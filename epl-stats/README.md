@@ -13,29 +13,30 @@ caches them to JSON, and renders a plain HTML table.
 ```
 
 Output:
+
 - `data/epl_2026_teams.json` — the cached data
 
 ## Fields
 
-| field                      | meaning                                                      |
-|-----------------------------|---------------------------------------------------------------|
-| `team_id`                   | understat's internal team ID                                  |
-| `team_name`                 | team name                                                      |
-| `games_played`               | completed matches this season                                 |
-| `points`                     | league points                                                  |
-| `expected_points`            | sum of per-match `xpts`                                       |
-| `goals`                      | goals scored                                                   |
-| `xg`                         | expected goals (sum of per-match `xG`)                         |
-| `ga`                         | goals against                                                   |
-| `xga`                        | expected goals against (sum of per-match `xGA`)                 |
-| `shots`                      | total shots taken, summed from every match's shot data          |
-| `shots_on_target`            | shots taken with result `Goal` or `SavedShot` (see caveat below)|
-| `shots_against`              | opponents' `shots` in the same matches                          |
-| `shots_on_target_against`    | opponents' `shots_on_target` in the same matches                |
-| `aggregated_deep`            | deep completions (passes completed within ~20yd of goal), summed from per-match `deep` |
-| `deep_per_game`               | `aggregated_deep / games_played`                                |
-| `aggregated_ppda`            | season PPDA (passes allowed per defensive action) — sum of each match's own `ppda.att / ppda.def` ratio, matching the aggregate shown on understat.com's team page |
-| `ppda_per_game`                | `aggregated_ppda / games_played` — average PPDA per match           |
+| field                     | meaning                                                                                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `team_id`                 | understat's internal team ID                                                                                                                                       |
+| `team_name`               | team name                                                                                                                                                          |
+| `games_played`            | completed matches this season                                                                                                                                      |
+| `points`                  | league points                                                                                                                                                      |
+| `expected_points`         | sum of per-match `xpts`                                                                                                                                            |
+| `goals`                   | goals scored                                                                                                                                                       |
+| `xg`                      | expected goals (sum of per-match `xG`)                                                                                                                             |
+| `ga`                      | goals against                                                                                                                                                      |
+| `xga`                     | expected goals against (sum of per-match `xGA`)                                                                                                                    |
+| `shots`                   | total shots taken, summed from every match's shot data                                                                                                             |
+| `shots_on_target`         | shots taken with result `Goal` or `SavedShot` (see caveat below)                                                                                                   |
+| `shots_against`           | opponents' `shots` in the same matches                                                                                                                             |
+| `shots_on_target_against` | opponents' `shots_on_target` in the same matches                                                                                                                   |
+| `aggregated_deep`         | deep completions (passes completed within ~20yd of goal), summed from per-match `deep`                                                                             |
+| `deep_per_game`           | `aggregated_deep / games_played`                                                                                                                                   |
+| `aggregated_ppda`         | season PPDA (passes allowed per defensive action) — sum of each match's own `ppda.att / ppda.def` ratio, matching the aggregate shown on understat.com's team page |
+| `ppda_per_game`           | `aggregated_ppda / games_played` — average PPDA per match                                                                                                          |
 
 ## Why `shots_on_target` is derived, not fetched directly
 
@@ -48,6 +49,7 @@ to match, but the docs page wasn't updated to drop the removed method. Calling
 it raises `AttributeError`.
 
 So instead, `fetch_stats.py` builds the shot totals itself:
+
 1. Pull every completed match ID for the season (`get_league_results`).
 2. For each match, pull the full shot-by-shot data (`get_match_shots`), which
    returns `{"h": [...], "a": [...]}` — every individual shot, each with a
@@ -61,7 +63,7 @@ So instead, `fetch_stats.py` builds the shot totals itself:
    opponent's `shots` / `shots_on_target` from that same match.
 
 **Caveat — own goals:** `OwnGoal` shots (7 so far this season) are counted
-in `shots`/`shots_against` for the team that took the shot, but are *not*
+in `shots`/`shots_against` for the team that took the shot, but are _not_
 counted as on-target for either side. If a `goals` total and a
 `shots_on_target` total look slightly inconsistent for a team, this is why.
 
