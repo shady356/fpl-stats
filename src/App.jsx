@@ -65,15 +65,19 @@ const COLUMNS = [
 ]
 
 function App() {
+  const [showTeamRatingColor, setShowTeamRatingColor] = useState(false)
   return (
     <div>
-      <h1>Premier League Matches</h1>
-      <Table />
+      <Header
+        showTeamRatingColor={showTeamRatingColor}
+        setShowTeamRatingColor={setShowTeamRatingColor}
+      />
+      <Table showTeamRatingColor={showTeamRatingColor} />
     </div>
   )
 }
 
-function Table() {
+function Table({ showTeamRatingColor }) {
   const [sortKey, setSortKey] = useState('points')
   const [sortOrder, setSortOrder] = useState('desc')
 
@@ -140,7 +144,9 @@ function Table() {
                     <div
                       className="team-name"
                       style={{
-                        background: `linear-gradient(90deg, ${team.rating_color} 0%, rgba(0, 0, 0, 0) 100%)`,
+                        background: showTeamRatingColor
+                          ? `linear-gradient(90deg, ${team.rating_color} 0%, rgba(0, 0, 0, 0) 100%)`
+                          : 'none',
                       }}
                     >
                       {teamBadgeUrl(team.team_name) && (
@@ -183,6 +189,22 @@ function StarRating({ rating }) {
         </span>
       ))}
     </div>
+  )
+}
+
+function Header({ showTeamRatingColor, setShowTeamRatingColor }) {
+  return (
+    <header>
+      <h1>Premier League Matches</h1>
+      <label>
+        <input
+          type="checkbox"
+          checked={showTeamRatingColor}
+          onChange={() => setShowTeamRatingColor((prev) => !prev)}
+        />
+        FDR colors
+      </label>
+    </header>
   )
 }
 
