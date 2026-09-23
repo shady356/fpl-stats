@@ -2,12 +2,13 @@ import './App.css'
 import { useState } from 'react'
 import epl_2026_teams from '../epl-stats/data/epl_2026_teams.json'
 import { computeRatings } from '../epl-stats/ratings.js'
+import { computePlayStyles } from '../epl-stats/playStyles.js'
 import 'material-symbols/rounded.css'
 import plLogoSVG from './assets/pl_logo.svg'
 import { teamBadgeUrl } from './teamBadges.js'
 import { COLUMNS, RATING_COLUMN_KEYS } from './teamStatsTableColumns.js'
 
-const teams = computeRatings(epl_2026_teams.map((team) => ({ ...team })))
+const teams = computePlayStyles(computeRatings(epl_2026_teams.map((team) => ({ ...team }))))
 
 function App() {
   const [showTeamRatingColor, setShowTeamRatingColor] = useState(false)
@@ -110,7 +111,12 @@ function TableRow({ team, columns, showTeamRatingColor }) {
   return (
     <tr>
       {columns.map((col) => (
-        <TableCell key={col.key} column={col} team={team} showTeamRatingColor={showTeamRatingColor} />
+        <TableCell
+          key={col.key}
+          column={col}
+          team={team}
+          showTeamRatingColor={showTeamRatingColor}
+        />
       ))}
     </tr>
   )
@@ -133,6 +139,14 @@ function TableCell({ column, team, showTeamRatingColor }) {
           )}
           {team.team_name}
         </div>
+      </td>
+    )
+  }
+
+  if (column.key === 'play_style') {
+    return (
+      <td style={{ textAlign: column.align }} title={team.play_style_detail}>
+        {team.play_style}
       </td>
     )
   }

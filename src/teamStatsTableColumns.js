@@ -2,6 +2,7 @@ export const RATING_COLUMN_KEYS = ['rating_total', 'rating_defense', 'rating_att
 
 export const COLUMNS = [
   { key: 'team_name', label: 'Team', to_fixed: 0, hidden: false, align: 'left' },
+  { key: 'play_style', label: 'Style', hidden: false, align: 'left' },
   { key: 'rating_total', label: 'Rating', to_fixed: 2, hidden: false, align: 'left' },
   { key: 'games_played', label: 'Played', hidden: false, align: 'right' },
   { key: 'rating_points', label: 'Points', to_fixed: 2, hidden: true, align: 'right' },
