@@ -23,6 +23,11 @@ header {
   padding: 12px;
 }
 
+.pl-logo {
+  height: 48px;
+  width: auto;
+}
+
 h1 {
   margin: 0;
   font-size: 20px;
@@ -67,6 +72,7 @@ table tbody tr:hover {
   align-items: center;
   border-radius: 8px;
   padding: 8px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .team-rating {
@@ -77,8 +83,8 @@ table tbody tr:hover {
 }
 
 .team-badge {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
 }
 
 .sort-button {

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import epl_2026_teams from '../epl-stats/data/epl_2026_teams.json'
 import { computeRatings } from '../epl-stats/ratings.js'
 import 'material-symbols/rounded.css'
+import plLogoSVG from './assets/pl_logo.svg'
 
 const teams = computeRatings(epl_2026_teams.map((team) => ({ ...team })))
 
@@ -195,7 +196,7 @@ function StarRating({ rating }) {
 function Header({ showTeamRatingColor, setShowTeamRatingColor }) {
   return (
     <header>
-      <h1>Premier League Matches</h1>
+      <img className="pl-logo" src={plLogoSVG} alt="" />
       <label>
         <input
           type="checkbox"
