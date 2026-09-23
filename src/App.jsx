@@ -2,6 +2,7 @@ import './App.css'
 import { useState } from 'react'
 import epl_2026_teams from '../epl-stats/data/epl_2026_teams.json'
 import { computeRatings } from '../epl-stats/ratings.js'
+import 'material-symbols/rounded.css'
 
 const teams = computeRatings(epl_2026_teams.map((team) => ({ ...team })))
 
@@ -113,10 +114,8 @@ function StarRating({ rating }) {
   return (
     
     <div className="star-container">
-      {stars.map((_, i) => 
-        i < rating
-          ? <span key={i} className="star">⭐</span>
-          : <span key={i} className="gray-star">⭐</span>
+      {stars.map((_, i) =>
+        <span key={i} className={`material-symbols-rounded filled${i < rating ? ' active' : ''}`}>star</span>
       )}
     </div>
   )

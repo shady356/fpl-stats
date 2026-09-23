@@ -1,12 +1,12 @@
 :root {
-  --primary-color: #007665;
-  --secondary-color: #013a31;
-  --background-color: #222;
-  --background-2-color: #2d2d2d;
+  --primary-color: hsl(180, 82%, 45%);
+  --secondary-color: hsl(180, 100%, 16%);
+  --background-color: hsl(250, 15%, 13%);
+  --background-2-color: hsl(250, 15%, 18%);
   --text-color: #fff;
   --table-data-color: #ccc;
-  --hover-color: #444;
-  --border-color: #333;
+  --hover-color: hsl(250, 15%, 27%);
+  --border-color: hsl(250, 15%, 20%);
 }
 
 body {
@@ -86,7 +86,15 @@ table tbody tr:hover {
   gap: 2px;
 }
 
-.star-container .gray-star {
-  filter: grayscale(100%);
-  opacity: 0.5;
+.star-container .filled {
+  font-variation-settings: 'FILL' 1;
+  color: #666;
+}
+
+.star-container .filled.active {
+  color: #ffc107;
+}
+
+.star-container .material-symbols-rounded{
+  font-size: 16px;
 }
