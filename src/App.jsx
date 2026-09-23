@@ -8,27 +8,60 @@ const teams = computeRatings(epl_2026_teams.map((team) => ({ ...team })))
 
 const RATING_COLUMN_KEYS = ['rating_total']
 
+const TEAM_BADGE_CODES = {
+  Arsenal: 3,
+  'Aston Villa': 7,
+  Bournemouth: 91,
+  Brentford: 94,
+  Brighton: 36,
+  Chelsea: 8,
+  Coventry: 9,
+  'Crystal Pal': 31,
+  Everton: 11,
+  Fulham: 54,
+  Hull: 88,
+  Ipswich: 40,
+  Leeds: 2,
+  Liverpool: 14,
+  'Man City': 43,
+  'Man United': 1,
+  Newcastle: 4,
+  'Nott Forest': 17,
+  Sunderland: 56,
+  Tottenham: 6,
+}
+
+function teamBadgeUrl(teamName) {
+  const code = TEAM_BADGE_CODES[teamName]
+  return code ? `https://resources.premierleague.com/premierleague25/badges-alt/${code}.svg` : null
+}
+
 const COLUMNS = [
-  { key: 'team_name', label: 'team', to_fixed: 0 },
-  { key: 'games_played', label: 'M', hidden: false },
-  { key: 'rating_total', label: 'rating', to_fixed: 2, hidden: false },
-  { key: 'rating_attack', label: 'atk r', to_fixed: 2, hidden: false },
-  { key: 'rating_defense', label: 'def r', to_fixed: 2, hidden: false },
-  { key: 'rating_points', label: 'pts r', to_fixed: 2, hidden: false },
-  { key: 'points', label: 'P', hidden: false },
-  { key: 'expected_points', label: 'xPTS', to_fixed: 2, hidden: false },
-  { key: 'goals', label: 'G', hidden: false },
-  { key: 'xg', label: 'xG', to_fixed: 2, hidden: false },
-  { key: 'ga', label: 'GA', hidden: false },
-  { key: 'xga', label: 'xGA', to_fixed: 2, hidden: false },
-  { key: 'shots', label: 'shots', hidden: false },
-  { key: 'shots_on_target', label: 'shots t', hidden: false },
-  { key: 'shots_against', label: 'shots a', hidden: false },
-  { key: 'shots_on_target_against', label: 'shots t a', hidden: false },
-  { key: 'aggregated_deep', label: 'total deep', hidden: true },
-  { key: 'deep_per_game', label: 'deep avg', to_fixed: 1, hidden: false },
-  { key: 'aggregated_ppda', label: 'total ppda', to_fixed: 2, hidden: true },
-  { key: 'ppda_per_game', label: 'ppda avg', to_fixed: 2, hidden: false },
+  { key: 'team_name', label: 'Team', to_fixed: 0, hidden: false, align: 'left' },
+  { key: 'games_played', label: 'M', hidden: false, align: 'center' },
+  { key: 'rating_total', label: 'Rating', to_fixed: 2, hidden: false, align: 'left' },
+  { key: 'rating_attack', label: 'Attack', to_fixed: 2, hidden: false, align: 'right' },
+  { key: 'rating_defense', label: 'Defense', to_fixed: 2, hidden: false, align: 'right' },
+  { key: 'rating_points', label: 'Points', to_fixed: 2, hidden: false, align: 'right' },
+  { key: 'points', label: 'Pts', hidden: false, align: 'right' },
+  { key: 'expected_points', label: 'xPts', to_fixed: 2, hidden: false, align: 'right' },
+  { key: 'goals', label: 'G', hidden: false, align: 'right' },
+  { key: 'xg', label: 'xG', to_fixed: 2, hidden: false, align: 'right' },
+  { key: 'ga', label: 'GA', hidden: false, align: 'right' },
+  { key: 'xga', label: 'xGA', to_fixed: 2, hidden: false, align: 'right' },
+  { key: 'shots', label: 'Shots', hidden: false, align: 'right' },
+  { key: 'shots_on_target', label: 'SOT', hidden: false, align: 'right' },
+  { key: 'shots_against', label: 'SA', hidden: false, align: 'right' },
+  {
+    key: 'shots_on_target_against',
+    label: 'SOTA',
+    hidden: false,
+    align: 'right',
+  },
+  { key: 'aggregated_deep', label: 'Total Deep', hidden: true, align: 'right' },
+  { key: 'deep_per_game', label: 'Deep', to_fixed: 1, hidden: false, align: 'right' },
+  { key: 'aggregated_ppda', label: 'Total PPDA', to_fixed: 2, hidden: true, align: 'right' },
+  { key: 'ppda_per_game', label: 'PPDA', to_fixed: 2, hidden: false, align: 'right' },
 ]
 
 function App() {
@@ -80,13 +113,18 @@ function Table() {
           <tr>
             {COLUMNS.map((col) =>
               col.hidden ? null : (
-                <th key={col.key} className={col.key === 'team_name' ? 'left-align' : ''}>
+                <th key={col.key} style={{ textAlign: col.align }}>
                   <button
                     className={`sort-button ${sortKey === col.key ? 'sort-button-selected' : ''}`}
                     onClick={() => sort(col.key)}
                   >
                     {col.label}
-                    {sortKey === col.key && (sortOrder === 'asc' ? ' ⬆️' : ' ⬇️')}
+                    {sortKey === col.key &&
+                      (sortOrder === 'asc' ? (
+                        <span className="material-symbols-rounded">arrow_upward</span>
+                      ) : (
+                        <span className="material-symbols-rounded">arrow_downward</span>
+                      ))}
                   </button>
                 </th>
               ),
@@ -98,8 +136,16 @@ function Table() {
             <tr key={team.team_id}>
               {COLUMNS.map((col) =>
                 col.hidden ? null : col.key === 'team_name' ? (
-                  <td key={col.key} className="left-align">
-                    <div style={{ backgroundColor: team.rating_color }} className="team-name">
+                  <td key={col.key}>
+                    <div
+                      className="team-name"
+                      style={{
+                        background: `linear-gradient(90deg, ${team.rating_color} 0%, rgba(0, 0, 0, 0) 100%)`,
+                      }}
+                    >
+                      {teamBadgeUrl(team.team_name) && (
+                        <img className="team-badge" src={teamBadgeUrl(team.team_name)} alt="" />
+                      )}
                       {team.team_name}
                     </div>
                   </td>
@@ -108,7 +154,9 @@ function Table() {
                     <StarRating rating={team[`${col.key}`]} />
                   </td>
                 ) : (
-                  <td key={col.key}>{team[col.key]}</td>
+                  <td key={col.key} style={{ textAlign: col.align }}>
+                    {team[col.key]}
+                  </td>
                 ),
               )}
             </tr>
@@ -121,13 +169,17 @@ function Table() {
 
 function StarRating({ rating }) {
   const stars = new Array(5).fill(0)
+  const fullStars = Math.floor(rating)
   const isHalfStar = rating % 1 >= 0.5
 
   return (
     <div className="star-container">
       {stars.map((_, i) => (
-        <span key={i} className={`material-symbols-rounded filled${i < rating ? ' colored' : ''}`}>
-          {isHalfStar && i === Math.floor(rating) ? 'star_half' : 'star'}
+        <span
+          key={i}
+          className={`material-symbols-rounded filled${i < fullStars || (isHalfStar && i === fullStars) ? ' colored' : ''}`}
+        >
+          {isHalfStar && i === fullStars ? 'star_half' : 'star'}
         </span>
       ))}
     </div>

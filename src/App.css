@@ -1,10 +1,9 @@
 :root {
-  --primary-color: hsl(180, 82%, 45%);
-  --secondary-color: hsl(180, 100%, 16%);
-  --background-color: hsl(250, 15%, 13%);
-  --background-2-color: hsl(250, 15%, 18%);
-  --text-color: #fff;
-  --table-data-color: #ccc;
+  --primary-color: hsl(200, 60%, 60%);
+  --secondary-color: hsl(200, 35%, 20%);
+  --background-color: hsl(250, 15%, 15%);
+  --background-2-color: hsl(250, 15%, 17%);
+  --text-color: hsl(250, 10%, 85%);
   --hover-color: hsl(250, 15%, 27%);
   --border-color: hsl(250, 15%, 20%);
 }
@@ -20,6 +19,7 @@ body {
 h1 {
   margin: 0;
   padding: 12px;
+  font-size: 20px;
 }
 
 table {
@@ -39,10 +39,12 @@ table thead tr th {
 
 table thead tr th,
 table tbody tr td {
-  padding: 8px;
-  text-align: right;
-  color: var(--table-data-color);
+  color: var(--text-color);
   font-size: 14px;
+}
+
+table tbody tr td {
+  padding: 8px;
 }
 
 table tbody tr:nth-child(even) {
@@ -53,14 +55,24 @@ table tbody tr:hover {
   background: var(--secondary-color);
 }
 
-.left-align {
-  text-align: left;
-}
-
 .team-name {
+  display: flex;
+  gap: 12px;
+  align-items: center;
   border-radius: 8px;
   padding: 8px;
-  color: var(--text-color);
+}
+
+.team-rating {
+  width: 12px;
+  height: 8px;
+  border-radius: 8px;
+  background: #333;
+}
+
+.team-badge {
+  width: 32px;
+  height: 32px;
 }
 
 .sort-button {
@@ -71,15 +83,19 @@ table tbody tr:hover {
   border-radius: 4px;
   color: var(--text-color);
   margin: 0;
+  width: 100%;
+  text-align: inherit;
 }
 
-.sort-button:hover {
-  background: var(--hover-color);
+.sort-button:hover,
+.sort-button-selected {
+  color: var(--primary-color);
 }
 
-.sort-button-selected,
-.sort-button-selected:hover {
-  background: var(--secondary-color);
+.sort-button .material-symbols-rounded {
+  font-size: 16px;
+  vertical-align: middle;
+  margin-left: 4px;
 }
 
 .star-container {
