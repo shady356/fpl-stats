@@ -11,14 +11,11 @@ import { COLUMNS, RATING_COLUMN_KEYS } from './teamStatsTableColumns.js'
 const teams = computePlayStyles(computeRatings(epl_2026_teams.map((team) => ({ ...team }))))
 
 function App() {
-  const [showTeamRatingColor, setShowTeamRatingColor] = useState(false)
+  const [teamRatingColor, setTeamRatingColor] = useState('none')
   return (
     <div>
-      <Header
-        showTeamRatingColor={showTeamRatingColor}
-        setShowTeamRatingColor={setShowTeamRatingColor}
-      />
-      <Table showTeamRatingColor={showTeamRatingColor} />
+      <Header setTeamRatingColor={setTeamRatingColor} />
+      <Table teamRatingColor={teamRatingColor} />
     </div>
   )
 }
@@ -45,7 +42,7 @@ function formatTeamValues(team) {
   return formatted
 }
 
-function Table({ showTeamRatingColor }) {
+function Table({ teamRatingColor }) {
   const [sortKey, setSortKey] = useState('points')
   const [sortOrder, setSortOrder] = useState('desc')
 
@@ -81,7 +78,7 @@ function Table({ showTeamRatingColor }) {
             key={team.team_id}
             team={team}
             columns={visibleColumns}
-            showTeamRatingColor={showTeamRatingColor}
+            teamRatingColor={teamRatingColor}
           />
         ))}
       </tbody>
@@ -107,31 +104,39 @@ function TableHeaderCell({ column, sortOrder, onSort }) {
   )
 }
 
-function TableRow({ team, columns, showTeamRatingColor }) {
+function TableRow({ team, columns, teamRatingColor }) {
   return (
     <tr>
       {columns.map((col) => (
-        <TableCell
-          key={col.key}
-          column={col}
-          team={team}
-          showTeamRatingColor={showTeamRatingColor}
-        />
+        <TableCell key={col.key} column={col} team={team} teamRatingColor={teamRatingColor} />
       ))}
     </tr>
   )
 }
 
-function TableCell({ column, team, showTeamRatingColor }) {
+function getTeamRatingColors(team, teamRatingColor) {
+  switch (teamRatingColor) {
+    case 'attack':
+      return team.rating_attack_color
+    case 'defense':
+      return team.rating_defense_color
+    case 'total':
+      return team.rating_total_color
+    default:
+      return 'transparent'
+  }
+}
+
+function TableCell({ column, team, teamRatingColor }) {
+  const teamColor = getTeamRatingColors(team, teamRatingColor)
+
   if (column.key === 'team_name') {
     return (
       <td>
         <div
           className="team-name"
           style={{
-            background: showTeamRatingColor
-              ? `linear-gradient(90deg, ${team.rating_total_color} 0%, rgba(0, 0, 0, 0) 100%)`
-              : 'none',
+            background: `linear-gradient(90deg, ${teamColor} 0%, rgba(0, 0, 0, 0) 100%)`,
           }}
         >
           {teamBadgeUrl(team.team_name) && (
@@ -182,17 +187,18 @@ function StarRating({ rating }) {
   )
 }
 
-function Header({ showTeamRatingColor, setShowTeamRatingColor }) {
+function Header({ setTeamRatingColor }) {
   return (
     <header>
       <img className="pl-logo" src={plLogoSVG} alt="" />
       <label>
-        <input
-          type="checkbox"
-          checked={showTeamRatingColor}
-          onChange={() => setShowTeamRatingColor((prev) => !prev)}
-        />
         FDR colors
+        <select name="fdr-colors" id="" onChange={(e) => setTeamRatingColor(e.target.value)}>
+          <option value="none">None</option>
+          <option value="total">Total</option>
+          <option value="attack">Attack</option>
+          <option value="defense">Defense</option>
+        </select>
       </label>
     </header>
   )

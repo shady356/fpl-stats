@@ -114,17 +114,17 @@ export function computeRatings(teams) {
   teams.forEach((team, index) => {
     const { attack, defense, totalCrude } = crudeRatings[index]
 
-    const rating_total = round(scale(totalMax, totalMin, totalCrude), 2)
     const rating_attack = round(scale(attackMax, attackMin, attack), 2)
     const rating_defense = round(scale(defenseMax, defenseMin, defense), 2)
+    const rating_total = round(scale(totalMax, totalMin, totalCrude), 2)
 
-    team.rating_total = rating_total
     team.rating_attack = rating_attack
     team.rating_defense = rating_defense
+    team.rating_total = rating_total
 
-    team.rating_total_color = RATING_COLORS[reviseTotalRating(rating_total)]
-    team.rating_defense_color = RATING_COLORS[reviseTotalRating(rating_defense)]
     team.rating_attack_color = RATING_COLORS[reviseTotalRating(rating_attack)]
+    team.rating_defense_color = RATING_COLORS[reviseTotalRating(rating_defense)]
+    team.rating_total_color = RATING_COLORS[reviseTotalRating(rating_total)]
   })
 
   return teams
