@@ -1,11 +1,11 @@
 :root {
   --primary-color: hsl(200, 60%, 60%);
-  --secondary-color: hsl(200, 35%, 20%);
+  --secondary-color: hsl(200, 35%, 18%);
   --background-color: hsl(250, 15%, 15%);
-  --background-2-color: hsl(250, 15%, 17%);
+  --background-2-color: hsl(250, 15%, 18%);
   --text-color: hsl(250, 10%, 85%);
   --hover-color: hsl(250, 15%, 27%);
-  --border-color: hsl(250, 15%, 20%);
+  --border-color: hsl(250, 15%, 25%);
 }
 
 body {
@@ -59,7 +59,7 @@ table tbody tr td {
 }
 
 table tbody tr:nth-child(even) {
-  background-color: var(--background-2-color);
+  background: var(--background-2-color);
 }
 
 table tbody tr:hover {
@@ -75,14 +75,9 @@ table tbody tr:hover {
   font-family: 'Roboto', sans-serif;
 }
 
-.team-rating {
-  width: 12px;
-  height: 8px;
-  border-radius: 8px;
-  background: #333;
-}
-
 .team-badge {
+  display: flex;
+  flex-shrink: 0;
   width: 24px;
   height: 24px;
 }
@@ -132,4 +127,18 @@ table tbody tr:hover {
   font-size: 20px;
   width: 20px;
   height: 20px;
+}
+
+select {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  margin-left: 12px;
+  border-radius: 12px;
+}
+
+select:focus {
+  outline: 2px solid;
+  outline-color: var(--primary-color);
 }
