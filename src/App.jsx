@@ -91,7 +91,7 @@ function Table({ showTeamRatingColor }) {
 
 function TableHeaderCell({ column, sortOrder, onSort }) {
   return (
-    <th style={{ textAlign: column.align }}>
+    <th style={{ textAlign: column.align }} title={column.tooltip}>
       <button
         className={`sort-button ${sortOrder ? 'sort-button-selected' : ''}`}
         onClick={() => onSort(column.key)}
