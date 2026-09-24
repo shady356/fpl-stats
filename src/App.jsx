@@ -130,7 +130,7 @@ function TableCell({ column, team, showTeamRatingColor }) {
           className="team-name"
           style={{
             background: showTeamRatingColor
-              ? `linear-gradient(90deg, ${team.rating_color} 0%, rgba(0, 0, 0, 0) 100%)`
+              ? `linear-gradient(90deg, ${team.rating_total_color} 0%, rgba(0, 0, 0, 0) 100%)`
               : 'none',
           }}
         >
