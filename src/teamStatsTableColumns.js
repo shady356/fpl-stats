@@ -25,14 +25,6 @@ export const COLUMNS = [
     align: 'right',
     tooltip: 'No description',
   },
-  {
-    key: 'rating_points',
-    label: 'Points',
-    to_fixed: 2,
-    hidden: true,
-    align: 'right',
-    tooltip: 'No description',
-  },
   { key: 'points', label: 'Points', hidden: false, align: 'right', tooltip: 'No description' },
   {
     key: 'expected_points',
