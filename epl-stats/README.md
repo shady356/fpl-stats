@@ -27,16 +27,18 @@ Output:
 | `expected_points`         | sum of per-match `xpts`                                                                                                                                            |
 | `goals`                   | goals scored                                                                                                                                                       |
 | `xg`                      | expected goals (sum of per-match `xG`)                                                                                                                             |
+| `npxg`                    | non-penalty expected goals (sum of per-match `npxG`)                                                                                                               |
 | `ga`                      | goals against                                                                                                                                                      |
 | `xga`                     | expected goals against (sum of per-match `xGA`)                                                                                                                    |
+| `npxga`                   | non-penalty expected goals against (sum of per-match `npxGA`)                                                                                                      |
 | `shots`                   | total shots taken, summed from every match's shot data                                                                                                             |
 | `shots_on_target`         | shots taken with result `Goal` or `SavedShot` (see caveat below)                                                                                                   |
 | `shots_against`           | opponents' `shots` in the same matches                                                                                                                             |
 | `shots_on_target_against` | opponents' `shots_on_target` in the same matches                                                                                                                   |
-| `aggregated_deep`         | deep completions (passes completed within ~20yd of goal), summed from per-match `deep`                                                                             |
-| `deep_per_game`           | `aggregated_deep / games_played`                                                                                                                                   |
-| `aggregated_ppda`         | season PPDA (passes allowed per defensive action) — sum of each match's own `ppda.att / ppda.def` ratio, matching the aggregate shown on understat.com's team page |
-| `ppda_per_game`           | `aggregated_ppda / games_played` — average PPDA per match                                                                                                          |
+| `deep_per_game`           | deep completions (passes completed within ~20yd of goal) per game, summed from per-match `deep` and divided by `games_played`                                     |
+| `deep_allowed_per_game`   | deep completions allowed per game, summed from per-match `deep_allowed` and divided by `games_played`                                                              |
+| `ppda_per_game`           | average PPDA (passes allowed per defensive action) per match — sum of each match's own `ppda.att / ppda.def` ratio, divided by `games_played`                     |
+| `o_ppda_per_game`         | average opponents' PPDA per match — sum of each match's own `ppda_allowed.att / ppda_allowed.def` ratio, divided by `games_played`                                 |
 
 ## Why `shots_on_target` is derived, not fetched directly
 

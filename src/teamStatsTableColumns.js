@@ -53,6 +53,14 @@ export const COLUMNS = [
   { key: 'goals', label: 'G', hidden: false, align: 'right', tooltip: 'Goals scored' },
   { key: 'xg', label: 'xG', to_fixed: 2, hidden: false, align: 'right', tooltip: 'Expected goals' },
   {
+    key: 'npxg',
+    label: 'npxG',
+    to_fixed: 2,
+    hidden: true,
+    align: 'right',
+    tooltip: 'Non-penalty expected goals',
+  },
+  {
     key: 'rating_defense',
     label: 'Defense',
     to_fixed: 2,
@@ -68,6 +76,14 @@ export const COLUMNS = [
     hidden: false,
     align: 'right',
     tooltip: 'Expected goals against',
+  },
+  {
+    key: 'npxga',
+    label: 'npxGA',
+    to_fixed: 2,
+    hidden: true,
+    align: 'right',
+    tooltip: 'Non-penalty expected goals against',
   },
   { key: 'shots', label: 'Shots', hidden: false, align: 'right', tooltip: 'Shots taken' },
   {
@@ -86,13 +102,6 @@ export const COLUMNS = [
     tooltip: 'shots on target against',
   },
   {
-    key: 'aggregated_deep',
-    label: 'Total Deep',
-    hidden: true,
-    align: 'right',
-    tooltip: 'Passes completed within an estimated 20 yards (18m) of goal (Crosses excluded).',
-  },
-  {
     key: 'deep_per_game',
     label: 'Deep',
     to_fixed: 1,
@@ -101,12 +110,13 @@ export const COLUMNS = [
     tooltip: 'Passes completed within an estimated 20 yards (18m) of goal (Crosses excluded).',
   },
   {
-    key: 'aggregated_ppda',
-    label: 'Total PPDA',
-    to_fixed: 2,
+    key: 'deep_allowed_per_game',
+    label: 'Deep Allowed',
+    to_fixed: 1,
     hidden: true,
     align: 'right',
-    tooltip: 'Passes allowed per defensive action in the opposition half.',
+    tooltip:
+      'Passes allowed within an estimated 20 yards (18m) of goal, per game (Crosses excluded).',
   },
   {
     key: 'ppda_per_game',
@@ -115,6 +125,14 @@ export const COLUMNS = [
     hidden: false,
     align: 'right',
     tooltip: 'Passes allowed per defensive action in the opposition half.',
+  },
+  {
+    key: 'o_ppda_per_game',
+    label: 'PPDA Allowed',
+    to_fixed: 2,
+    hidden: true,
+    align: 'right',
+    tooltip: "Opponents' passes allowed per defensive action in the opposition half.",
   },
   {
     key: 'pressing',

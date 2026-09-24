@@ -28,11 +28,19 @@ async def fetch_team_stats(session):
         games_played = len(history)
 
         aggregated_deep = sum(m["deep"] for m in history)
+        aggregated_deep_allowed = sum(m["deep_allowed"] for m in history)
 
         match_ppda = [
             m["ppda"]["att"] / m["ppda"]["def"] for m in history if m["ppda"]["def"]
         ]
         aggregated_ppda = round(sum(match_ppda), 2)
+
+        match_o_ppda = [
+            m["ppda_allowed"]["att"] / m["ppda_allowed"]["def"]
+            for m in history
+            if m["ppda_allowed"]["def"]
+        ]
+        aggregated_o_ppda = round(sum(match_o_ppda), 2)
 
         stats[team["id"]] = {
             "team_id": int(team["id"]),
@@ -42,16 +50,18 @@ async def fetch_team_stats(session):
             "expected_points": round(sum(m["xpts"] for m in history), 2),
             "goals": sum(m["scored"] for m in history),
             "xg": round(sum(m["xG"] for m in history), 2),
+            "npxg": round(sum(m["npxG"] for m in history), 2),
             "ga": sum(m["missed"] for m in history),
             "xga": round(sum(m["xGA"] for m in history), 2),
+            "npxga": round(sum(m["npxGA"] for m in history), 2),
             "shots": 0,
             "shots_on_target": 0,
             "shots_against": 0,
             "shots_on_target_against": 0,
-            "aggregated_deep": aggregated_deep,
             "deep_per_game": round(aggregated_deep / games_played, 2) if games_played else 0,
-            "aggregated_ppda": aggregated_ppda,
+            "deep_allowed_per_game": round(aggregated_deep_allowed / games_played, 2) if games_played else 0,
             "ppda_per_game": round(aggregated_ppda / games_played, 2) if games_played else 0,
+            "o_ppda_per_game": round(aggregated_o_ppda / games_played, 2) if games_played else 0,
         }
 
     for match in results:
