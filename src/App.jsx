@@ -164,8 +164,9 @@ function TableCell({ column, team, showTeamRatingColor }) {
 
 function StarRating({ rating }) {
   const stars = new Array(5).fill(0)
-  const fullStars = Math.floor(rating)
-  const isHalfStar = rating % 1 >= 0.5
+  const score = rating / 25 + 1
+  const fullStars = Math.floor(score)
+  const isHalfStar = score % 1 >= 0.5
 
   return (
     <div className="star-container">

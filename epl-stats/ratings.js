@@ -9,67 +9,94 @@ export function round(value, decimals = 0) {
 
 // Rescale `score` from [scoreMin, scoreMax] onto a 1-5 scale.
 // `reverse` flips the scale for stats where lower is better (e.g. goals against).
-export function calcRating(scoreMax, scoreMin, score, reverse = false) {
-  const min = 1
-  const max = 5
-  const newRange = max - min
-  const currentRange = scoreMax - scoreMin
-  let rating = round(((score - scoreMin) / currentRange) * newRange + min, 2)
+export function scale(leagueMax, leagueMin, teamValue, reverse = false) {
+  let score
+
+  score = ((teamValue - leagueMin) / (leagueMax - leagueMin)) * 100
   if (reverse) {
-    rating = round(max + min - rating, 2)
+    score = ((leagueMax - teamValue) / (leagueMax - leagueMin)) * 100
   }
-  return rating
+
+  return score
 }
 
-export function calcExtremum(teams) {
-  const extremum = {}
-  extremum.ptsMax = Math.max(...teams.map((t) => t.points))
-  extremum.ptsMin = Math.min(...teams.map((t) => t.points))
-  extremum.xPtsMax = Math.max(...teams.map((t) => t.expected_points))
-  extremum.xPtsMin = Math.min(...teams.map((t) => t.expected_points))
-  extremum.gMax = Math.max(...teams.map((t) => t.goals))
-  extremum.gMin = Math.min(...teams.map((t) => t.goals))
-  extremum.xGMax = Math.max(...teams.map((t) => t.xg))
-  extremum.xGMin = Math.min(...teams.map((t) => t.xg))
-  extremum.gAMax = Math.max(...teams.map((t) => t.ga))
-  extremum.gAMin = Math.min(...teams.map((t) => t.ga))
-  extremum.xGaMax = Math.max(...teams.map((t) => t.xga))
-  extremum.xGaMin = Math.min(...teams.map((t) => t.xga))
-  return extremum
+function calcAttack(goals, points, npxg, xP, deep, ppda) {
+  const value = goals * 0.25 + points * 0.25 + npxg * 0.2 + xP * 0.1 + deep * 0.15 + ppda * 0.05
+  return value
+}
+
+function calcDefense(ga, points, npxga, xP, deepAllowed, oppda) {
+  const value =
+    ga * 0.25 + points * 0.25 + npxga * 0.2 + xP * 0.1 + deepAllowed * 0.15 + oppda * 0.05
+  return value
+}
+
+export function calcLeague(teams) {
+  const league = {}
+  league.ptsMax = Math.max(...teams.map((t) => t.points))
+  league.ptsMin = Math.min(...teams.map((t) => t.points))
+  league.xPtsMax = Math.max(...teams.map((t) => t.expected_points))
+  league.xPtsMin = Math.min(...teams.map((t) => t.expected_points))
+  league.gMax = Math.max(...teams.map((t) => t.goals))
+  league.gMin = Math.min(...teams.map((t) => t.goals))
+  league.npxgMax = Math.max(...teams.map((t) => t.npxg))
+  league.npxgMin = Math.min(...teams.map((t) => t.npxg))
+  league.gAMax = Math.max(...teams.map((t) => t.ga))
+  league.gAMin = Math.min(...teams.map((t) => t.ga))
+  league.deepMax = Math.max(...teams.map((t) => t.deep_per_game))
+  league.deepMin = Math.min(...teams.map((t) => t.deep_per_game))
+  league.ppdaMax = Math.max(...teams.map((t) => t.ppda_per_game))
+  league.ppdaMin = Math.min(...teams.map((t) => t.ppda_per_game))
+  league.npxgaMax = Math.max(...teams.map((t) => t.npxga))
+  league.npxgaMin = Math.min(...teams.map((t) => t.npxga))
+  league.deepAllowedMax = Math.max(...teams.map((t) => t.deep_allowed_per_game))
+  league.deepAllowedMin = Math.min(...teams.map((t) => t.deep_allowed_per_game))
+  league.oppdaMax = Math.max(...teams.map((t) => t.o_ppda_per_game))
+  league.oppdaMin = Math.min(...teams.map((t) => t.o_ppda_per_game))
+  return league
 }
 
 // points/attack/defense each blend actual + expected into one 1-5 rating.
-export function calcTeamRating(team, extremum) {
-  const points = calcRating(
-    round(extremum.ptsMax + extremum.xPtsMax, 2),
-    round(extremum.ptsMin + extremum.xPtsMin, 2),
-    round(team.points + team.expected_points, 2),
-  )
-  const attack = calcRating(
-    round(extremum.gMax + extremum.xGMax, 2),
-    round(extremum.gMin + extremum.xGMin, 2),
-    round(team.goals + team.xg, 2),
-  )
-  const defense = calcRating(
-    round(extremum.gAMax + extremum.xGaMax, 2),
-    round(extremum.gAMin + extremum.xGaMin, 2),
-    round(team.ga + team.xga, 2),
+export function calcTeamRating(team, league) {
+  const scaledGoals = scale(league.gMax, league.gMin, team.goals)
+  const scaledPoints = scale(league.ptsMax, league.ptsMin, team.points)
+  const scalednpxg = scale(league.npxgMax, league.npxgMin, team.npxg)
+  const scaledxP = scale(league.xPtsMax, league.xPtsMin, team.expected_points)
+  const scaledDeep = scale(league.deepMax, league.deepMin, team.deep_per_game)
+  const scaledPpda = scale(league.ppdaMax, league.ppdaMin, team.ppda_per_game, true)
+  const scaledGoalsA = scale(league.gAMax, league.gAMin, team.ga, true)
+  const scalednpxga = scale(league.npxgaMax, league.npxgaMin, team.npxga, true)
+  const scaledDeepAllowed = scale(
+    league.deepAllowedMax,
+    league.deepAllowedMin,
+    team.deep_allowed_per_game,
     true,
+  )
+  const scaledoppda = scale(league.oppdaMax, league.oppdaMin, team.o_ppda_per_game)
+
+  const attack = calcAttack(scaledGoals, scaledPoints, scalednpxg, scaledxP, scaledDeep, scaledPpda)
+  const defense = calcDefense(
+    scaledGoalsA,
+    scaledPoints,
+    scalednpxga,
+    scaledxP,
+    scaledDeepAllowed,
+    scaledoppda,
   )
 
   return {
-    points,
     attack,
     defense,
-    totalCrude: round((points + attack + defense) / 3, 2),
+    totalCrude: round((attack + defense) / 2, 2),
   }
 }
 
 // Custom rounding for the final integer rating: floor unless the
 // decimal part is >= 0.5, in which case round up.
 export function reviseTotalRating(rating) {
-  const decimal = rating - Math.floor(rating)
-  return decimal >= 0.5 ? Math.floor(rating + 1) : Math.floor(rating)
+  const score = rating / 25 + 1
+  const decimal = score - Math.floor(score)
+  return decimal >= 0.5 ? Math.floor(score + 1) : Math.floor(score)
 }
 
 // Color scale from green (best, rating 1) to red (worst, rating 5).
@@ -83,8 +110,8 @@ export const RATING_COLORS = {
 
 // Mutates and returns `teams`, adding flat rating_* fields to each team.
 export function computeRatings(teams) {
-  const extremum = calcExtremum(teams)
-  const crudeRatings = teams.map((team) => calcTeamRating(team, extremum))
+  const league = calcLeague(teams)
+  const crudeRatings = teams.map((team) => calcTeamRating(team, league))
 
   // Re-normalize totalCrude against its own min/max so the best/worst
   // team's total rating actually spans the 1-5 scale.
@@ -92,18 +119,14 @@ export function computeRatings(teams) {
   const totalMin = Math.min(...crudeRatings.map((r) => r.totalCrude))
 
   teams.forEach((team, index) => {
-    const { points, attack, defense, totalCrude } = crudeRatings[index]
-    const total = round(calcRating(totalMax, totalMin, totalCrude), 2)
+    const { attack, defense, totalCrude } = crudeRatings[index]
+    const total = round(scale(totalMax, totalMin, totalCrude), 2)
+    const totalScaleOneToFive = reviseTotalRating(total)
 
-    team.rating_points = points
-    team.rating_points_rounded = reviseTotalRating(points)
     team.rating_attack = attack
-    team.rating_attack_rounded = reviseTotalRating(attack)
     team.rating_defense = defense
-    team.rating_defense_rounded = reviseTotalRating(defense)
     team.rating_total = total
-    team.rating_total_rounded = reviseTotalRating(total)
-    team.rating_color = RATING_COLORS[team.rating_total_rounded]
+    team.rating_color = RATING_COLORS[totalScaleOneToFive]
   })
 
   return teams
