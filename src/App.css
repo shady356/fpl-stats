@@ -1,8 +1,12 @@
 :root {
   --primary-color: hsl(200, 60%, 60%);
   --secondary-color: hsl(200, 35%, 18%);
+
+  --body-color: hsl(250, 15%, 5%);
+
   --background-color: hsl(250, 15%, 15%);
   --background-2-color: hsl(250, 15%, 18%);
+
   --text-color: hsl(250, 10%, 85%);
   --hover-color: hsl(250, 15%, 27%);
   --border-color: hsl(250, 15%, 25%);
@@ -10,9 +14,9 @@
 
 body {
   margin: 0;
-  padding: 8px;
+  padding: 0;
   font-family: 'Roboto', sans-serif;
-  background: var(--background-color);
+  background: var(--body-color);
   color: var(--text-color);
 }
 
@@ -20,6 +24,21 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 12px;
+  background: var(--background-color);
+}
+
+header .top {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 12px;
 }
 
@@ -35,7 +54,10 @@ h1 {
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--background-color);
+  border-radius: 12px;
   font-family: 'Roboto Mono', monospace;
 }
 
@@ -46,6 +68,19 @@ table thead tr th {
   border-bottom: 2px solid var(--border-color);
   font-weight: bold;
   z-index: 1;
+}
+
+table thead tr:first-child th:first-child {
+  border-top-left-radius: 12px;
+}
+table thead tr:first-child th:last-child {
+  border-top-right-radius: 12px;
+}
+table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
 }
 
 table thead tr th,
@@ -90,7 +125,7 @@ table tbody tr:hover {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 12px 8px;
   border-radius: 4px;
   color: var(--text-color);
   margin: 0;

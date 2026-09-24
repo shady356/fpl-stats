@@ -2,6 +2,14 @@ export const RATING_COLUMN_KEYS = ['rating_total', 'rating_defense', 'rating_att
 
 export const COLUMNS = [
   {
+    key: 'position',
+    label: '#',
+    to_fixed: 0,
+    hidden: false,
+    align: 'center',
+    tooltip: 'No description',
+  },
+  {
     key: 'team_name',
     label: 'Team',
     to_fixed: 0,

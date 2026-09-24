@@ -13,10 +13,13 @@ const teams = computePlayStyles(computeRatings(epl_2026_teams.map((team) => ({ .
 function App() {
   const [teamRatingColor, setTeamRatingColor] = useState('none')
   return (
-    <div>
-      <Header setTeamRatingColor={setTeamRatingColor} />
-      <Table teamRatingColor={teamRatingColor} />
-    </div>
+    <>
+      <Header />
+      <main className="main">
+        <TableFilters setTeamRatingColor={setTeamRatingColor} />
+        <Table teamRatingColor={teamRatingColor} />
+      </main>
+    </>
   )
 }
 
@@ -187,19 +190,27 @@ function StarRating({ rating }) {
   )
 }
 
-function Header({ setTeamRatingColor }) {
+function TableFilters({ setTeamRatingColor }) {
+  return (
+    <label>
+      FDR colors
+      <select name="fdr-colors" id="" onChange={(e) => setTeamRatingColor(e.target.value)}>
+        <option value="none">None</option>
+        <option value="total">Total</option>
+        <option value="attack">Attack</option>
+        <option value="defense">Defense</option>
+      </select>
+    </label>
+  )
+}
+
+function Header() {
   return (
     <header>
-      <img className="pl-logo" src={plLogoSVG} alt="" />
-      <label>
-        FDR colors
-        <select name="fdr-colors" id="" onChange={(e) => setTeamRatingColor(e.target.value)}>
-          <option value="none">None</option>
-          <option value="total">Total</option>
-          <option value="attack">Attack</option>
-          <option value="defense">Defense</option>
-        </select>
-      </label>
+      <div className="top">
+        <img className="pl-logo" src={plLogoSVG} alt="" />
+      </div>
+      <nav></nav>
     </header>
   )
 }

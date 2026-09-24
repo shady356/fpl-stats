@@ -15,6 +15,16 @@ DATA_FILE = Path(__file__).parent / "data" / f"{LEAGUE}_{SEASON}_teams.json"
 # Blocked shots, misses and post-hits are not on target.
 ON_TARGET_RESULTS = {"Goal", "SavedShot"}
 
+TEAM_NAME_OVERRIDES = {
+    "Manchester City": "Man City",
+    "Manchester United": "Man Utd",
+    "Newcastle United": "Newcastle",
+    "Nottingham Forest": "Nottm Forest",
+    "Crystal Palace": "Palace",
+    "Tottenham": "Spurs",
+    "Ipswich": "Ipswich Town",
+}
+
 
 async def fetch_team_stats(session):
     understat = Understat(session)
@@ -44,7 +54,8 @@ async def fetch_team_stats(session):
 
         stats[team["id"]] = {
             "team_id": int(team["id"]),
-            "team_name": team["title"],
+            "team_name": TEAM_NAME_OVERRIDES.get(team["title"], team["title"]),
+            "position": None,
             "games_played": games_played,
             "points": sum(m["pts"] for m in history),
             "expected_points": round(sum(m["xpts"] for m in history), 2),
@@ -83,9 +94,14 @@ async def fetch_team_stats(session):
         stats[away_id]["shots_against"] += len(home_shots)
         stats[away_id]["shots_on_target_against"] += home_on_target
 
-    return sorted(
-        stats.values(), key=lambda t: (-t["points"], -(t["goals"] - t["ga"]))
+    ranked = sorted(
+        stats.values(),
+        key=lambda t: (-t["points"], -(t["goals"] - t["ga"]), -t["goals"]),
     )
+    for position, team in enumerate(ranked, start=1):
+        team["position"] = position
+
+    return ranked
 
 
 async def main():
