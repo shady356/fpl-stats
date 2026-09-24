@@ -116,4 +116,11 @@ export const COLUMNS = [
     align: 'right',
     tooltip: 'Passes allowed per defensive action in the opposition half.',
   },
+  {
+    key: 'pressing',
+    label: 'Pressing',
+    hidden: false,
+    align: 'left',
+    tooltip: 'How much a team is pressing the opponents',
+  },
 ]

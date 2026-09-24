@@ -87,6 +87,10 @@ table tbody tr:hover {
   height: 24px;
 }
 
+.play-style {
+  font-family: 'Roboto', sans-serif;
+}
+
 .sort-button {
   background: none;
   border: none;

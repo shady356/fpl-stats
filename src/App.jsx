@@ -145,7 +145,7 @@ function TableCell({ column, team, showTeamRatingColor }) {
 
   if (column.key === 'play_style') {
     return (
-      <td style={{ textAlign: column.align }} title={team.play_style_detail}>
+      <td className="play-style" style={{ textAlign: column.align }} title={team.play_style_detail}>
         {team.play_style}
       </td>
     )
