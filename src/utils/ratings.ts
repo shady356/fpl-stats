@@ -26,7 +26,7 @@ export type League = Record<RatedStat, { min: number; max: number }>
 /**
  * A team's attack, defense and total ratings before re-normalizing across the league.
  */
-interface RawRating {
+type RawRating = {
   attack: number
   defense: number
   total: number

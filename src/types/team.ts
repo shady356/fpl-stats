@@ -1,7 +1,7 @@
 /**
  * One team's season stats, as written to `epl-stats/data` by `fetch_stats.py`.
  */
-export interface TeamStats {
+export type TeamStats = {
   team_id: number
   team_name: string
   position: number
@@ -27,7 +27,7 @@ export interface TeamStats {
 /**
  * Fields added by computeRatings. Ratings are 0-100, colors are CSS colors.
  */
-export interface TeamRatings {
+export type TeamRatings = {
   rating_attack: number
   rating_defense: number
   rating_total: number
@@ -39,7 +39,7 @@ export interface TeamRatings {
 /**
  * Fields added by computePlayStyles.
  */
-export interface TeamPlayStyle {
+export type TeamPlayStyle = {
   pressing: string
   play_style: string
   play_style_detail: string

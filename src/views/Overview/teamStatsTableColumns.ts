@@ -2,7 +2,7 @@ import type { Team } from '@/types/team.ts'
 
 export type ColumnKey = keyof Team
 
-export interface Column {
+export type Column = {
   key: ColumnKey
   label: string
   /** Decimals to show for numeric values; unset shows the value as-is. */

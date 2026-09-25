@@ -44,7 +44,7 @@ function formatValue(value: Team[ColumnKey], column: Column): string | number {
   return value
 }
 
-interface TableProps {
+type TableProps = {
   teamRatingColor: TeamRatingColor
 }
 
@@ -92,7 +92,7 @@ function Table({ teamRatingColor }: TableProps) {
   )
 }
 
-interface TableHeaderCellProps {
+type TableHeaderCellProps = {
   column: Column
   sortOrder: SortOrder | null
   onSort: (key: ColumnKey) => void
@@ -116,7 +116,7 @@ function TableHeaderCell({ column, sortOrder, onSort }: TableHeaderCellProps) {
   )
 }
 
-interface TableRowProps {
+type TableRowProps = {
   team: Team
   columns: Column[]
   teamRatingColor: TeamRatingColor
@@ -145,7 +145,7 @@ function getTeamRatingColors(team: Team, teamRatingColor: TeamRatingColor): stri
   }
 }
 
-interface TableCellProps {
+type TableCellProps = {
   column: Column
   team: Team
   teamRatingColor: TeamRatingColor
@@ -190,7 +190,7 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
   return <td style={{ textAlign: column.align }}>{formatValue(team[column.key], column)}</td>
 }
 
-interface TableFiltersProps {
+type TableFiltersProps = {
   setTeamRatingColor: (color: TeamRatingColor) => void
 }
 

@@ -1,4 +1,4 @@
-interface StarRatingProps {
+type StarRatingProps = {
   /** Rating from 0 (1 star) to 100 (5 stars). */
   score: number
 }
