@@ -38,53 +38,45 @@ function calcTotal(attack, defense, points, xP) {
   return attack * 0.4 + defense * 0.4 + points * 0.1 + xP * 0.1
 }
 
+// Team stat keys that feed the rating; calcLeague records each one's league range.
+const RATED_STATS = [
+  'points',
+  'expected_points',
+  'goals',
+  'npxg',
+  'deep_per_game',
+  'shots',
+  'ga',
+  'npxga',
+  'deep_allowed_per_game',
+  'shots_against',
+]
+
+// Returns { [statKey]: { min, max } } across all teams.
 export function calcLeague(teams) {
   const league = {}
-  league.ptsMax = Math.max(...teams.map((t) => t.points))
-  league.ptsMin = Math.min(...teams.map((t) => t.points))
-  league.xPtsMax = Math.max(...teams.map((t) => t.expected_points))
-  league.xPtsMin = Math.min(...teams.map((t) => t.expected_points))
-  league.gMax = Math.max(...teams.map((t) => t.goals))
-  league.gMin = Math.min(...teams.map((t) => t.goals))
-  league.npxgMax = Math.max(...teams.map((t) => t.npxg))
-  league.npxgMin = Math.min(...teams.map((t) => t.npxg))
-  league.gAMax = Math.max(...teams.map((t) => t.ga))
-  league.gAMin = Math.min(...teams.map((t) => t.ga))
-  league.deepMax = Math.max(...teams.map((t) => t.deep_per_game))
-  league.deepMin = Math.min(...teams.map((t) => t.deep_per_game))
-  league.npxgaMax = Math.max(...teams.map((t) => t.npxga))
-  league.npxgaMin = Math.min(...teams.map((t) => t.npxga))
-  league.deepAllowedMax = Math.max(...teams.map((t) => t.deep_allowed_per_game))
-  league.deepAllowedMin = Math.min(...teams.map((t) => t.deep_allowed_per_game))
-  league.shotsMax = Math.max(...teams.map((t) => t.shots))
-  league.shotsMin = Math.min(...teams.map((t) => t.shots))
-  league.shotsAgainstMax = Math.max(...teams.map((t) => t.shots_against))
-  league.shotsAgainstMin = Math.min(...teams.map((t) => t.shots_against))
+  RATED_STATS.forEach((key) => {
+    const values = teams.map((t) => t[key])
+    league[key] = { min: Math.min(...values), max: Math.max(...values) }
+  })
   return league
 }
 
 // points/attack/defense each blend actual + expected into one 1-5 rating.
 export function calcTeamRating(team, league) {
-  const scaledGoals = scale(league.gMax, league.gMin, team.goals)
-  const scaledPoints = scale(league.ptsMax, league.ptsMin, team.points)
-  const scalednpxg = scale(league.npxgMax, league.npxgMin, team.npxg)
-  const scaledxP = scale(league.xPtsMax, league.xPtsMin, team.expected_points)
-  const scaledDeep = scale(league.deepMax, league.deepMin, team.deep_per_game)
-  const scaledGoalsA = scale(league.gAMax, league.gAMin, team.ga, true)
-  const scalednpxga = scale(league.npxgaMax, league.npxgaMin, team.npxga, true)
-  const scaledDeepAllowed = scale(
-    league.deepAllowedMax,
-    league.deepAllowedMin,
-    team.deep_allowed_per_game,
-    true,
-  )
-  const scaledShots = scale(league.shotsMax, league.shotsMin, team.shots)
-  const scaledShotsAgainst = scale(
-    league.shotsAgainstMax,
-    league.shotsAgainstMin,
-    team.shots_against,
-    true,
-  )
+  const scaleStat = (key, reverse = false) =>
+    scale(league[key].max, league[key].min, team[key], reverse)
+
+  const scaledPoints = scaleStat('points')
+  const scaledxP = scaleStat('expected_points')
+  const scaledGoals = scaleStat('goals')
+  const scalednpxg = scaleStat('npxg')
+  const scaledDeep = scaleStat('deep_per_game')
+  const scaledShots = scaleStat('shots')
+  const scaledGoalsA = scaleStat('ga', true)
+  const scalednpxga = scaleStat('npxga', true)
+  const scaledDeepAllowed = scaleStat('deep_allowed_per_game', true)
+  const scaledShotsAgainst = scaleStat('shots_against', true)
 
   const attack = calcAttack(scaledGoals, scalednpxg, scaledDeep, scaledShots)
   const defense = calcDefense(scaledGoalsA, scalednpxga, scaledDeepAllowed, scaledShotsAgainst)
