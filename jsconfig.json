@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@data/*": ["./epl-stats/data/*"]
+    }
+  },
+  "include": ["src", "epl-stats/data"]
+}
