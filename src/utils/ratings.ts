@@ -16,6 +16,16 @@ const RATED_STATS = [
   'shots_against',
 ] as const satisfies readonly (keyof TeamStats)[]
 
+/* 
+  Without as const, TypeScript sees your array as a generic list of strings (string[]).
+  With as const, it locks the values down to those exact literal words ('points', 'goals', etc.).
+  
+  But as const does not care what those words mean. You could type 'banana' or 'spaceship' into that array,
+  and as const will happily lock them in.
+  This is where satisfies steps in. It doesn't actually change the type of the array at all.
+  Instead, it asks TypeScript: "Hey, look at these specific strings I just locked down. 
+  Are they all valid keys inside TeamStats?" */
+
 type RatedStat = (typeof RATED_STATS)[number]
 
 /**
@@ -148,11 +158,12 @@ export function calcTeamRating(team: TeamStats, league: League): RawRating {
 
   const attack = calcAttack(scaledGoals, scalednpxg, scaledDeep, scaledShots)
   const defense = calcDefense(scaledGoalsA, scalednpxga, scaledDeepAllowed, scaledShotsAgainst)
+  const total = calcTotal(attack, defense, scaledPoints, scaledxP)
 
   return {
     attack,
     defense,
-    total: calcTotal(attack, defense, scaledPoints, scaledxP),
+    total,
   }
 }
 
@@ -174,7 +185,7 @@ export const RATING_COLORS: Record<number, string> = {
  * @param teams - Team stat objects; not modified.
  * @returns New team objects with the rating fields added.
  */
-export function computeRatings<T extends TeamStats>(teams: T[]): (T & TeamRatings)[] {
+export function computeRatings(teams: TeamStats[]): (TeamStats & TeamRatings)[] {
   const league = calcLeague(teams)
   const rawRatings = teams.map((team) => calcTeamRating(team, league))
 
