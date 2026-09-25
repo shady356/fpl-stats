@@ -1,7 +1,9 @@
-/**
- * @param {number} score - Rating from 0 (1 star) to 100 (5 stars)
- */
-export default function StarRating({ score }) {
+interface StarRatingProps {
+  /** Rating from 0 (1 star) to 100 (5 stars). */
+  score: number
+}
+
+export default function StarRating({ score }: StarRatingProps) {
   const stars = new Array(5).fill(0)
   const value = score / 25 + 1
   const fullStars = Math.floor(value)

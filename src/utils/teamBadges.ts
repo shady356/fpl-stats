@@ -1,4 +1,4 @@
-const TEAM_BADGE_CODES = {
+const TEAM_BADGE_CODES: Record<string, number> = {
   Arsenal: 3,
   'Aston Villa': 7,
   Bournemouth: 91,
@@ -21,7 +21,7 @@ const TEAM_BADGE_CODES = {
   Spurs: 6,
 }
 
-export function teamBadgeUrl(teamName) {
+export function teamBadgeUrl(teamName: string): string | null {
   const code = TEAM_BADGE_CODES[teamName]
   return code ? `https://resources.premierleague.com/premierleague25/badges-alt/${code}.svg` : null
 }

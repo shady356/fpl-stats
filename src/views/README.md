@@ -7,15 +7,15 @@ A view gets its own folder once it has more than one file (styles, view-local co
 ```
 views/
   about/
-    About.jsx
+    About.tsx
     About.css
     components/
-      AboutHelper.jsx      # used only by this view — not shared elsewhere
+      AboutHelper.tsx      # used only by this view — not shared elsewhere
     contact/                # sub-view nested under `about`
-      Contact.jsx
+      Contact.tsx
       Contact.css
   fixtures/
-    Fixtures.jsx
+    Fixtures.tsx
 ```
 
 Keep out of `views/`:

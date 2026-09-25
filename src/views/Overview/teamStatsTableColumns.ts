@@ -1,6 +1,26 @@
-export const RATING_COLUMN_KEYS = ['rating_total', 'rating_defense', 'rating_attack']
+import type { Team } from '@/types/team.ts'
 
-export const COLUMNS = [
+export type ColumnKey = keyof Team
+
+export interface Column {
+  key: ColumnKey
+  label: string
+  /** Decimals to show for numeric values; unset shows the value as-is. */
+  to_fixed?: number
+  hidden: boolean
+  align: 'left' | 'center' | 'right'
+  tooltip: string
+}
+
+export const RATING_COLUMN_KEYS = ['rating_total', 'rating_defense', 'rating_attack'] as const
+
+export type RatingColumnKey = (typeof RATING_COLUMN_KEYS)[number]
+
+export function isRatingColumnKey(key: ColumnKey): key is RatingColumnKey {
+  return (RATING_COLUMN_KEYS as readonly ColumnKey[]).includes(key)
+}
+
+export const COLUMNS: Column[] = [
   {
     key: 'position',
     label: '#',

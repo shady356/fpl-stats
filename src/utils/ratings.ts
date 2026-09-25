@@ -1,3 +1,5 @@
+import type { TeamRatings, TeamStats } from '@/types/team.ts'
+
 /**
  * Team stat keys that feed the rating; calcLeague records each one's league range.
  */
@@ -12,45 +14,61 @@ const RATED_STATS = [
   'npxga',
   'deep_allowed_per_game',
   'shots_against',
-]
+] as const satisfies readonly (keyof TeamStats)[]
+
+type RatedStat = (typeof RATED_STATS)[number]
+
+/**
+ * League-wide min/max for each rated stat.
+ */
+export type League = Record<RatedStat, { min: number; max: number }>
+
+/**
+ * A team's attack, defense and total ratings before re-normalizing across the league.
+ */
+interface RawRating {
+  attack: number
+  defense: number
+  total: number
+}
 
 /* --- CALC RATINGS --- */
 /**
  * Attack rating from the team's own attacking stats only, weighting expected
  * over actual since xG is the more stable signal.
- * @param {number} goals - Scaled goals scored (0-100).
- * @param {number} npxg - Scaled non-penalty xG (0-100).
- * @param {number} deep - Scaled deep completions per game (0-100).
- * @param {number} shots - Scaled shots (0-100).
- * @returns {number} Raw attack rating (0-100).
+ * @param goals - Scaled goals scored (0-100).
+ * @param npxg - Scaled non-penalty xG (0-100).
+ * @param deep - Scaled deep completions per game (0-100).
+ * @param shots - Scaled shots (0-100).
+ * @returns Raw attack rating (0-100).
  */
-function calcAttack(goals, npxg, deep, shots) {
+function calcAttack(goals: number, npxg: number, deep: number, shots: number): number {
   return goals * 0.3 + npxg * 0.4 + deep * 0.2 + shots * 0.1
 }
 
 /**
  * Defense rating from the team's own defensive stats only, mirroring calcAttack.
  * All inputs are reverse-scaled, so higher means fewer conceded.
- * @param {number} ga - Scaled goals against (0-100).
- * @param {number} npxga - Scaled non-penalty xGA (0-100).
- * @param {number} deepAllowed - Scaled deep completions allowed per game (0-100).
- * @param {number} shotsAgainst - Scaled shots against (0-100).
- * @returns {number} Raw defense rating (0-100).
+ * @param ga - Scaled goals against (0-100).
+ * @param npxga - Scaled non-penalty xGA (0-100).
+ * @param deepAllowed - Scaled deep completions allowed per game (0-100).
+ * @param shotsAgainst - Scaled shots against (0-100).
+ * @returns Raw defense rating (0-100).
  */
-function calcDefense(ga, npxga, deepAllowed, shotsAgainst) {
+function calcDefense(ga: number, npxga: number, deepAllowed: number, shotsAgainst: number): number {
   return ga * 0.3 + npxga * 0.4 + deepAllowed * 0.2 + shotsAgainst * 0.1
 }
 
 /**
  * Overall rating. Results (points + xP) only feed the total, so they don't
  * blur attack vs defense.
- * @param {number} attack - Raw attack rating.
- * @param {number} defense - Raw defense rating.
- * @param {number} points - Scaled points (0-100).
- * @param {number} xP - Scaled expected points (0-100).
- * @returns {number} Raw total rating (0-100).
+ * @param attack - Raw attack rating.
+ * @param defense - Raw defense rating.
+ * @param points - Scaled points (0-100).
+ * @param xP - Scaled expected points (0-100).
+ * @returns Raw total rating (0-100).
  */
-function calcTotal(attack, defense, points, xP) {
+function calcTotal(attack: number, defense: number, points: number, xP: number): number {
   return attack * 0.4 + defense * 0.4 + points * 0.1 + xP * 0.1
 }
 
@@ -58,19 +76,22 @@ function calcTotal(attack, defense, points, xP) {
 
 /**
  * Rescale `teamValue` from [leagueMin, leagueMax] onto 0-100.
- * @param {number} leagueMax - Highest value in the league.
- * @param {number} leagueMin - Lowest value in the league.
- * @param {number} teamValue - The team's value.
- * @param {boolean} [reverse=false] - Flip the scale for stats where lower is better (e.g. goals against).
- * @returns {number} Score from 0 (worst) to 100 (best); 50 if every team is tied.
+ * @param leagueMax - Highest value in the league.
+ * @param leagueMin - Lowest value in the league.
+ * @param teamValue - The team's value.
+ * @param reverse - Flip the scale for stats where lower is better (e.g. goals against).
+ * @returns Score from 0 (worst) to 100 (best); 50 if every team is tied.
  */
-export function scale(leagueMax, leagueMin, teamValue, reverse = false) {
+export function scale(
+  leagueMax: number,
+  leagueMin: number,
+  teamValue: number,
+  reverse = false,
+): number {
   // Every team tied on this stat — treat as a neutral mid-score instead of dividing by zero.
   if (leagueMax === leagueMin) return 50
 
-  let score
-
-  score = ((teamValue - leagueMin) / (leagueMax - leagueMin)) * 100
+  let score = ((teamValue - leagueMin) / (leagueMax - leagueMin)) * 100
   if (reverse) {
     score = ((leagueMax - teamValue) / (leagueMax - leagueMin)) * 100
   }
@@ -81,10 +102,10 @@ export function scale(leagueMax, leagueMin, teamValue, reverse = false) {
 /**
  * Map a 0-100 rating onto an integer 1-5 bucket: floor unless the decimal
  * part is >= 0.5, in which case round up.
- * @param {number} rating - Rating from 0 to 100.
- * @returns {number} Integer from 1 to 5, used as a RATING_COLORS key.
+ * @param rating - Rating from 0 to 100.
+ * @returns Integer from 1 to 5, used as a RATING_COLORS key.
  */
-export function reviseTotalRating(rating) {
+export function reviseTotalRating(rating: number): number {
   const score = rating / 25 + 1
   const decimal = score - Math.floor(score)
   return decimal >= 0.5 ? Math.floor(score + 1) : Math.floor(score)
@@ -92,27 +113,26 @@ export function reviseTotalRating(rating) {
 
 /**
  * League-wide range of every stat in RATED_STATS.
- * @param {object[]} teams - Team stat objects.
- * @returns {Object<string, {min: number, max: number}>} Range per stat key.
+ * @param teams - Team stat objects.
+ * @returns Range per stat key.
  */
-export function calcLeague(teams) {
-  const league = {}
-  RATED_STATS.forEach((key) => {
+export function calcLeague(teams: TeamStats[]): League {
+  const entries = RATED_STATS.map((key) => {
     const values = teams.map((t) => t[key])
-    league[key] = { min: Math.min(...values), max: Math.max(...values) }
+    return [key, { min: Math.min(...values), max: Math.max(...values) }]
   })
-  return league
+  return Object.fromEntries(entries) as League
 }
 
 /**
  * Raw attack, defense and total ratings for one team, before re-normalizing
  * across the league.
- * @param {object} team - Team stat object.
- * @param {Object<string, {min: number, max: number}>} league - Output of calcLeague.
- * @returns {{attack: number, defense: number, total: number}} Raw ratings.
+ * @param team - Team stat object.
+ * @param league - Output of calcLeague.
+ * @returns Raw ratings.
  */
-export function calcTeamRating(team, league) {
-  const scaleStat = (key, reverse = false) =>
+export function calcTeamRating(team: TeamStats, league: League): RawRating {
+  const scaleStat = (key: RatedStat, reverse = false) =>
     scale(league[key].max, league[key].min, team[key], reverse)
 
   const scaledPoints = scaleStat('points')
@@ -141,7 +161,7 @@ export function calcTeamRating(team, league) {
 /**
  * Color per 1-5 bucket from reviseTotalRating, green (1 - easy to beat) to red (5 - hard to beat).
  */
-export const RATING_COLORS = {
+export const RATING_COLORS: Record<number, string> = {
   1: 'rgb(0, 78, 47)',
   2: 'rgb(0, 150, 73)',
   3: 'rgb(108, 108, 108)',
@@ -151,10 +171,10 @@ export const RATING_COLORS = {
 
 /**
  * Add rating_attack/defense/total (0-100) and matching *_color fields to each team.
- * @param {object[]} teams - Team stat objects; mutated in place.
- * @returns {object[]} The same `teams` array.
+ * @param teams - Team stat objects; not modified.
+ * @returns New team objects with the rating fields added.
  */
-export function computeRatings(teams) {
+export function computeRatings<T extends TeamStats>(teams: T[]): (T & TeamRatings)[] {
   const league = calcLeague(teams)
   const rawRatings = teams.map((team) => calcTeamRating(team, league))
 
@@ -167,21 +187,21 @@ export function computeRatings(teams) {
   const totalMax = Math.max(...rawRatings.map((r) => r.total))
   const totalMin = Math.min(...rawRatings.map((r) => r.total))
 
-  teams.forEach((team, index) => {
+  return teams.map((team, index) => {
     const { attack, defense, total } = rawRatings[index]
 
     const rating_attack = scale(attackMax, attackMin, attack)
     const rating_defense = scale(defenseMax, defenseMin, defense)
     const rating_total = scale(totalMax, totalMin, total)
 
-    team.rating_attack = rating_attack
-    team.rating_defense = rating_defense
-    team.rating_total = rating_total
-
-    team.rating_attack_color = RATING_COLORS[reviseTotalRating(rating_attack)]
-    team.rating_defense_color = RATING_COLORS[reviseTotalRating(rating_defense)]
-    team.rating_total_color = RATING_COLORS[reviseTotalRating(rating_total)]
+    return {
+      ...team,
+      rating_attack,
+      rating_defense,
+      rating_total,
+      rating_attack_color: RATING_COLORS[reviseTotalRating(rating_attack)],
+      rating_defense_color: RATING_COLORS[reviseTotalRating(rating_defense)],
+      rating_total_color: RATING_COLORS[reviseTotalRating(rating_total)],
+    }
   })
-
-  return teams
 }

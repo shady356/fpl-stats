@@ -1,8 +1,8 @@
 import './App.css'
 import 'material-symbols/rounded.css'
 
-import Header from '@/components/layout/Header.jsx'
-import Overview from '@/views/Overview/Overview.jsx'
+import Header from '@/components/layout/Header.tsx'
+import Overview from '@/views/Overview/Overview.tsx'
 
 function App() {
   return (

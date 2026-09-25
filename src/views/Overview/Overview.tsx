@@ -1,17 +1,22 @@
 import { useState } from 'react'
 
 import epl_2026_teams from '@data/epl_2026_teams.json'
-import StarRating from '@/components/ui/StarRating.jsx'
-import { computePlayStyles } from '@/utils/playStyles.js'
-import { computeRatings } from '@/utils/ratings.js'
-import { teamBadgeUrl } from '@/utils/teamBadges.js'
+import StarRating from '@/components/ui/StarRating.tsx'
+import type { Team } from '@/types/team.ts'
+import { computePlayStyles } from '@/utils/playStyles.ts'
+import { computeRatings } from '@/utils/ratings.ts'
+import { teamBadgeUrl } from '@/utils/teamBadges.ts'
 
-import { COLUMNS, RATING_COLUMN_KEYS } from './teamStatsTableColumns.js'
+import { COLUMNS, isRatingColumnKey } from './teamStatsTableColumns.ts'
+import type { Column, ColumnKey } from './teamStatsTableColumns.ts'
 
-const teams = computePlayStyles(computeRatings(epl_2026_teams.map((team) => ({ ...team }))))
+type SortOrder = 'asc' | 'desc'
+type TeamRatingColor = 'none' | 'total' | 'attack' | 'defense'
+
+const teams: Team[] = computePlayStyles(computeRatings(epl_2026_teams))
 
 function App() {
-  const [teamRatingColor, setTeamRatingColor] = useState('none')
+  const [teamRatingColor, setTeamRatingColor] = useState<TeamRatingColor>('none')
   return (
     <>
       <TableFilters setTeamRatingColor={setTeamRatingColor} />
@@ -20,33 +25,34 @@ function App() {
   )
 }
 
-function sortTeams(teamsToSort, sortKey, sortOrder) {
+function sortTeams(teamsToSort: Team[], sortKey: ColumnKey, sortOrder: SortOrder): Team[] {
   const direction = sortOrder === 'asc' ? 1 : -1
   return [...teamsToSort].sort((a, b) => {
     const aVal = a[sortKey]
     const bVal = b[sortKey]
-    if (typeof aVal === 'string') {
-      return aVal.localeCompare(bVal) * direction
+    if (typeof aVal === 'number' && typeof bVal === 'number') {
+      return (aVal - bVal) * direction
     }
-    return (aVal - bVal) * direction
+    return String(aVal).localeCompare(String(bVal)) * direction
   })
 }
 
-function formatTeamValues(team) {
-  const formatted = { ...team }
-  COLUMNS.forEach((col) => {
-    if (col.to_fixed !== undefined && typeof team[col.key] === 'number') {
-      formatted[col.key] = team[col.key].toFixed(col.to_fixed)
-    }
-  })
-  return formatted
+function formatValue(value: Team[ColumnKey], column: Column): string | number {
+  if (column.to_fixed !== undefined && typeof value === 'number') {
+    return value.toFixed(column.to_fixed)
+  }
+  return value
 }
 
-function Table({ teamRatingColor }) {
-  const [sortKey, setSortKey] = useState('points')
-  const [sortOrder, setSortOrder] = useState('desc')
+interface TableProps {
+  teamRatingColor: TeamRatingColor
+}
 
-  function sort(column) {
+function Table({ teamRatingColor }: TableProps) {
+  const [sortKey, setSortKey] = useState<ColumnKey>('points')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
+
+  function sort(column: ColumnKey) {
     if (sortKey === column) {
       setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))
     } else {
@@ -55,7 +61,7 @@ function Table({ teamRatingColor }) {
     }
   }
 
-  const sortedTeams = sortTeams(teams, sortKey, sortOrder).map(formatTeamValues)
+  const sortedTeams = sortTeams(teams, sortKey, sortOrder)
   const visibleColumns = COLUMNS.filter((col) => !col.hidden)
 
   return (
@@ -86,7 +92,13 @@ function Table({ teamRatingColor }) {
   )
 }
 
-function TableHeaderCell({ column, sortOrder, onSort }) {
+interface TableHeaderCellProps {
+  column: Column
+  sortOrder: SortOrder | null
+  onSort: (key: ColumnKey) => void
+}
+
+function TableHeaderCell({ column, sortOrder, onSort }: TableHeaderCellProps) {
   return (
     <th style={{ textAlign: column.align }} title={column.tooltip}>
       <button
@@ -104,7 +116,13 @@ function TableHeaderCell({ column, sortOrder, onSort }) {
   )
 }
 
-function TableRow({ team, columns, teamRatingColor }) {
+interface TableRowProps {
+  team: Team
+  columns: Column[]
+  teamRatingColor: TeamRatingColor
+}
+
+function TableRow({ team, columns, teamRatingColor }: TableRowProps) {
   return (
     <tr>
       {columns.map((col) => (
@@ -114,7 +132,7 @@ function TableRow({ team, columns, teamRatingColor }) {
   )
 }
 
-function getTeamRatingColors(team, teamRatingColor) {
+function getTeamRatingColors(team: Team, teamRatingColor: TeamRatingColor): string {
   switch (teamRatingColor) {
     case 'attack':
       return team.rating_attack_color
@@ -127,10 +145,17 @@ function getTeamRatingColors(team, teamRatingColor) {
   }
 }
 
-function TableCell({ column, team, teamRatingColor }) {
+interface TableCellProps {
+  column: Column
+  team: Team
+  teamRatingColor: TeamRatingColor
+}
+
+function TableCell({ column, team, teamRatingColor }: TableCellProps) {
   const teamColor = getTeamRatingColors(team, teamRatingColor)
 
   if (column.key === 'team_name') {
+    const badgeUrl = teamBadgeUrl(team.team_name)
     return (
       <td>
         <div
@@ -139,9 +164,7 @@ function TableCell({ column, team, teamRatingColor }) {
             background: `linear-gradient(90deg, ${teamColor} 0%, rgba(0, 0, 0, 0) 100%)`,
           }}
         >
-          {teamBadgeUrl(team.team_name) && (
-            <img className="team-badge" src={teamBadgeUrl(team.team_name)} alt="" />
-          )}
+          {badgeUrl && <img className="team-badge" src={badgeUrl} alt="" />}
           {team.team_name}
         </div>
       </td>
@@ -156,22 +179,30 @@ function TableCell({ column, team, teamRatingColor }) {
     )
   }
 
-  if (RATING_COLUMN_KEYS.includes(column.key)) {
+  if (isRatingColumnKey(column.key)) {
     return (
-      <td title={`${column.label}: ${team[column.key]}`}>
+      <td title={`${column.label}: ${formatValue(team[column.key], column)}`}>
         <StarRating score={team[column.key]} />
       </td>
     )
   }
 
-  return <td style={{ textAlign: column.align }}>{team[column.key]}</td>
+  return <td style={{ textAlign: column.align }}>{formatValue(team[column.key], column)}</td>
 }
 
-function TableFilters({ setTeamRatingColor }) {
+interface TableFiltersProps {
+  setTeamRatingColor: (color: TeamRatingColor) => void
+}
+
+function TableFilters({ setTeamRatingColor }: TableFiltersProps) {
   return (
     <label>
       FDR colors
-      <select name="fdr-colors" id="" onChange={(e) => setTeamRatingColor(e.target.value)}>
+      <select
+        name="fdr-colors"
+        id=""
+        onChange={(e) => setTeamRatingColor(e.target.value as TeamRatingColor)}
+      >
         <option value="none">None</option>
         <option value="total">Total</option>
         <option value="attack">Attack</option>
