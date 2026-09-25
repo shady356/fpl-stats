@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { computeRatings } from '@/utils/ratings.js'
-import { computePlayStyles } from '@/utils/playStyles.js'
-import { teamBadgeUrl } from '@/utils/teamBadges.js'
-import { COLUMNS, RATING_COLUMN_KEYS } from './teamStatsTableColumns.js'
+
 import epl_2026_teams from '@data/epl_2026_teams.json'
 import StarRating from '@/components/ui/StarRating.jsx'
+import { computePlayStyles } from '@/utils/playStyles.js'
+import { computeRatings } from '@/utils/ratings.js'
+import { teamBadgeUrl } from '@/utils/teamBadges.js'
+
+import { COLUMNS, RATING_COLUMN_KEYS } from './teamStatsTableColumns.js'
 
 const teams = computePlayStyles(computeRatings(epl_2026_teams.map((team) => ({ ...team }))))
 
