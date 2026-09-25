@@ -12,7 +12,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@bigballsdata/sdk": "^0.1.1",
     "material-symbols": "^0.47.5",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
