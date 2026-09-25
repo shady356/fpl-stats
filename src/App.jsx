@@ -207,10 +207,22 @@ function TableFilters({ setTeamRatingColor }) {
 function Header() {
   return (
     <header>
-      <div className="top">
-        <img className="pl-logo" src={plLogoSVG} alt="" />
+      <img className="pl-logo" src={plLogoSVG} alt="" />
+
+      <nav>
+        <ul>
+          <li>
+            <a href="/overview">Overview</a>
+          </li>
+          <li>
+            <a href="#">Fixtures</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div>
+        <button>settings</button>
       </div>
-      <nav></nav>
     </header>
   )
 }
