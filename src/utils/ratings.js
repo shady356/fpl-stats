@@ -84,7 +84,7 @@ export function calcTeamRating(team, league) {
   return {
     attack,
     defense,
-    totalCrude: round(calcTotal(attack, defense, scaledPoints, scaledxP), 2),
+    total: round(calcTotal(attack, defense, scaledPoints, scaledxP), 2),
   }
 }
 
@@ -108,23 +108,23 @@ export const RATING_COLORS = {
 // Mutates and returns `teams`, adding flat rating_* fields to each team.
 export function computeRatings(teams) {
   const league = calcLeague(teams)
-  const crudeRatings = teams.map((team) => calcTeamRating(team, league))
+  const rawRatings = teams.map((team) => calcTeamRating(team, league))
 
   // Re-normalize each sub-rating against its own min/max so the best/worst
   // team's rating actually spans the 1-5 scale.
-  const attackMax = Math.max(...crudeRatings.map((r) => r.attack))
-  const attackMin = Math.min(...crudeRatings.map((r) => r.attack))
-  const defenseMax = Math.max(...crudeRatings.map((r) => r.defense))
-  const defenseMin = Math.min(...crudeRatings.map((r) => r.defense))
-  const totalMax = Math.max(...crudeRatings.map((r) => r.totalCrude))
-  const totalMin = Math.min(...crudeRatings.map((r) => r.totalCrude))
+  const attackMax = Math.max(...rawRatings.map((r) => r.attack))
+  const attackMin = Math.min(...rawRatings.map((r) => r.attack))
+  const defenseMax = Math.max(...rawRatings.map((r) => r.defense))
+  const defenseMin = Math.min(...rawRatings.map((r) => r.defense))
+  const totalMax = Math.max(...rawRatings.map((r) => r.total))
+  const totalMin = Math.min(...rawRatings.map((r) => r.total))
 
   teams.forEach((team, index) => {
-    const { attack, defense, totalCrude } = crudeRatings[index]
+    const { attack, defense, total } = rawRatings[index]
 
     const rating_attack = round(scale(attackMax, attackMin, attack), 2)
     const rating_defense = round(scale(defenseMax, defenseMin, defense), 2)
-    const rating_total = round(scale(totalMax, totalMin, totalCrude), 2)
+    const rating_total = round(scale(totalMax, totalMin, total), 2)
 
     team.rating_attack = rating_attack
     team.rating_defense = rating_defense
