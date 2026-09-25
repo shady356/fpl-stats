@@ -14,7 +14,10 @@ caches them to JSON, and renders a plain HTML table.
 
 Output:
 
-- `data/epl_2026_teams.json` — the cached data
+- `data/epl_2026_teams.json` — cached team stats
+- `data/epl_2026_fixtures.json` — cached fixtures (every played and upcoming match)
+
+Each file is fetched only if missing, unless `--refresh` is passed.
 
 ## Fields
 
@@ -39,6 +42,21 @@ Output:
 | `deep_allowed_per_game`   | deep completions allowed per game, summed from per-match `deep_allowed` and divided by `games_played`                                                              |
 | `ppda_per_game`           | average PPDA (passes allowed per defensive action) per match — sum of each match's own `ppda.att / ppda.def` ratio, divided by `games_played`                     |
 | `o_ppda_per_game`         | average opponents' PPDA per match — sum of each match's own `ppda_allowed.att / ppda_allowed.def` ratio, divided by `games_played`                                 |
+
+## Fixture fields
+
+| field          | meaning                                                  |
+| -------------- | -------------------------------------------------------- |
+| `fixture_id`   | understat's internal match ID                            |
+| `kickoff`      | kickoff time, ISO 8601 UTC (e.g. `2026-10-10T11:30:00Z`) |
+| `home_team_id` | home team's `team_id`                                    |
+| `away_team_id` | away team's `team_id`                                    |
+| `home_goals`   | home goals; `null` until played                          |
+| `away_goals`   | away goals; `null` until played                          |
+| `home_xg`      | home expected goals; `null` until played                 |
+| `away_xg`      | away expected goals; `null` until played                 |
+
+understat has no gameweek numbers, so fixtures are ordered by `kickoff`.
 
 ## Why `shots_on_target` is derived, not fetched directly
 
