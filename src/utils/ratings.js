@@ -23,14 +23,19 @@ export function scale(leagueMax, leagueMin, teamValue, reverse = false) {
   return score
 }
 
-function calcAttack(goals, points, npxg, xP, deep) {
-  const value = goals * 0.26 + points * 0.26 + npxg * 0.21 + xP * 0.11 + deep * 0.16
-  return value
+// Attack and defense use only their own side's stats, weighting expected
+// over actual since xG is the more stable signal.
+function calcAttack(goals, npxg, deep, shots) {
+  return goals * 0.3 + npxg * 0.4 + deep * 0.2 + shots * 0.1
 }
 
-function calcDefense(ga, points, npxga, xP, deepAllowed) {
-  const value = ga * 0.26 + points * 0.26 + npxga * 0.21 + xP * 0.11 + deepAllowed * 0.16
-  return value
+function calcDefense(ga, npxga, deepAllowed, shotsAgainst) {
+  return ga * 0.3 + npxga * 0.4 + deepAllowed * 0.2 + shotsAgainst * 0.1
+}
+
+// Results (points + xP) only feed the total, so they don't blur attack vs defense.
+function calcTotal(attack, defense, points, xP) {
+  return attack * 0.4 + defense * 0.4 + points * 0.1 + xP * 0.1
 }
 
 export function calcLeague(teams) {
@@ -51,6 +56,10 @@ export function calcLeague(teams) {
   league.npxgaMin = Math.min(...teams.map((t) => t.npxga))
   league.deepAllowedMax = Math.max(...teams.map((t) => t.deep_allowed_per_game))
   league.deepAllowedMin = Math.min(...teams.map((t) => t.deep_allowed_per_game))
+  league.shotsMax = Math.max(...teams.map((t) => t.shots))
+  league.shotsMin = Math.min(...teams.map((t) => t.shots))
+  league.shotsAgainstMax = Math.max(...teams.map((t) => t.shots_against))
+  league.shotsAgainstMin = Math.min(...teams.map((t) => t.shots_against))
   return league
 }
 
@@ -69,14 +78,21 @@ export function calcTeamRating(team, league) {
     team.deep_allowed_per_game,
     true,
   )
+  const scaledShots = scale(league.shotsMax, league.shotsMin, team.shots)
+  const scaledShotsAgainst = scale(
+    league.shotsAgainstMax,
+    league.shotsAgainstMin,
+    team.shots_against,
+    true,
+  )
 
-  const attack = calcAttack(scaledGoals, scaledPoints, scalednpxg, scaledxP, scaledDeep)
-  const defense = calcDefense(scaledGoalsA, scaledPoints, scalednpxga, scaledxP, scaledDeepAllowed)
+  const attack = calcAttack(scaledGoals, scalednpxg, scaledDeep, scaledShots)
+  const defense = calcDefense(scaledGoalsA, scalednpxga, scaledDeepAllowed, scaledShotsAgainst)
 
   return {
     attack,
     defense,
-    totalCrude: round((attack + defense) / 2, 2),
+    totalCrude: round(calcTotal(attack, defense, scaledPoints, scaledxP), 2),
   }
 }
 
