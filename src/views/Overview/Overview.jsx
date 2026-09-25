@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import epl_2026_teams from '@data/epl_2026_teams.json'
 import { computeRatings } from '@/utils/ratings.js'
 import { computePlayStyles } from '@/utils/playStyles.js'
-import 'material-symbols/rounded.css'
 import { teamBadgeUrl } from '@/utils/teamBadges.js'
 import { COLUMNS, RATING_COLUMN_KEYS } from './teamStatsTableColumns.js'
+import epl_2026_teams from '@data/epl_2026_teams.json'
+import StarRating from '@/components/ui/StarRating.jsx'
 
 const teams = computePlayStyles(computeRatings(epl_2026_teams.map((team) => ({ ...team }))))
 
@@ -157,32 +157,12 @@ function TableCell({ column, team, teamRatingColor }) {
   if (RATING_COLUMN_KEYS.includes(column.key)) {
     return (
       <td title={`${column.label}: ${team[column.key]}`}>
-        <StarRating rating={team[column.key]} />
+        <StarRating score={team[column.key]} />
       </td>
     )
   }
 
   return <td style={{ textAlign: column.align }}>{team[column.key]}</td>
-}
-
-function StarRating({ rating }) {
-  const stars = new Array(5).fill(0)
-  const score = rating / 25 + 1
-  const fullStars = Math.floor(score)
-  const isHalfStar = score % 1 >= 0.5
-
-  return (
-    <div className="star-container">
-      {stars.map((_, i) => (
-        <span
-          key={i}
-          className={`material-symbols-rounded filled${i < fullStars || (isHalfStar && i === fullStars) ? ' colored' : ''}`}
-        >
-          {isHalfStar && i === fullStars ? 'star_half' : 'star'}
-        </span>
-      ))}
-    </div>
-  )
 }
 
 function TableFilters({ setTeamRatingColor }) {
