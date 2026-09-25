@@ -44,8 +44,8 @@ const TEMPO_LABELS = ['Territorial', 'Balanced buildup', 'Counter-attacking']
 // More shots per game = higher attacking volume.
 const ATTACK_LABELS = ['High-volume attack', 'Balanced attack', 'Low-volume attack']
 
-// Returns new team objects with pressing/play_style fields added; `teams` is not modified.
-export function computePlayStyles<T extends TeamStats>(teams: T[]): (T & TeamPlayStyle)[] {
+// Returns pressing/play_style fields per team, in the same order as `teams`.
+export function computePlayStyles(teams: TeamStats[]): TeamPlayStyle[] {
   const tempoTiers = rankTiers(teams, (t) => t.deep_per_game, true)
   const attackTiers = rankTiers(teams, (t) => t.shots / t.games_played, true)
 
@@ -56,7 +56,6 @@ export function computePlayStyles<T extends TeamStats>(teams: T[]): (T & TeamPla
     const pressing = getPressingRank(team.ppda_per_game)
 
     return {
-      ...team,
       pressing,
       play_style: tempo,
       play_style_detail:

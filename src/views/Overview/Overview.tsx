@@ -3,9 +3,7 @@ import { useState } from 'react'
 import epl_2026_teams from '@data/epl_2026_teams.json'
 import StarRating from '@/components/ui/StarRating.tsx'
 import type { Team } from '@/types/team.ts'
-import { computePlayStyles } from '@/utils/playStyles.ts'
-import { computeRatings } from '@/utils/ratings.ts'
-import { teamBadgeUrl } from '@/utils/teamBadges.ts'
+import { computeTeamData } from '@/utils/computeTeamData.ts'
 
 import { COLUMNS, isRatingColumnKey } from './teamStatsTableColumns.ts'
 import type { Column, ColumnKey } from './teamStatsTableColumns.ts'
@@ -13,7 +11,7 @@ import type { Column, ColumnKey } from './teamStatsTableColumns.ts'
 type SortOrder = 'asc' | 'desc'
 type TeamRatingColor = 'none' | 'total' | 'attack' | 'defense'
 
-const teams: Team[] = computePlayStyles(computeRatings(epl_2026_teams))
+const teams: Team[] = computeTeamData(epl_2026_teams)
 
 function App() {
   const [teamRatingColor, setTeamRatingColor] = useState<TeamRatingColor>('none')
@@ -155,7 +153,6 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
   const teamColor = getTeamRatingColors(team, teamRatingColor)
 
   if (column.key === 'team_name') {
-    const badgeUrl = teamBadgeUrl(team.team_name)
     return (
       <td>
         <div
@@ -164,7 +161,7 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
             background: `linear-gradient(90deg, ${teamColor} 0%, rgba(0, 0, 0, 0) 100%)`,
           }}
         >
-          {badgeUrl && <img className="team-badge" src={badgeUrl} alt="" />}
+          {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
           {team.team_name}
         </div>
       </td>

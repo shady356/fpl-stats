@@ -1,6 +1,6 @@
 import type { Team } from '@/types/team.ts'
 
-export type ColumnKey = keyof Team
+export type ColumnKey = Exclude<keyof Team, 'badge_url'>
 
 export type Column = {
   key: ColumnKey

@@ -25,7 +25,7 @@ export type TeamStats = {
 }
 
 /**
- * Fields added by computeRatings. Ratings are 0-100, colors are CSS colors.
+ * Fields computed by computeRatings. Ratings are 0-100, colors are CSS colors.
  */
 export type TeamRatings = {
   rating_attack: number
@@ -37,7 +37,7 @@ export type TeamRatings = {
 }
 
 /**
- * Fields added by computePlayStyles.
+ * Fields computed by computePlayStyles.
  */
 export type TeamPlayStyle = {
   pressing: string
@@ -46,6 +46,13 @@ export type TeamPlayStyle = {
 }
 
 /**
- * A team with stats, ratings and play style, as shown in the Overview table.
+ * Display assets for a team.
  */
-export type Team = TeamStats & TeamRatings & TeamPlayStyle
+export type TeamAssets = {
+  badge_url: string | null
+}
+
+/**
+ * A team with stats, ratings, play style and assets, as built by computeTeamData.
+ */
+export type Team = TeamStats & TeamRatings & TeamPlayStyle & TeamAssets

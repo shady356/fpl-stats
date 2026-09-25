@@ -181,11 +181,11 @@ export const RATING_COLORS: Record<number, string> = {
 }
 
 /**
- * Add rating_attack/defense/total (0-100) and matching *_color fields to each team.
+ * Compute rating_attack/defense/total (0-100) and matching *_color fields for each team.
  * @param teams - Team stat objects; not modified.
- * @returns New team objects with the rating fields added.
+ * @returns Rating fields per team, in the same order as `teams`.
  */
-export function computeRatings(teams: TeamStats[]): (TeamStats & TeamRatings)[] {
+export function computeRatings(teams: TeamStats[]): TeamRatings[] {
   const league = calcLeague(teams)
   const rawRatings = teams.map((team) => calcTeamRating(team, league))
 
@@ -198,15 +198,12 @@ export function computeRatings(teams: TeamStats[]): (TeamStats & TeamRatings)[] 
   const totalMax = Math.max(...rawRatings.map((r) => r.total))
   const totalMin = Math.min(...rawRatings.map((r) => r.total))
 
-  return teams.map((team, index) => {
-    const { attack, defense, total } = rawRatings[index]
-
+  return rawRatings.map(({ attack, defense, total }) => {
     const rating_attack = scale(attackMax, attackMin, attack)
     const rating_defense = scale(defenseMax, defenseMin, defense)
     const rating_total = scale(totalMax, totalMin, total)
 
     return {
-      ...team,
       rating_attack,
       rating_defense,
       rating_total,
