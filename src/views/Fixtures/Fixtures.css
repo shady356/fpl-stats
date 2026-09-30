@@ -1,0 +1,10 @@
+.table-fixtures {
+  width: 100%;
+  overflow-x: scroll;
+  max-width: 100%;
+}
+
+.table-fixture-opponent {
+  padding: 12px 32px;
+  border-radius: 8px;
+}

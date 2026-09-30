@@ -4,6 +4,8 @@ import { fetchFixtures } from '@/services/FplAPI'
 import type { Fixture, TeamFixture, TeamWithFixtures } from '@/types/fixture.ts'
 import type { Team } from '@/types/team.ts'
 
+import './Fixtures.css'
+
 const fixturesPromise = fetchFixtures()
 
 type FixtureProps = {
@@ -25,7 +27,7 @@ function FixtureList({ teams }: FixtureProps) {
   const gameweeks = new Array(33).fill(0)
 
   return (
-    <table>
+    <table className="table-fixtures">
       <thead>
         <tr>
           <th>Teams</th>
@@ -37,13 +39,18 @@ function FixtureList({ teams }: FixtureProps) {
       <tbody>
         {teamWithFixtures.map((team) => (
           <tr key={team.team_id}>
-            <td>{team.team_name}</td>
+            <td className="team-name">
+              {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
+              {team.team_name}
+            </td>
             {team.fixtures.map((fixture) => (
-              <td
-                key={fixture.fixture_id}
-                style={{ background: fixture.opponent.rating_total_color }}
-              >
-                {fixture.opponent.team_name}
+              <td key={fixture.fixture_id}>
+                <div
+                  className="table-fixture-opponent"
+                  style={{ background: fixture.opponent.rating_total_color }}
+                >
+                  {fixture.opponent.team_name_short}
+                </div>
               </td>
             ))}
           </tr>
@@ -79,7 +86,7 @@ function toTeamFixture(fixture: Fixture, opponent: Team, isHome: boolean): TeamF
     is_home: isHome,
     opponent: {
       team_name: opponent.team_name,
-      short_name: opponent.team_name, // Team has no short_name yet
+      team_name_short: opponent.team_name_short,
       rating_total_color: opponent.rating_total_color,
       rating_attack_color: opponent.rating_attack_color,
       rating_defense_color: opponent.rating_defense_color,

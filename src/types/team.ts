@@ -49,6 +49,7 @@ export type TeamPlayStyle = {
  * Display assets for a team.
  */
 export type TeamAssets = {
+  team_name_short: string
   badge_url: string | null
 }
 

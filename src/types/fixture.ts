@@ -19,7 +19,7 @@ export type TeamFixture = {
   is_home: boolean
   opponent: {
     team_name: string
-    short_name: string
+    team_name_short: string
     rating_total_color: string
     rating_attack_color: string
     rating_defense_color: string
