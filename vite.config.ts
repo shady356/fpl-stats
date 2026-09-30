@@ -14,4 +14,13 @@ export default defineConfig({
       '@data': path.resolve(__dirname, 'epl-stats/data'),
     },
   },
+  server: {
+    proxy: {
+      '/fpl-api': {
+        target: 'https://fantasy.premierleague.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/fpl-api/, '/api'),
+      },
+    },
+  },
 })
