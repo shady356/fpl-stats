@@ -1,9 +1,7 @@
 import { useState } from 'react'
 
-import epl_2026_teams from '@data/epl_2026_teams.json'
 import StarRating from '@/components/ui/StarRating.tsx'
 import type { Team } from '@/types/team.ts'
-import { computeTeamData } from '@/utils/computeTeamData.ts'
 
 import { COLUMNS, isRatingColumnKey } from './teamStatsTableColumns.ts'
 import type { Column, ColumnKey } from './teamStatsTableColumns.ts'
@@ -11,14 +9,16 @@ import type { Column, ColumnKey } from './teamStatsTableColumns.ts'
 type SortOrder = 'asc' | 'desc'
 type TeamRatingColor = 'none' | 'total' | 'attack' | 'defense'
 
-const teams: Team[] = computeTeamData(epl_2026_teams)
+type OverviewProps = {
+  teams: Team[]
+}
 
-function Overview() {
+function Overview({ teams }: OverviewProps) {
   const [teamRatingColor, setTeamRatingColor] = useState<TeamRatingColor>('none')
   return (
     <>
       <TableFilters setTeamRatingColor={setTeamRatingColor} />
-      <Table teamRatingColor={teamRatingColor} />
+      <Table teams={teams} teamRatingColor={teamRatingColor} />
     </>
   )
 }
@@ -43,10 +43,11 @@ function formatValue(value: Team[ColumnKey], column: Column): string | number {
 }
 
 type TableProps = {
+  teams: Team[]
   teamRatingColor: TeamRatingColor
 }
 
-function Table({ teamRatingColor }: TableProps) {
+function Table({ teams, teamRatingColor }: TableProps) {
   const [sortKey, setSortKey] = useState<ColumnKey>('points')
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
 
