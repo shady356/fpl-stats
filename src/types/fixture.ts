@@ -1,3 +1,5 @@
+import type { Team } from '@/types/team.ts'
+
 export type Fixture = {
   code: number
   event: number
@@ -8,17 +10,23 @@ export type Fixture = {
   team_h: number
 }
 
+/**
+ * One upcoming fixture from a team's point of view, as built by attachFixtures.
+ */
 export type TeamFixture = {
-  fixtures: [
-    {
-      fixture_id: number
-      event: number
-      is_home: boolean
-      opponent: {
-        team_name: string
-        short_name: string
-        rating_total_color: string
-      }
-    },
-  ]
+  fixture_id: number
+  event: number
+  is_home: boolean
+  opponent: {
+    team_name: string
+    short_name: string
+    rating_total_color: string
+  }
+}
+
+/**
+ * A team with its upcoming fixtures, sorted by kickoff.
+ */
+export type TeamWithFixtures = Team & {
+  fixtures: TeamFixture[]
 }

@@ -1,20 +1,26 @@
 import { Suspense, use } from 'react'
 
 import { fetchFixtures } from '@/services/FplAPI'
+import type { Team } from '@/types/team.ts'
 
 const fixturesPromise = fetchFixtures()
 
-function FixtureList() {
-  const fixtures = use(fixturesPromise)
-  return <pre>{JSON.stringify(fixtures, null, 2)}</pre>
+type FixtureProps = {
+  teams: Team[]
 }
 
-function Fixtures() {
+function Fixtures({ teams }: FixtureProps) {
   return (
     <Suspense fallback={<p>Loading fixtures…</p>}>
-      <FixtureList />
+      <FixtureList teams={teams} />
     </Suspense>
   )
+}
+
+function FixtureList({ teams }: FixtureProps) {
+  const fixtures = use(fixturesPromise)
+
+  return <pre>{JSON.stringify(fixtures, null, 2)}</pre>
 }
 
 export default Fixtures

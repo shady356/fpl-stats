@@ -16,7 +16,7 @@ function App() {
       <Header />
       <main className="main">
         <Overview teams={teams} />
-        <Fixtures />
+        <Fixtures teams={teams} />
       </main>
     </>
   )
