@@ -48,9 +48,11 @@ function FixtureList({ teams }: FixtureProps) {
         <tbody>
           {teamWithFixtures.map((team) => (
             <tr key={team.team_id}>
-              <td className="team-name">
-                {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
-                {team.team_name}
+              <td>
+                <div className="team-name">
+                  {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
+                  {team.team_name}
+                </div>
               </td>
               {team.fixtures.map((fixture) => (
                 <td key={fixture.fixture_id}>
