@@ -18,25 +18,6 @@ function Fixtures({ teams }: FixtureProps) {
   )
 }
 
-//{
-//    "team_id": 88,
-//    "team_name": "Man City",
-//    "badge_url": "https://resources.premierleague.com/premierleague25/badges-alt/43.svg",
-//    "fixtures": [
-//      {
-//        "fixture_id": 58,
-//        "event": 6,
-//        "is_home": false,
-//        "opponent": {
-//          "team_name": "Liverpool",
-//          "short_name": "Liverpool",
-//          "rating_total_color": "rgb(233, 44, 91)"
-//          "rating_attack_color": "rgb(108, 108, 108)",
-//          "rating_defense_color": "rgb(233, 44, 91)"
-//        }
-//      },
-//      {
-
 function FixtureList({ teams }: FixtureProps) {
   const fixtures = use(fixturesPromise)
   const teamWithFixtures = getTeamFixtureList(teams, fixtures)
@@ -73,17 +54,22 @@ function FixtureList({ teams }: FixtureProps) {
 }
 
 function getTeamFixtureList(teams: Team[], fixtures: Fixture[]): TeamWithFixtures[] {
-  return teams.map((team) => ({
-    ...team,
-    fixtures: fixtures
-      .filter((fixture) => fixture.team_h === team.team_id || fixture.team_a === team.team_id)
-      .flatMap((fixture) => {
-        const isHome = fixture.team_h === team.team_id
-        const opponentId = isHome ? fixture.team_a : fixture.team_h
-        const opponent = teams.find((team) => team.team_id === opponentId)
-        return opponent ? [toTeamFixture(fixture, opponent, isHome)] : []
-      }),
-  }))
+  // Map: [team_id, {Team & Fixtures}]
+  const teamsById = new Map<number, TeamWithFixtures>(
+    teams.map((team) => [team.team_id, { ...team, fixtures: [] }]),
+  )
+
+  for (const fixture of fixtures) {
+    const home = teamsById.get(fixture.team_h)
+    const away = teamsById.get(fixture.team_a)
+
+    if (home && away) {
+      home.fixtures.push(toTeamFixture(fixture, away, true))
+      away.fixtures.push(toTeamFixture(fixture, home, false))
+    }
+  }
+
+  return [...teamsById.values()]
 }
 
 function toTeamFixture(fixture: Fixture, opponent: Team, isHome: boolean): TeamFixture {
