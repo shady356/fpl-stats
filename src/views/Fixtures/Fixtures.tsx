@@ -6,7 +6,6 @@ const fixturesPromise = fetchFixtures()
 
 function FixtureList() {
   const fixtures = use(fixturesPromise)
-
   return <pre>{JSON.stringify(fixtures, null, 2)}</pre>
 }
 
