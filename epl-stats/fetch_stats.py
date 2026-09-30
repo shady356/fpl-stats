@@ -11,7 +11,6 @@ SEASON = 2026
 
 DATA_DIR = Path(__file__).parent / "data"
 TEAMS_FILE = DATA_DIR / f"{LEAGUE}_{SEASON}_teams.json"
-FIXTURES_FILE = DATA_DIR / f"{LEAGUE}_{SEASON}_fixtures.json"
 
 # "On target" = shots that were either saved by the keeper or scored.
 # Blocked shots, misses and post-hits are not on target.
@@ -104,32 +103,6 @@ async def fetch_team_stats(understat):
     return ranked
 
 
-def to_fixture(match):
-    """Flatten an understat match (played or upcoming) into a fixture row."""
-
-    def to_number(value, cast):
-        return None if value is None else round(cast(value), 2)
-
-    return {
-        "fixture_id": int(match["id"]),
-        # understat datetimes are UTC without a zone marker.
-        "kickoff": match["datetime"].replace(" ", "T") + "Z",
-        "home_team_id": int(match["h"]["id"]),
-        "away_team_id": int(match["a"]["id"]),
-        "home_goals": to_number(match["goals"]["h"], int),
-        "away_goals": to_number(match["goals"]["a"], int),
-        "home_xg": to_number(match["xG"]["h"], float),
-        "away_xg": to_number(match["xG"]["a"], float),
-    }
-
-
-async def fetch_fixtures(understat):
-    results = await understat.get_league_results(LEAGUE, SEASON)
-    upcoming = await understat.get_league_fixtures(LEAGUE, SEASON)
-    fixtures = [to_fixture(match) for match in results + upcoming]
-    return sorted(fixtures, key=lambda f: (f["kickoff"], f["fixture_id"]))
-
-
 async def main():
     force_refresh = "--refresh" in sys.argv
 
@@ -140,10 +113,6 @@ async def main():
         if force_refresh or not TEAMS_FILE.exists():
             teams = await fetch_team_stats(understat)
             TEAMS_FILE.write_text(json.dumps(teams, indent=2))
-
-        if force_refresh or not FIXTURES_FILE.exists():
-            fixtures = await fetch_fixtures(understat)
-            FIXTURES_FILE.write_text(json.dumps(fixtures, indent=2))
 
 
 if __name__ == "__main__":

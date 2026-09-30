@@ -15,7 +15,6 @@ caches them to JSON, and renders a plain HTML table.
 Output:
 
 - `data/epl_2026_teams.json` — cached team stats
-- `data/epl_2026_fixtures.json` — cached fixtures (every played and upcoming match)
 
 Each file is fetched only if missing, unless `--refresh` is passed.
 
