@@ -13,7 +13,7 @@ type TeamRatingColor = 'none' | 'total' | 'attack' | 'defense'
 
 const teams: Team[] = computeTeamData(epl_2026_teams)
 
-function App() {
+function Overview() {
   const [teamRatingColor, setTeamRatingColor] = useState<TeamRatingColor>('none')
   return (
     <>
@@ -209,4 +209,4 @@ function TableFilters({ setTeamRatingColor }: TableFiltersProps) {
   )
 }
 
-export default App
+export default Overview
