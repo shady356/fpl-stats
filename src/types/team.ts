@@ -52,7 +52,22 @@ export type TeamAssets = {
   badge_url: string | null
 }
 
+export type TeamFixtures = {
+  fixtures: [
+    {
+      fixture_id: number
+      event: number
+      is_home: boolean
+      opponent: {
+        team_name: string
+        short_name: string
+        rating_total_color: string
+      }
+    },
+  ]
+}
+
 /**
  * A team with stats, ratings, play style and assets, as built by computeTeamData.
  */
-export type Team = TeamStats & TeamRatings & TeamPlayStyle & TeamAssets
+export type Team = TeamStats & TeamRatings & TeamPlayStyle & TeamAssets & TeamFixtures
