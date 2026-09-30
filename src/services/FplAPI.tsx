@@ -1,14 +1,6 @@
-type FplFixture = {
-  code: number
-  event: number
-  id: number
-  kickoff_time: string
-  started: boolean
-  team_a: number
-  team_h: number
-}
+import type { Fixture } from '@/types/fixture'
 
-export async function fetchFplFixtures(): Promise<FplFixture[]> {
+export async function fetchFixtures(): Promise<Fixture[]> {
   try {
     const response = await fetch(`https://fantasy.premierleague.com/api/fixtures/?future=1`)
 
@@ -16,7 +8,7 @@ export async function fetchFplFixtures(): Promise<FplFixture[]> {
       throw new Error(`HTTP error! Status: ${response.status}`)
     }
 
-    const data: FplFixture[] = await response.json()
+    const data: Fixture[] = await response.json()
     return data
   } catch (error) {
     console.error(`Failed to fetch: ${error}`)
