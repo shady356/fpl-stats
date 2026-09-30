@@ -27,36 +27,46 @@ function FixtureList({ teams }: FixtureProps) {
   const gameweeks = new Array(33).fill(0)
 
   return (
-    <table className="table-fixtures">
-      <thead>
-        <tr>
-          <th>Teams</th>
-          {gameweeks.map((_, i) => (
-            <th key={i}>{`GW ${i + 6}`}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {teamWithFixtures.map((team) => (
-          <tr key={team.team_id}>
-            <td className="team-name">
-              {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
-              {team.team_name}
-            </td>
-            {team.fixtures.map((fixture) => (
-              <td key={fixture.fixture_id}>
-                <div
-                  className="table-fixture-opponent"
-                  style={{ background: fixture.opponent.rating_total_color }}
-                >
-                  {fixture.opponent.team_name_short}
-                </div>
-              </td>
+    <div className="table-fixtures-wrapper">
+      <table className="table-fixtures">
+        <thead>
+          <tr>
+            <th style={{ textAlign: 'left' }}>
+              <button className="sort-button" disabled>
+                Teams
+              </button>
+            </th>
+            {gameweeks.map((_, i) => (
+              <th key={i}>
+                <button className="sort-button" disabled>
+                  {`GW ${i + 6}`}
+                </button>
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {teamWithFixtures.map((team) => (
+            <tr key={team.team_id}>
+              <td className="team-name">
+                {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
+                {team.team_name}
+              </td>
+              {team.fixtures.map((fixture) => (
+                <td key={fixture.fixture_id}>
+                  <div
+                    className="table-fixture-opponent"
+                    style={{ background: fixture.opponent.rating_total_color }}
+                  >
+                    {fixture.opponent.team_name_short}
+                  </div>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
