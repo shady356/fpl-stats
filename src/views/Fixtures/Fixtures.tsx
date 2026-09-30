@@ -1,11 +1,21 @@
-import { useFixtures } from '@/hooks/useFixtures'
+import { Suspense, use } from 'react'
 
-function Fixtures() {
-  const { fixtures, loading } = useFixtures()
+import { fetchFixtures } from '@/services/FplAPI'
 
-  if (loading) return <p>Loading fixtures…</p>
+const fixturesPromise = fetchFixtures()
+
+function FixtureList() {
+  const fixtures = use(fixturesPromise)
 
   return <pre>{JSON.stringify(fixtures, null, 2)}</pre>
+}
+
+function Fixtures() {
+  return (
+    <Suspense fallback={<p>Loading fixtures…</p>}>
+      <FixtureList />
+    </Suspense>
+  )
 }
 
 export default Fixtures
