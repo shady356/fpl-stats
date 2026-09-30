@@ -1,3 +1,5 @@
+import { NavLink } from 'react-router'
+
 import plLogoSVG from '@/assets/pl_logo.svg'
 
 function Header() {
@@ -8,10 +10,10 @@ function Header() {
       <nav>
         <ul>
           <li>
-            <a href="/overview">Overview</a>
+            <NavLink to="/overview">Overview</NavLink>
           </li>
           <li>
-            <a href="#">Fixtures</a>
+            <NavLink to="/fixtures">Fixtures</NavLink>
           </li>
         </ul>
       </nav>

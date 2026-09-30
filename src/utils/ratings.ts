@@ -173,11 +173,11 @@ export function calcTeamRating(team: TeamStats, league: League): RawRating {
  * Color per 1-5 bucket from reviseTotalRating, green (1 - easy to beat) to red (5 - hard to beat).
  */
 export const RATING_COLORS: Record<number, string> = {
-  1: 'rgb(0, 78, 47)',
-  2: 'rgb(0, 150, 73)',
-  3: 'rgb(108, 108, 108)',
-  4: 'rgb(233, 44, 91)',
-  5: 'rgb(128, 7, 45)',
+  1: 'hsl(156, 100%, 15%)',
+  2: 'hsl(149, 100%, 23%)',
+  3: 'hsl(0, 0%, 35%)',
+  4: 'hsl(340, 85%, 32%)',
+  5: 'hsl(340, 85%, 20%)',
 }
 
 /**
