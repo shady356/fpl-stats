@@ -173,22 +173,6 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
     )
   }
 
-  if (column.key === 'play_style') {
-    return (
-      <td className="play-style" style={{ textAlign: column.align }} title={team.play_style_detail}>
-        {team.play_style}
-      </td>
-    )
-  }
-
-  if (column.key === 'pressing') {
-    return (
-      <td className="pressing" style={{ textAlign: column.align }}>
-        {team.pressing}
-      </td>
-    )
-  }
-
   if (isRatingColumnKey(column.key)) {
     return (
       <td title={`${column.label}: ${formatValue(team[column.key], column)}`}>
@@ -197,7 +181,11 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
     )
   }
 
-  return <td style={{ textAlign: column.align }}>{formatValue(team[column.key], column)}</td>
+  return (
+    <td className={column.numeric ? 'numeric' : undefined} style={{ textAlign: column.align }}>
+      {formatValue(team[column.key], column)}
+    </td>
+  )
 }
 
 type TableFiltersProps = {

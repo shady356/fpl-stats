@@ -41,8 +41,8 @@ a.active {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Roboto Mono', monospace;
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
 
 table thead tr th {
@@ -83,13 +83,16 @@ table tbody tr td:last-child {
   border-bottom-right-radius: 8px;
 }
 
+td.numeric {
+  font-family: 'Roboto Mono', monospace;
+}
+
 .team-name {
   display: flex;
   gap: 12px;
   align-items: center;
   border-radius: 8px;
   padding: 8px;
-  font-family: 'Roboto', sans-serif;
 }
 
 .team-badge {
@@ -97,12 +100,6 @@ table tbody tr td:last-child {
   flex-shrink: 0;
   width: 24px;
   height: 24px;
-}
-
-.play-style,
-.pressing {
-  font-family: 'Roboto', sans-serif;
-  font-size: 13px;
 }
 
 .sort-button {
