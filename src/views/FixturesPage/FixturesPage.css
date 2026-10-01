@@ -5,6 +5,7 @@
 }
 
 .table-fixture-opponent {
-  padding: 12px 64px;
+  padding: 8px 40px;
   border-radius: 8px;
+  margin: 0 32px;
 }

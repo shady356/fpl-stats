@@ -1,0 +1,19 @@
+:root {
+  --color-highlight-hue: 240;
+  --color-background-hue: 240;
+  --color-background-saturation: 0%;
+
+  --primary-color: hsl(var(--color-highlight-hue), 60%, 70%);
+  --secondary-color: hsl(var(--color-highlight-hue), 5%, 20%);
+
+  --body-color: hsl(var(--color-background-hue), var(--color-background-saturation), 10%);
+
+  --background-color: hsl(var(--color-background-hue), var(--color-background-saturation), 15%);
+  --background-2-color: hsl(var(--color-background-hue), var(--color-background-saturation), 18%);
+  --background-3-color: hsl(var(--color-background-hue), var(--color-background-saturation), 22%);
+
+  --text-color: hsl(var(--color-background-hue), 10%, 85%);
+  --text-secondary-color: hsl(var(--color-background-hue), 10%, 70%);
+  --hover-color: hsl(var(--color-background-hue), var(--color-background-saturation), 27%);
+  --border-color: hsl(var(--color-background-hue), var(--color-background-saturation), 20%);
+}

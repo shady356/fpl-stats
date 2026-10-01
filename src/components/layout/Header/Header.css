@@ -1,0 +1,28 @@
+header {
+  padding: 12px;
+  background: var(--background-color);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--screen-max-width);
+  margin: 0 auto;
+}
+
+.header-content nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content nav ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.header-content nav ul li {
+  font-size: 14px;
+}

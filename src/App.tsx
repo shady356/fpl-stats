@@ -4,7 +4,7 @@ import 'material-symbols/rounded.css'
 import { Navigate, Route, Routes } from 'react-router'
 
 import epl_2026_teams from '@data/epl_2026_teams.json'
-import Header from '@/components/layout/Header.tsx'
+import Header from '@/components/layout/Header/Header'
 import type { Team } from '@/types/team.ts'
 import { computeTeamData } from '@/utils/computeTeamData.ts'
 import FixturesPage from '@/views/FixturesPage/FixturesPage.tsx'
