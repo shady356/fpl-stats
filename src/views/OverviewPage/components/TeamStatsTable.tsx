@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router'
 
 import StarRating from '@/components/ui/StarRating/StarRating.tsx'
 import Table from '@/components/ui/Table/Table.tsx'
@@ -125,9 +124,7 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
   if (column.key === 'team_name') {
     return (
       <td>
-        <NavLink to={`/team/${team.team_id}`}>
-          <TeamName team={team} color={teamColor} />
-        </NavLink>
+        <TeamName team={team} color={teamColor} />
       </td>
     )
   }

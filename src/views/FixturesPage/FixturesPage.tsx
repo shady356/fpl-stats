@@ -1,5 +1,4 @@
 import { Suspense, use } from 'react'
-import { NavLink } from 'react-router'
 
 import Table from '@/components/ui/Table/Table.tsx'
 import TableHeaderCell from '@/components/ui/Table/TableHeaderCell.tsx'
@@ -46,9 +45,7 @@ function FixtureList({ teams }: FixturesPageProps) {
         {teamWithFixtures.map((team) => (
           <tr key={team.team_id}>
             <td>
-              <NavLink to={`/team/${team.team_id}`}>
-                <TeamName team={team} />
-              </NavLink>
+              <TeamName team={team} />
             </td>
             {team.fixtures.map((fixture) => (
               <td key={fixture.fixture_id}>
