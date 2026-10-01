@@ -10,11 +10,11 @@ import type { Column, ColumnKey } from './teamStatsTableColumns.ts'
 type SortOrder = 'asc' | 'desc'
 type TeamRatingColor = 'none' | 'total' | 'attack' | 'defense'
 
-type OverviewProps = {
+type OverviewPageProps = {
   teams: Team[]
 }
 
-function Overview({ teams }: OverviewProps) {
+function OverviewPage({ teams }: OverviewPageProps) {
   const [teamRatingColor, setTeamRatingColor] = useState<TeamRatingColor>('none')
   return (
     <>
@@ -212,4 +212,4 @@ function TableFilters({ setTeamRatingColor }: TableFiltersProps) {
   )
 }
 
-export default Overview
+export default OverviewPage

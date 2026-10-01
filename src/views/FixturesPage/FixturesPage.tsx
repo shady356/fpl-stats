@@ -4,15 +4,15 @@ import { fetchFixtures } from '@/services/FplAPI'
 import type { Fixture, TeamFixture, TeamWithFixtures } from '@/types/fixture.ts'
 import type { Team } from '@/types/team.ts'
 
-import './Fixtures.css'
+import './FixturesPage.css'
 
 const fixturesPromise = fetchFixtures()
 
-type FixtureProps = {
+type FixturesPageProps = {
   teams: Team[]
 }
 
-function Fixtures({ teams }: FixtureProps) {
+function FixturesPage({ teams }: FixturesPageProps) {
   return (
     <Suspense fallback={<p>Loading fixtures…</p>}>
       <FixtureList teams={teams} />
@@ -20,7 +20,7 @@ function Fixtures({ teams }: FixtureProps) {
   )
 }
 
-function FixtureList({ teams }: FixtureProps) {
+function FixtureList({ teams }: FixturesPageProps) {
   const fixtures = use(fixturesPromise)
   const teamWithFixtures = getTeamFixtureList(teams, fixtures)
 
@@ -106,4 +106,4 @@ function toTeamFixture(fixture: Fixture, opponent: Team, isHome: boolean): TeamF
   }
 }
 
-export default Fixtures
+export default FixturesPage
