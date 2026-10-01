@@ -1,3 +1,10 @@
+.team-page {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px;
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -9,9 +16,6 @@
 }
 
 .team .team-badge {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
   margin-bottom: 16px;
 }
 
