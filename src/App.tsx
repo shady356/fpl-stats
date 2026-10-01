@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <Header />
-      <main className="main">
+      <main>
         <Routes>
           <Route path="/" element={<Navigate to="/overview" replace />} />
           <Route path="/overview" element={<OverviewPage teams={teams} />} />
