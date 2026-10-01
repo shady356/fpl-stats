@@ -1,10 +1,12 @@
 import { Suspense, use } from 'react'
+import { NavLink } from 'react-router'
 
 import Table from '@/components/ui/Table/Table.tsx'
 import TableHeaderCell from '@/components/ui/Table/TableHeaderCell.tsx'
+import TeamName from '@/components/ui/TeamName/TeamName.tsx'
 import { fetchFixtures } from '@/services/FplAPI'
-import type { Fixture, TeamFixture, TeamWithFixtures } from '@/types/fixture.ts'
 import type { Team } from '@/types/team.ts'
+import { getTeamFixtureList } from '@/utils/teamFixtures.ts'
 
 import './FixturesPage.css'
 
@@ -44,10 +46,9 @@ function FixtureList({ teams }: FixturesPageProps) {
         {teamWithFixtures.map((team) => (
           <tr key={team.team_id}>
             <td>
-              <div className="team-name">
-                {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
-                {team.team_name}
-              </div>
+              <NavLink to={`/team/${team.team_id}`}>
+                <TeamName team={team} />
+              </NavLink>
             </td>
             {team.fixtures.map((fixture) => (
               <td key={fixture.fixture_id}>
@@ -64,40 +65,6 @@ function FixtureList({ teams }: FixturesPageProps) {
       </tbody>
     </Table>
   )
-}
-
-function getTeamFixtureList(teams: Team[], fixtures: Fixture[]): TeamWithFixtures[] {
-  // Map: [team_id, {Team & Fixtures}]
-  const teamsById = new Map<number, TeamWithFixtures>(
-    teams.map((team) => [team.team_id, { ...team, fixtures: [] }]),
-  )
-
-  for (const fixture of fixtures) {
-    const home = teamsById.get(fixture.team_h)
-    const away = teamsById.get(fixture.team_a)
-
-    if (home && away) {
-      home.fixtures.push(toTeamFixture(fixture, away, true))
-      away.fixtures.push(toTeamFixture(fixture, home, false))
-    }
-  }
-
-  return [...teamsById.values()]
-}
-
-function toTeamFixture(fixture: Fixture, opponent: Team, isHome: boolean): TeamFixture {
-  return {
-    fixture_id: fixture.id,
-    event: fixture.event,
-    is_home: isHome,
-    opponent: {
-      team_name: opponent.team_name,
-      team_name_short: opponent.team_name_short,
-      rating_total_color: opponent.rating_total_color,
-      rating_attack_color: opponent.rating_attack_color,
-      rating_defense_color: opponent.rating_defense_color,
-    },
-  }
 }
 
 export default FixturesPage

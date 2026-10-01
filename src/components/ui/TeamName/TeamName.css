@@ -1,0 +1,14 @@
+.team-name {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.team-badge {
+  display: flex;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}

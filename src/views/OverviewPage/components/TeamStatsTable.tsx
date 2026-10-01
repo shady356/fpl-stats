@@ -5,6 +5,7 @@ import StarRating from '@/components/ui/StarRating/StarRating.tsx'
 import Table from '@/components/ui/Table/Table.tsx'
 import TableHeaderCell from '@/components/ui/Table/TableHeaderCell.tsx'
 import type { SortOrder } from '@/components/ui/Table/TableHeaderCell.tsx'
+import TeamName from '@/components/ui/TeamName/TeamName.tsx'
 import type { Team } from '@/types/team.ts'
 
 import { COLUMNS, isRatingColumnKey } from '../teamStatsTableColumns.ts'
@@ -124,15 +125,8 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
   if (column.key === 'team_name') {
     return (
       <td>
-        <NavLink
-          to={`/team/${team.team_id}`}
-          className="team-name"
-          style={{
-            background: `linear-gradient(90deg, ${teamColor} 0%, rgba(0, 0, 0, 0) 100%)`,
-          }}
-        >
-          {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
-          {team.team_name}
+        <NavLink to={`/team/${team.team_id}`}>
+          <TeamName team={team} color={teamColor} />
         </NavLink>
       </td>
     )
