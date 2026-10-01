@@ -160,26 +160,6 @@ table tbody tr:hover {
   margin-left: 4px;
 }
 
-.star-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.star-container .filled {
-  font-variation-settings: 'FILL' 1;
-  color: #666;
-}
-
-.star-container .filled.colored {
-  color: #ffc169;
-}
-
-.star-container .material-symbols-rounded {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
 select {
   background: var(--background-color);
   color: var(--text-color);

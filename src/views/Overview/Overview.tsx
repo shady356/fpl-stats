@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import StarRating from '@/components/ui/StarRating.tsx'
+import StarRating from '@/components/ui/StarRating/StarRating.tsx'
 import type { Team } from '@/types/team.ts'
 
 import { COLUMNS, isRatingColumnKey } from './teamStatsTableColumns.ts'

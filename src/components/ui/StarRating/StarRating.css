@@ -1,0 +1,19 @@
+.star-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.star-container .filled {
+  font-variation-settings: 'FILL' 1;
+  color: #666;
+}
+
+.star-container .filled.colored {
+  color: #ffc169;
+}
+
+.star-container .material-symbols-rounded {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
