@@ -7,4 +7,9 @@
   color: #ddd;
   border: none;
   border-radius: 12px;
+  cursor: pointer;
+}
+
+.base-button:hover {
+  background: var(--background-3-color);
 }
