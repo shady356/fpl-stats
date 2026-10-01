@@ -14,3 +14,35 @@
   object-fit: contain;
   margin-bottom: 16px;
 }
+
+.team .team-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.team .team-ratings {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.team .team-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.team .team-rating .label {
+  font-size: 14px;
+  color: var(--text-color);
+  margin-bottom: 4px;
+}
+
+.team .team-rating .score {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-color);
+}
