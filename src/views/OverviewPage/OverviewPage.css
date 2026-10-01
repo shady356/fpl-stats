@@ -1,0 +1,32 @@
+.overview-page {
+  background: var(--background-color);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-radius: 20px;
+}
+
+.table-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.table-filters label {
+  font-size: 14px;
+}
+
+.table-filters select {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  margin-left: 12px;
+  border-radius: 12px;
+}
+
+.table-filters select:focus {
+  outline: 2px solid;
+  outline-color: var(--primary-color);
+}

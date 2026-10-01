@@ -24,7 +24,7 @@
 .team .team-ratings {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
   margin-top: 16px;
 }
 

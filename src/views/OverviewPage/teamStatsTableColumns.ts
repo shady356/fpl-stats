@@ -62,6 +62,20 @@ export const COLUMNS: Column[] = [
     tooltip: 'No description',
   },
   {
+    key: 'pressing',
+    label: 'Pressing',
+    hidden: false,
+    align: 'left',
+    tooltip: 'How much a team is pressing the opponents, based on DEEP stat',
+  },
+  {
+    key: 'play_style',
+    label: 'Style',
+    hidden: false,
+    align: 'left',
+    tooltip: 'Playstyles for this team',
+  },
+  {
     key: 'games_played',
     label: 'Played',
     hidden: false,
@@ -153,19 +167,5 @@ export const COLUMNS: Column[] = [
     hidden: true,
     align: 'right',
     tooltip: "Opponents' passes allowed per defensive action in the opposition half.",
-  },
-  {
-    key: 'pressing',
-    label: 'Pressing',
-    hidden: false,
-    align: 'left',
-    tooltip: 'How much a team is pressing the opponents, based on DEEP stat',
-  },
-  {
-    key: 'play_style',
-    label: 'Style',
-    hidden: false,
-    align: 'left',
-    tooltip: 'Playstyles for this team',
   },
 ]

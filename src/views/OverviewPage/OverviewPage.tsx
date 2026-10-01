@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router'
 
+import './OverviewPage.css'
+
 import StarRating from '@/components/ui/StarRating/StarRating.tsx'
 import type { Team } from '@/types/team.ts'
 
@@ -17,10 +19,10 @@ type OverviewPageProps = {
 function OverviewPage({ teams }: OverviewPageProps) {
   const [teamRatingColor, setTeamRatingColor] = useState<TeamRatingColor>('none')
   return (
-    <>
+    <div className="overview-page">
       <TableFilters setTeamRatingColor={setTeamRatingColor} />
       <Table teams={teams} teamRatingColor={teamRatingColor} />
-    </>
+    </div>
   )
 }
 
@@ -179,10 +181,18 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
     )
   }
 
+  if (column.key === 'pressing') {
+    return (
+      <td className="pressing" style={{ textAlign: column.align }}>
+        {team.pressing}
+      </td>
+    )
+  }
+
   if (isRatingColumnKey(column.key)) {
     return (
       <td title={`${column.label}: ${formatValue(team[column.key], column)}`}>
-        <StarRating score={team[column.key]} />
+        <StarRating size="small" score={team[column.key]} />
       </td>
     )
   }
@@ -196,19 +206,21 @@ type TableFiltersProps = {
 
 function TableFilters({ setTeamRatingColor }: TableFiltersProps) {
   return (
-    <label>
-      FDR colors
-      <select
-        name="fdr-colors"
-        id=""
-        onChange={(e) => setTeamRatingColor(e.target.value as TeamRatingColor)}
-      >
-        <option value="none">None</option>
-        <option value="total">Total</option>
-        <option value="attack">Attack</option>
-        <option value="defense">Defense</option>
-      </select>
-    </label>
+    <div className="table-filters">
+      <label className="table-filters-label">
+        FDR colors
+        <select
+          name="fdr-colors"
+          id=""
+          onChange={(e) => setTeamRatingColor(e.target.value as TeamRatingColor)}
+        >
+          <option value="none">None</option>
+          <option value="total">Total</option>
+          <option value="attack">Attack</option>
+          <option value="defense">Defense</option>
+        </select>
+      </label>
+    </div>
   )
 }
 

@@ -38,22 +38,9 @@ a.active {
   padding: 12px;
 }
 
-.pl-logo {
-  height: 40px;
-  width: auto;
-}
-
-h1 {
-  margin: 0;
-  font-size: 20px;
-}
-
 table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--background-color);
-  border-radius: 12px;
+  border-collapse: collapse;
   font-family: 'Roboto Mono', monospace;
   font-size: 14px;
 }
@@ -62,22 +49,18 @@ table thead tr th {
   position: sticky;
   top: 0;
   background: var(--background-color);
-  border-bottom: 2px solid var(--border-color);
-  font-weight: bold;
   z-index: 1;
 }
 
-table thead tr:first-child th:first-child {
-  border-top-left-radius: 12px;
+table thead tr th:first-child {
+  padding-left: 8px;
 }
-table thead tr:first-child th:last-child {
-  border-top-right-radius: 12px;
+table thead tr th:last-child {
+  padding-right: 8px;
 }
-table tbody tr:last-child td:first-child {
-  border-bottom-left-radius: 12px;
-}
-table tbody tr:last-child td:last-child {
-  border-bottom-right-radius: 12px;
+
+table tbody tr:hover {
+  background: var(--secondary-color);
 }
 
 table tbody tr td {
@@ -85,8 +68,19 @@ table tbody tr td {
   vertical-align: middle;
 }
 
-table tbody tr:hover {
-  background: var(--secondary-color);
+table tbody tr td:first-child {
+  padding-left: 16px;
+  border-top-left-radius: 8px;
+}
+table tbody tr td:last-child {
+  padding-right: 16px;
+  border-top-right-radius: 8px;
+}
+table tbody tr td:first-child {
+  border-bottom-left-radius: 8px;
+}
+table tbody tr td:last-child {
+  border-bottom-right-radius: 8px;
 }
 
 .team-name {
@@ -105,8 +99,10 @@ table tbody tr:hover {
   height: 24px;
 }
 
-.play-style {
+.play-style,
+.pressing {
   font-family: 'Roboto', sans-serif;
+  font-size: 13px;
 }
 
 .sort-button {
@@ -115,6 +111,7 @@ table tbody tr:hover {
   cursor: pointer;
   padding: 12px 8px;
   border-radius: 4px;
+  font-size: 13px;
   color: var(--text-secondary-color);
   margin: 0;
   width: 100%;
@@ -127,21 +124,7 @@ table tbody tr:hover {
 }
 
 .sort-button .material-symbols-rounded {
-  font-size: 16px;
+  font-size: 14px;
   vertical-align: middle;
   margin-left: 4px;
-}
-
-select {
-  background: var(--background-color);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-  padding: 8px;
-  margin-left: 12px;
-  border-radius: 12px;
-}
-
-select:focus {
-  outline: 2px solid;
-  outline-color: var(--primary-color);
 }

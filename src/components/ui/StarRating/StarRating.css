@@ -12,20 +12,20 @@
   color: #ffc169;
 }
 
-.star-container .material-symbols-rounded {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+.star-container.small .material-symbols-rounded {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
-.star-container.small .material-symbols-rounded {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
+.star-container.medium .material-symbols-rounded {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 .star-container.large .material-symbols-rounded {
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
 }

@@ -21,8 +21,14 @@ header {
   display: flex;
   gap: 20px;
   list-style: none;
+  padding: 0;
 }
 
 .header-content nav ul li {
   font-size: 14px;
+}
+
+.pl-logo {
+  height: 40px;
+  width: auto;
 }
