@@ -1,0 +1,25 @@
+.team-badge {
+  display: flex;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.team-badge.tiny {
+  width: 16px;
+  height: 16px;
+}
+
+.team-badge.small {
+  width: 24px;
+  height: 24px;
+}
+
+.team-badge.medium {
+  width: 64px;
+  height: 64px;
+}
+
+.team-badge.large {
+  width: 150px;
+  height: 150px;
+}

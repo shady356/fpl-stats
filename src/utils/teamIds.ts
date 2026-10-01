@@ -35,3 +35,19 @@ const FPL_TO_UNDERSTAT_TEAM_ID: Record<number, number> = {
 export function understatTeamId(fplId: number): number | undefined {
   return FPL_TO_UNDERSTAT_TEAM_ID[fplId]
 }
+
+const UNDERSTAT_TO_FPL_TEAM_ID: Record<number, number> = Object.fromEntries(
+  Object.entries(FPL_TO_UNDERSTAT_TEAM_ID).map(([fplId, understatId]) => [
+    understatId,
+    Number(fplId),
+  ]),
+)
+
+/**
+ * Convert an understat team_id to the FPL team id.
+ * @param understatId - understat team_id.
+ * @returns The FPL team id, or undefined if the team isn't mapped.
+ */
+export function fplTeamId(understatId: number): number | undefined {
+  return UNDERSTAT_TO_FPL_TEAM_ID[understatId]
+}

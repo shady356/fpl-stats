@@ -50,7 +50,6 @@ export type TeamPlayStyle = {
  */
 export type TeamAssets = {
   team_name_short: string
-  badge_url: string | null
 }
 
 /**

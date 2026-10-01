@@ -1,11 +1,10 @@
 import type { Team, TeamStats } from '@/types/team.ts'
 import { computePlayStyles } from '@/utils/playStyles.ts'
 import { computeRatings } from '@/utils/ratings.ts'
-import { teamBadgeUrl } from '@/utils/teamBadges.ts'
 import { teamShortName } from '@/utils/teamShortNames'
 
 /**
- * Build full Team objects from raw stats: ratings, play style and badge URL.
+ * Build full Team objects from raw stats: ratings, play style and short name.
  * @param teams - Team stat objects; not modified.
  * @returns New team objects, in the same order as `teams`.
  */
@@ -17,7 +16,6 @@ export function computeTeamData(teams: TeamStats[]): Team[] {
     ...team,
     ...ratings[index],
     ...playStyles[index],
-    badge_url: teamBadgeUrl(team.team_name),
     team_name_short: teamShortName(team.team_name),
   }))
 }

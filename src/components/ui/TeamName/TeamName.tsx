@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router'
 
+import TeamBadge from '@/components/ui/TeamBadge/TeamBadge.tsx'
 import type { Team } from '@/types/team.ts'
 
 import './TeamName.css'
 
 type TeamNameProps = {
-  team: Pick<Team, 'team_id' | 'team_name' | 'badge_url'>
+  team: Pick<Team, 'team_id' | 'team_name'>
   color?: string
 }
 
@@ -16,7 +17,7 @@ function TeamName({ team, color = 'transparent' }: TeamNameProps) {
       className="team-name"
       style={{ background: `linear-gradient(90deg, ${color} 0%, rgba(0, 0, 0, 0) 100%)` }}
     >
-      {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
+      <TeamBadge teamId={team.team_id} size="small" />
       {team.team_name}
     </NavLink>
   )
