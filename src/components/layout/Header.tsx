@@ -3,6 +3,7 @@ import { NavLink } from 'react-router'
 import plLogoSVG from '@/assets/pl_logo.svg'
 
 import BaseButton from '../ui/BaseButton/BaseButton'
+import Icon from '../ui/Icon/Icon'
 
 function Header() {
   return (
@@ -21,8 +22,8 @@ function Header() {
       </nav>
 
       <div>
-        <BaseButton aria-label="Settings">
-          Settings <span className="material-symbols-rounded filled">settings</span>
+        <BaseButton aria-label="Settings" square>
+          <Icon icon="settings" />
         </BaseButton>
       </div>
     </header>

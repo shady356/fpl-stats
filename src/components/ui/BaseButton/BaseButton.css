@@ -3,7 +3,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 8px;
-  background: var(--background-2-color);
+  background: var(--background-3-color);
   color: #ddd;
   border: none;
   border-radius: 12px;
@@ -12,4 +12,10 @@
 
 .base-button:hover {
   background: var(--background-3-color);
+}
+
+.base-button-square {
+  justify-content: center;
+  padding: 8px;
+  aspect-ratio: 1;
 }

@@ -2,15 +2,15 @@ import type { ComponentPropsWithoutRef } from 'react'
 
 import './BaseButton.css'
 
-type ButtonProps = ComponentPropsWithoutRef<'button'>
+type ButtonProps = ComponentPropsWithoutRef<'button'> & {
+  square?: boolean
+}
 
-function BaseButton({ children, className, type = 'button', ...rest }: ButtonProps) {
+function BaseButton({ children, className, square = false, type = 'button', ...rest }: ButtonProps) {
+  const classes = ['base-button', square && 'base-button-square', className].filter(Boolean).join(' ')
+
   return (
-    <button
-      type={type}
-      className={className ? `base-button ${className}` : 'base-button'}
-      {...rest}
-    >
+    <button type={type} className={classes} {...rest}>
       {children}
     </button>
   )
