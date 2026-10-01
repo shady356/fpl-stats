@@ -1,0 +1,81 @@
+.table-scroll-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.table thead tr th {
+  position: sticky;
+  top: 0;
+  background: var(--background-color);
+  z-index: 1;
+}
+
+.table thead tr th:first-child {
+  padding-left: 8px;
+}
+.table thead tr th:last-child {
+  padding-right: 8px;
+}
+
+.table tbody tr:hover {
+  background: var(--secondary-color);
+}
+
+.table tbody tr td {
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.table tbody tr td:first-child {
+  padding-left: 16px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.table tbody tr td:last-child {
+  padding-right: 16px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.table td.numeric {
+  font-family: 'Roboto Mono', monospace;
+}
+
+.table-header-label {
+  display: block;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  padding: 12px 8px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: normal;
+  color: var(--text-secondary-color);
+  margin: 0;
+  width: 100%;
+  text-align: inherit;
+}
+
+.table-sort-button {
+  cursor: pointer;
+}
+
+.table-sort-button:hover,
+.table-sort-button-selected {
+  color: var(--primary-color);
+}
+
+.table-sort-button .material-symbols-rounded {
+  font-size: 14px;
+  vertical-align: middle;
+  margin-left: 4px;
+}

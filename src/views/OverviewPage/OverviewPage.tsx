@@ -4,12 +4,14 @@ import { NavLink } from 'react-router'
 import './OverviewPage.css'
 
 import StarRating from '@/components/ui/StarRating/StarRating.tsx'
+import Table from '@/components/ui/Table/Table.tsx'
+import TableHeaderCell from '@/components/ui/Table/TableHeaderCell.tsx'
+import type { SortOrder } from '@/components/ui/Table/TableHeaderCell.tsx'
 import type { Team } from '@/types/team.ts'
 
 import { COLUMNS, isRatingColumnKey } from './teamStatsTableColumns.ts'
 import type { Column, ColumnKey } from './teamStatsTableColumns.ts'
 
-type SortOrder = 'asc' | 'desc'
 type TeamRatingColor = 'none' | 'total' | 'attack' | 'defense'
 
 type OverviewPageProps = {
@@ -21,7 +23,7 @@ function OverviewPage({ teams }: OverviewPageProps) {
   return (
     <div className="overview-page">
       <TableFilters setTeamRatingColor={setTeamRatingColor} />
-      <Table teams={teams} teamRatingColor={teamRatingColor} />
+      <TeamStatsTable teams={teams} teamRatingColor={teamRatingColor} />
     </div>
   )
 }
@@ -45,12 +47,12 @@ function formatValue(value: Team[ColumnKey], column: Column): string | number {
   return value
 }
 
-type TableProps = {
+type TeamStatsTableProps = {
   teams: Team[]
   teamRatingColor: TeamRatingColor
 }
 
-function Table({ teams, teamRatingColor }: TableProps) {
+function TeamStatsTable({ teams, teamRatingColor }: TeamStatsTableProps) {
   const [sortKey, setSortKey] = useState<ColumnKey>('points')
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
 
@@ -67,16 +69,19 @@ function Table({ teams, teamRatingColor }: TableProps) {
   const visibleColumns = COLUMNS.filter((col) => !col.hidden)
 
   return (
-    <table>
+    <Table>
       <thead>
         <tr>
           {visibleColumns.map((col) => (
             <TableHeaderCell
               key={col.key}
-              column={col}
+              align={col.align}
+              title={col.tooltip}
               sortOrder={sortKey === col.key ? sortOrder : null}
-              onSort={sort}
-            />
+              onSort={() => sort(col.key)}
+            >
+              {col.label}
+            </TableHeaderCell>
           ))}
         </tr>
       </thead>
@@ -90,31 +95,7 @@ function Table({ teams, teamRatingColor }: TableProps) {
           />
         ))}
       </tbody>
-    </table>
-  )
-}
-
-type TableHeaderCellProps = {
-  column: Column
-  sortOrder: SortOrder | null
-  onSort: (key: ColumnKey) => void
-}
-
-function TableHeaderCell({ column, sortOrder, onSort }: TableHeaderCellProps) {
-  return (
-    <th style={{ textAlign: column.align }} title={column.tooltip}>
-      <button
-        className={`sort-button ${sortOrder ? 'sort-button-selected' : ''}`}
-        onClick={() => onSort(column.key)}
-      >
-        {column.label}
-        {sortOrder && (
-          <span className="material-symbols-rounded">
-            {sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward'}
-          </span>
-        )}
-      </button>
-    </th>
+    </Table>
   )
 }
 

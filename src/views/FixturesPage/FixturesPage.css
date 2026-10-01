@@ -1,7 +1,7 @@
-.table-fixtures-wrapper {
-  max-width: 100%;
-  overflow-x: auto;
-  border-radius: 12px;
+.fixtures-page {
+  background: var(--background-color);
+  padding: 24px;
+  border-radius: 20px;
 }
 
 .table-fixture-opponent {

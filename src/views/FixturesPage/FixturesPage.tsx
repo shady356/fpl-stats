@@ -1,5 +1,7 @@
 import { Suspense, use } from 'react'
 
+import Table from '@/components/ui/Table/Table.tsx'
+import TableHeaderCell from '@/components/ui/Table/TableHeaderCell.tsx'
 import { fetchFixtures } from '@/services/FplAPI'
 import type { Fixture, TeamFixture, TeamWithFixtures } from '@/types/fixture.ts'
 import type { Team } from '@/types/team.ts'
@@ -14,9 +16,11 @@ type FixturesPageProps = {
 
 function FixturesPage({ teams }: FixturesPageProps) {
   return (
-    <Suspense fallback={<p>Loading fixtures…</p>}>
-      <FixtureList teams={teams} />
-    </Suspense>
+    <div className="fixtures-page">
+      <Suspense fallback={<p>Loading fixtures…</p>}>
+        <FixtureList teams={teams} />
+      </Suspense>
+    </div>
   )
 }
 
@@ -27,48 +31,38 @@ function FixtureList({ teams }: FixturesPageProps) {
   const gameweeks = new Array(33).fill(0)
 
   return (
-    <div className="table-fixtures-wrapper">
-      <table className="table-fixtures">
-        <thead>
-          <tr>
-            <th style={{ textAlign: 'left' }}>
-              <button className="sort-button" disabled>
-                Teams
-              </button>
-            </th>
-            {gameweeks.map((_, i) => (
-              <th key={i}>
-                <button className="sort-button" disabled>
-                  {`GW ${i + 6}`}
-                </button>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {teamWithFixtures.map((team) => (
-            <tr key={team.team_id}>
-              <td>
-                <div className="team-name">
-                  {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
-                  {team.team_name}
+    <Table scrollable>
+      <thead>
+        <tr>
+          <TableHeaderCell align="left">Teams</TableHeaderCell>
+          {gameweeks.map((_, i) => (
+            <TableHeaderCell key={i}>{`GW ${i + 6}`}</TableHeaderCell>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {teamWithFixtures.map((team) => (
+          <tr key={team.team_id}>
+            <td>
+              <div className="team-name">
+                {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
+                {team.team_name}
+              </div>
+            </td>
+            {team.fixtures.map((fixture) => (
+              <td key={fixture.fixture_id}>
+                <div
+                  className="table-fixture-opponent"
+                  style={{ background: fixture.opponent.rating_total_color }}
+                >
+                  {fixture.opponent.team_name_short}
                 </div>
               </td>
-              {team.fixtures.map((fixture) => (
-                <td key={fixture.fixture_id}>
-                  <div
-                    className="table-fixture-opponent"
-                    style={{ background: fixture.opponent.rating_total_color }}
-                  >
-                    {fixture.opponent.team_name_short}
-                  </div>
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </Table>
   )
 }
 
