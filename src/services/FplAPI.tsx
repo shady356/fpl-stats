@@ -1,9 +1,25 @@
 import type { Fixture } from '@/types/fixture'
 import { understatTeamId } from '@/utils/teamIds'
 
-export async function fetchFixtures(): Promise<Fixture[]> {
+export type FixturesQuery = {
+  future?: boolean
+  team?: number
+}
+
+/**
+ * Fetch fixtures, with team_h / team_a converted to understat team ids.
+ * @param query - Query params sent to the FPL fixtures endpoint.
+ * @returns The fixtures; empty if the request fails.
+ */
+export async function fetchFixtures({ future = true, team }: FixturesQuery = {}): Promise<
+  Fixture[]
+> {
+  const params = new URLSearchParams()
+  if (future) params.set('future', '1')
+  if (team !== undefined) params.set('team', String(team))
+
   try {
-    const response = await fetch(`/fpl-api/fixtures/?future=1`)
+    const response = await fetch(`/fpl-api/fixtures/?${params}`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`)
