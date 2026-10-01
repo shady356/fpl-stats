@@ -1,5 +1,6 @@
 @import './style/Colors.css';
 @import './style/Responsive.css';
+@import './style/Links.css';
 
 body {
   margin: 0;
@@ -16,20 +17,4 @@ main {
   max-width: var(--screen-max-width);
   margin: 0 auto;
   padding: 16px;
-}
-
-a {
-  color: var(--text-color);
-  text-decoration: none;
-  padding: 8px 0px;
-}
-
-a:hover {
-  text-decoration: underline;
-  color: var(--primary-color);
-}
-
-a.active {
-  font-weight: bold;
-  border-bottom: 2px solid var(--primary-color);
 }

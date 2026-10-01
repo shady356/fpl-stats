@@ -1,0 +1,15 @@
+a {
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 8px 0px;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--primary-color);
+}
+
+a.active {
+  font-weight: bold;
+  border-bottom: 2px solid var(--primary-color);
+}
