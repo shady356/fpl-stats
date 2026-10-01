@@ -1,0 +1,10 @@
+.base-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px;
+  background: var(--background-2-color);
+  color: #ddd;
+  border: none;
+  border-radius: 12px;
+}
