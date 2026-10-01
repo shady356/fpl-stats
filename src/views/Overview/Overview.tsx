@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { NavLink } from 'react-router'
 
 import StarRating from '@/components/ui/StarRating/StarRating.tsx'
 import type { Team } from '@/types/team.ts'
@@ -156,7 +157,8 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
   if (column.key === 'team_name') {
     return (
       <td>
-        <div
+        <NavLink
+          to={`/team/${team.team_id}`}
           className="team-name"
           style={{
             background: `linear-gradient(90deg, ${teamColor} 0%, rgba(0, 0, 0, 0) 100%)`,
@@ -164,7 +166,7 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
         >
           {team.badge_url && <img className="team-badge" src={team.badge_url} alt="" />}
           {team.team_name}
-        </div>
+        </NavLink>
       </td>
     )
   }
