@@ -19,6 +19,7 @@ views/
 ```
 
 Keep out of `views/`:
+
 - Reusable, app-specific or generic UI — `components/`
 - Data transforms and business logic (sorting, formatting, ratings math) — `utils/`
 - Data fetching / API calls — `services/`

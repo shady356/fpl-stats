@@ -8,5 +8,6 @@ React components, organized atomic-ish:
 Each component gets its own folder when it has more than one file (e.g. `ui/table/Table.tsx`, `ui/table/TableRow.tsx`), otherwise a single file is fine.
 
 Keep out of `components/`:
+
 - Data transforms and business logic (sorting, formatting, ratings math) — plain `.ts` modules elsewhere (e.g. `teamStatsTableColumns.ts`)
 - Hooks that aren't purely presentational — a `hooks/` folder

@@ -6,8 +6,16 @@ type ButtonProps = ComponentPropsWithoutRef<'button'> & {
   square?: boolean
 }
 
-function BaseButton({ children, className, square = false, type = 'button', ...rest }: ButtonProps) {
-  const classes = ['base-button', square && 'base-button-square', className].filter(Boolean).join(' ')
+function BaseButton({
+  children,
+  className,
+  square = false,
+  type = 'button',
+  ...rest
+}: ButtonProps) {
+  const classes = ['base-button', square && 'base-button-square', className]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <button type={type} className={classes} {...rest}>

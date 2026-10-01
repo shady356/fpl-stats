@@ -20,27 +20,27 @@ Each file is fetched only if missing, unless `--refresh` is passed.
 
 ## Fields
 
-| field                     | meaning                                                                                                                                                            |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `team_id`                 | understat's internal team ID                                                                                                                                       |
-| `team_name`               | team name                                                                                                                                                          |
-| `games_played`            | completed matches this season                                                                                                                                      |
-| `points`                  | league points                                                                                                                                                      |
-| `expected_points`         | sum of per-match `xpts`                                                                                                                                            |
-| `goals`                   | goals scored                                                                                                                                                       |
-| `xg`                      | expected goals (sum of per-match `xG`)                                                                                                                             |
-| `npxg`                    | non-penalty expected goals (sum of per-match `npxG`)                                                                                                               |
-| `ga`                      | goals against                                                                                                                                                      |
-| `xga`                     | expected goals against (sum of per-match `xGA`)                                                                                                                    |
-| `npxga`                   | non-penalty expected goals against (sum of per-match `npxGA`)                                                                                                      |
-| `shots`                   | total shots taken, summed from every match's shot data                                                                                                             |
-| `shots_on_target`         | shots taken with result `Goal` or `SavedShot` (see caveat below)                                                                                                   |
-| `shots_against`           | opponents' `shots` in the same matches                                                                                                                             |
-| `shots_on_target_against` | opponents' `shots_on_target` in the same matches                                                                                                                   |
-| `deep_per_game`           | deep completions (passes completed within ~20yd of goal) per game, summed from per-match `deep` and divided by `games_played`                                     |
-| `deep_allowed_per_game`   | deep completions allowed per game, summed from per-match `deep_allowed` and divided by `games_played`                                                              |
-| `ppda_per_game`           | average PPDA (passes allowed per defensive action) per match — sum of each match's own `ppda.att / ppda.def` ratio, divided by `games_played`                     |
-| `o_ppda_per_game`         | average opponents' PPDA per match — sum of each match's own `ppda_allowed.att / ppda_allowed.def` ratio, divided by `games_played`                                 |
+| field                     | meaning                                                                                                                                       |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `team_id`                 | understat's internal team ID                                                                                                                  |
+| `team_name`               | team name                                                                                                                                     |
+| `games_played`            | completed matches this season                                                                                                                 |
+| `points`                  | league points                                                                                                                                 |
+| `expected_points`         | sum of per-match `xpts`                                                                                                                       |
+| `goals`                   | goals scored                                                                                                                                  |
+| `xg`                      | expected goals (sum of per-match `xG`)                                                                                                        |
+| `npxg`                    | non-penalty expected goals (sum of per-match `npxG`)                                                                                          |
+| `ga`                      | goals against                                                                                                                                 |
+| `xga`                     | expected goals against (sum of per-match `xGA`)                                                                                               |
+| `npxga`                   | non-penalty expected goals against (sum of per-match `npxGA`)                                                                                 |
+| `shots`                   | total shots taken, summed from every match's shot data                                                                                        |
+| `shots_on_target`         | shots taken with result `Goal` or `SavedShot` (see caveat below)                                                                              |
+| `shots_against`           | opponents' `shots` in the same matches                                                                                                        |
+| `shots_on_target_against` | opponents' `shots_on_target` in the same matches                                                                                              |
+| `deep_per_game`           | deep completions (passes completed within ~20yd of goal) per game, summed from per-match `deep` and divided by `games_played`                 |
+| `deep_allowed_per_game`   | deep completions allowed per game, summed from per-match `deep_allowed` and divided by `games_played`                                         |
+| `ppda_per_game`           | average PPDA (passes allowed per defensive action) per match — sum of each match's own `ppda.att / ppda.def` ratio, divided by `games_played` |
+| `o_ppda_per_game`         | average opponents' PPDA per match — sum of each match's own `ppda_allowed.att / ppda_allowed.def` ratio, divided by `games_played`            |
 
 ## Fixture fields
 
