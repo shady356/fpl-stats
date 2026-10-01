@@ -3,16 +3,17 @@ import './StarRating.css'
 type StarRatingProps = {
   /** Rating from 0 (1 star) to 100 (5 stars). */
   score: number
+  size?: 'small' | 'medium' | 'large'
 }
 
-export default function StarRating({ score }: StarRatingProps) {
+export default function StarRating({ score, size = 'medium' }: StarRatingProps) {
   const stars = new Array(5).fill(0)
   const value = score / 25 + 1
   const fullStars = Math.floor(value)
   const isHalfStar = value % 1 >= 0.5
 
   return (
-    <div className="star-container">
+    <div className={`star-container ${size}`}>
       {stars.map((_, i) => (
         <span
           key={i}
