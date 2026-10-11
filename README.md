@@ -6,8 +6,9 @@
 npm run stats
 ```
 
-Re-fetches the current season's team stats from understat.com and overwrites
-`epl-stats/data/epl_2026_teams.json`. Requires the Python venv in
+Re-fetches the current season's per-match team stats from understat.com and
+overwrites `epl-stats/data/epl_2026_matches.json`. The app sums these into
+season (or last-n-matches) totals in `src/utils/aggregateMatches.ts`. Requires the Python venv in
 `epl-stats/.venv` (see [epl-stats/README.md](epl-stats/README.md)).
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

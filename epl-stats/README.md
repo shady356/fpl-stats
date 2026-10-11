@@ -16,33 +16,43 @@ Or, from the project root: `npm run stats` (same as `--refresh`).
 
 Output:
 
-- `data/epl_2026_teams.json` — cached team stats
+- `data/epl_2026_matches.json` — cached per-match stats, one entry per team:
+  `{ team_id, team_name, matches: [...] }`, with `matches` oldest first
 
 Each file is fetched only if missing, unless `--refresh` is passed.
 
-## Fields
+The app turns these into season totals, or totals over a team's last 3/5/10
+matches, in `src/utils/aggregateMatches.ts`.
 
-| field                     | meaning                                                                                                                                       |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `team_id`                 | understat's internal team ID                                                                                                                  |
-| `team_name`               | team name                                                                                                                                     |
-| `games_played`            | completed matches this season                                                                                                                 |
-| `points`                  | league points                                                                                                                                 |
-| `expected_points`         | sum of per-match `xpts`                                                                                                                       |
-| `goals`                   | goals scored                                                                                                                                  |
-| `xg`                      | expected goals (sum of per-match `xG`)                                                                                                        |
-| `npxg`                    | non-penalty expected goals (sum of per-match `npxG`)                                                                                          |
-| `ga`                      | goals against                                                                                                                                 |
-| `xga`                     | expected goals against (sum of per-match `xGA`)                                                                                               |
-| `npxga`                   | non-penalty expected goals against (sum of per-match `npxGA`)                                                                                 |
-| `shots`                   | total shots taken, summed from every match's shot data                                                                                        |
-| `shots_on_target`         | shots taken with result `Goal` or `SavedShot` (see caveat below)                                                                              |
-| `shots_against`           | opponents' `shots` in the same matches                                                                                                        |
-| `shots_on_target_against` | opponents' `shots_on_target` in the same matches                                                                                              |
-| `deep_per_game`           | deep completions (passes completed within ~20yd of goal) per game, summed from per-match `deep` and divided by `games_played`                 |
-| `deep_allowed_per_game`   | deep completions allowed per game, summed from per-match `deep_allowed` and divided by `games_played`                                         |
-| `ppda_per_game`           | average PPDA (passes allowed per defensive action) per match — sum of each match's own `ppda.att / ppda.def` ratio, divided by `games_played` |
-| `o_ppda_per_game`         | average opponents' PPDA per match — sum of each match's own `ppda_allowed.att / ppda_allowed.def` ratio, divided by `games_played`            |
+## Match fields
+
+Each entry in `matches` is one team's view of one match.
+
+| field                     | meaning                                                                          |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| `match_id`                | understat's internal match ID                                                    |
+| `date`                    | kickoff, `YYYY-MM-DD HH:mm:ss`                                                   |
+| `opponent_id`             | the opponent's `team_id`                                                         |
+| `home`                    | `true` if this team was at home                                                  |
+| `points`                  | league points from the match                                                     |
+| `expected_points`         | understat's `xpts`                                                               |
+| `goals`                   | goals scored                                                                     |
+| `xg`                      | expected goals                                                                   |
+| `npxg`                    | non-penalty expected goals                                                       |
+| `ga`                      | goals against                                                                    |
+| `xga`                     | expected goals against                                                           |
+| `npxga`                   | non-penalty expected goals against                                               |
+| `shots`                   | shots taken, counted from the match's shot data                                  |
+| `shots_on_target`         | shots taken with result `Goal` or `SavedShot` (see caveat below)                 |
+| `shots_against`           | the opponent's `shots`                                                           |
+| `shots_on_target_against` | the opponent's `shots_on_target`                                                 |
+| `deep`                    | deep completions (passes completed within ~20yd of goal)                         |
+| `deep_allowed`            | deep completions allowed                                                         |
+| `ppda`                    | passes allowed per defensive action, `ppda.att / ppda.def`; `null` if `def` is 0 |
+| `o_ppda`                  | opponents' PPDA, `ppda_allowed.att / ppda_allowed.def`; `null` if `def` is 0     |
+
+A team's understat `history` has no match ID, so `fetch_stats.py` joins each
+history entry to its result on team and kickoff time.
 
 ## Fixture fields
 
@@ -69,7 +79,7 @@ understat.com changed its API around that date and the library was rewritten
 to match, but the docs page wasn't updated to drop the removed method. Calling
 it raises `AttributeError`.
 
-So instead, `fetch_stats.py` builds the shot totals itself:
+So instead, `fetch_stats.py` counts the shots itself:
 
 1. Pull every completed match ID for the season (`get_league_results`).
 2. For each match, pull the full shot-by-shot data (`get_match_shots`), which

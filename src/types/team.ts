@@ -1,5 +1,43 @@
 /**
- * One team's season stats, as written to `epl-stats/data` by `fetch_stats.py`.
+ * One team's stats from a single match, as written to `epl-stats/data` by `fetch_stats.py`.
+ */
+export type MatchStats = {
+  match_id: number
+  /** Kickoff, `YYYY-MM-DD HH:mm:ss`; sorts chronologically as a string. */
+  date: string
+  opponent_id: number
+  home: boolean
+  points: number
+  expected_points: number
+  goals: number
+  xg: number
+  npxg: number
+  ga: number
+  xga: number
+  npxga: number
+  shots: number
+  shots_on_target: number
+  shots_against: number
+  shots_on_target_against: number
+  deep: number
+  deep_allowed: number
+  /** null when the opponent made no defensive actions. */
+  ppda: number | null
+  /** null when the team made no defensive actions. */
+  o_ppda: number | null
+}
+
+/**
+ * A team and its matches, oldest first.
+ */
+export type TeamMatches = {
+  team_id: number
+  team_name: string
+  matches: MatchStats[]
+}
+
+/**
+ * One team's stats over a run of matches, built by aggregateMatches.
  */
 export type TeamStats = {
   team_id: number

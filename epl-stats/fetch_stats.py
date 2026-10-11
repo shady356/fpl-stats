@@ -10,7 +10,7 @@ LEAGUE = "epl"
 SEASON = 2026
 
 DATA_DIR = Path(__file__).parent / "data"
-TEAMS_FILE = DATA_DIR / f"{LEAGUE}_{SEASON}_teams.json"
+MATCHES_FILE = DATA_DIR / f"{LEAGUE}_{SEASON}_matches.json"
 
 # "On target" = shots that were either saved by the keeper or scored.
 # Blocked shots, misses and post-hits are not on target.
@@ -27,52 +27,20 @@ TEAM_NAME_OVERRIDES = {
 }
 
 
-async def fetch_team_stats(understat):
+def ppda_ratio(ppda):
+    """A match's PPDA (att / def), or None when there were no defensive actions."""
+    return round(ppda["att"] / ppda["def"], 6) if ppda["def"] else None
+
+
+async def fetch_team_matches(understat):
     teams = await understat.get_teams(LEAGUE, SEASON)
     results = await understat.get_league_results(LEAGUE, SEASON)
 
-    stats = {}
-    for team in teams:
-        history = team["history"]
-        games_played = len(history)
-
-        aggregated_deep = sum(m["deep"] for m in history)
-        aggregated_deep_allowed = sum(m["deep_allowed"] for m in history)
-
-        match_ppda = [
-            m["ppda"]["att"] / m["ppda"]["def"] for m in history if m["ppda"]["def"]
-        ]
-        aggregated_ppda = round(sum(match_ppda), 2)
-
-        match_o_ppda = [
-            m["ppda_allowed"]["att"] / m["ppda_allowed"]["def"]
-            for m in history
-            if m["ppda_allowed"]["def"]
-        ]
-        aggregated_o_ppda = round(sum(match_o_ppda), 2)
-
-        stats[team["id"]] = {
-            "team_id": int(team["id"]),
-            "team_name": TEAM_NAME_OVERRIDES.get(team["title"], team["title"]),
-            "position": None,
-            "games_played": games_played,
-            "points": sum(m["pts"] for m in history),
-            "expected_points": round(sum(m["xpts"] for m in history), 2),
-            "goals": sum(m["scored"] for m in history),
-            "xg": round(sum(m["xG"] for m in history), 2),
-            "npxg": round(sum(m["npxG"] for m in history), 2),
-            "ga": sum(m["missed"] for m in history),
-            "xga": round(sum(m["xGA"] for m in history), 2),
-            "npxga": round(sum(m["npxGA"] for m in history), 2),
-            "shots": 0,
-            "shots_on_target": 0,
-            "shots_against": 0,
-            "shots_on_target_against": 0,
-            "deep_per_game": round(aggregated_deep / games_played, 2) if games_played else 0,
-            "deep_allowed_per_game": round(aggregated_deep_allowed / games_played, 2) if games_played else 0,
-            "ppda_per_game": round(aggregated_ppda / games_played, 2) if games_played else 0,
-            "o_ppda_per_game": round(aggregated_o_ppda / games_played, 2) if games_played else 0,
-        }
+    # A team's history has no match ID, so join it to results on (team, kickoff).
+    history_by_team_date = {
+        (team["id"], m["date"]): m for team in teams for m in team["history"]
+    }
+    matches_by_team = {team["id"]: [] for team in teams}
 
     for match in results:
         home_id, away_id = match["h"]["id"], match["a"]["id"]
@@ -83,24 +51,45 @@ async def fetch_team_stats(understat):
         home_on_target = sum(1 for s in home_shots if s["result"] in ON_TARGET_RESULTS)
         away_on_target = sum(1 for s in away_shots if s["result"] in ON_TARGET_RESULTS)
 
-        stats[home_id]["shots"] += len(home_shots)
-        stats[home_id]["shots_on_target"] += home_on_target
-        stats[home_id]["shots_against"] += len(away_shots)
-        stats[home_id]["shots_on_target_against"] += away_on_target
+        sides = [
+            (home_id, away_id, True, home_shots, home_on_target, away_shots, away_on_target),
+            (away_id, home_id, False, away_shots, away_on_target, home_shots, home_on_target),
+        ]
+        for team_id, opponent_id, home, own, own_on_target, opp, opp_on_target in sides:
+            h = history_by_team_date[(team_id, match["datetime"])]
+            matches_by_team[team_id].append(
+                {
+                    "match_id": int(match["id"]),
+                    "date": match["datetime"],
+                    "opponent_id": int(opponent_id),
+                    "home": home,
+                    "points": h["pts"],
+                    "expected_points": round(h["xpts"], 6),
+                    "goals": h["scored"],
+                    "xg": round(h["xG"], 6),
+                    "npxg": round(h["npxG"], 6),
+                    "ga": h["missed"],
+                    "xga": round(h["xGA"], 6),
+                    "npxga": round(h["npxGA"], 6),
+                    "shots": len(own),
+                    "shots_on_target": own_on_target,
+                    "shots_against": len(opp),
+                    "shots_on_target_against": opp_on_target,
+                    "deep": h["deep"],
+                    "deep_allowed": h["deep_allowed"],
+                    "ppda": ppda_ratio(h["ppda"]),
+                    "o_ppda": ppda_ratio(h["ppda_allowed"]),
+                }
+            )
 
-        stats[away_id]["shots"] += len(away_shots)
-        stats[away_id]["shots_on_target"] += away_on_target
-        stats[away_id]["shots_against"] += len(home_shots)
-        stats[away_id]["shots_on_target_against"] += home_on_target
-
-    ranked = sorted(
-        stats.values(),
-        key=lambda t: (-t["points"], -(t["goals"] - t["ga"]), -t["goals"]),
-    )
-    for position, team in enumerate(ranked, start=1):
-        team["position"] = position
-
-    return ranked
+    return [
+        {
+            "team_id": int(team["id"]),
+            "team_name": TEAM_NAME_OVERRIDES.get(team["title"], team["title"]),
+            "matches": sorted(matches_by_team[team["id"]], key=lambda m: m["date"]),
+        }
+        for team in teams
+    ]
 
 
 async def main():
@@ -110,9 +99,9 @@ async def main():
         understat = Understat(session)
         DATA_DIR.mkdir(exist_ok=True)
 
-        if force_refresh or not TEAMS_FILE.exists():
-            teams = await fetch_team_stats(understat)
-            TEAMS_FILE.write_text(json.dumps(teams, indent=2))
+        if force_refresh or not MATCHES_FILE.exists():
+            teams = await fetch_team_matches(understat)
+            MATCHES_FILE.write_text(json.dumps(teams, indent=2))
 
 
 if __name__ == "__main__":

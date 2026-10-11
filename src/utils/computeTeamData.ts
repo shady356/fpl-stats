@@ -1,14 +1,17 @@
-import type { Team, TeamStats } from '@/types/team.ts'
+import type { Team, TeamMatches } from '@/types/team.ts'
+import { aggregateMatches, type MatchWindow } from '@/utils/aggregateMatches.ts'
 import { computePlayStyles } from '@/utils/playStyles.ts'
 import { computeRatings } from '@/utils/ratings.ts'
 import { teamShortName } from '@/utils/teamShortNames'
 
 /**
- * Build full Team objects from raw stats: ratings, play style and short name.
- * @param teams - Team stat objects; not modified.
- * @returns New team objects, in the same order as `teams`.
+ * Build full Team objects from per-match stats: totals, ratings, play style and short name.
+ * @param teamMatches - Teams with their matches; not modified.
+ * @param window - Rate teams on only their last n matches, or 'all' for the whole season.
+ * @returns New team objects, ordered by league position.
  */
-export function computeTeamData(teams: TeamStats[]): Team[] {
+export function computeTeamData(teamMatches: TeamMatches[], window: MatchWindow = 'all'): Team[] {
+  const teams = aggregateMatches(teamMatches, window)
   const ratings = computeRatings(teams)
   const playStyles = computePlayStyles(teams)
 
