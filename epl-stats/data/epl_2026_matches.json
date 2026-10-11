@@ -250,6 +250,28 @@
         "deep_allowed": 5,
         "ppda": 13.809524,
         "o_ppda": 13.52381
+      },
+      {
+        "match_id": 31237,
+        "date": "2026-10-11 13:00:00",
+        "opponent_id": 91,
+        "home": false,
+        "points": 1,
+        "expected_points": 2.233,
+        "goals": 2,
+        "xg": 2.79588,
+        "npxg": 2.79588,
+        "ga": 2,
+        "xga": 1.53245,
+        "npxga": 1.53245,
+        "shots": 15,
+        "shots_on_target": 6,
+        "shots_against": 9,
+        "shots_on_target_against": 4,
+        "deep": 8,
+        "deep_allowed": 10,
+        "ppda": 7.1,
+        "o_ppda": 13.64
       }
     ]
   },
@@ -642,6 +664,28 @@
         "deep_allowed": 0,
         "ppda": 12.952381,
         "o_ppda": 9.818182
+      },
+      {
+        "match_id": 31236,
+        "date": "2026-10-11 13:00:00",
+        "opponent_id": 249,
+        "home": true,
+        "points": 3,
+        "expected_points": 0.5861,
+        "goals": 3,
+        "xg": 2.24807,
+        "npxg": 2.24807,
+        "ga": 1,
+        "xga": 3.76379,
+        "npxga": 3.76379,
+        "shots": 13,
+        "shots_on_target": 7,
+        "shots_against": 24,
+        "shots_on_target_against": 5,
+        "deep": 6,
+        "deep_allowed": 9,
+        "ppda": 12.904762,
+        "o_ppda": 8.619048
       }
     ]
   },
@@ -1288,6 +1332,28 @@
         "deep_allowed": 8,
         "ppda": 9.666667,
         "o_ppda": 11.285714
+      },
+      {
+        "match_id": 31238,
+        "date": "2026-10-11 15:30:00",
+        "opponent_id": 88,
+        "home": true,
+        "points": 0,
+        "expected_points": 0.6284,
+        "goals": 0,
+        "xg": 0.75917,
+        "npxg": 0.75917,
+        "ga": 3,
+        "xga": 1.58703,
+        "npxga": 1.58703,
+        "shots": 13,
+        "shots_on_target": 6,
+        "shots_against": 15,
+        "shots_on_target_against": 4,
+        "deep": 3,
+        "deep_allowed": 11,
+        "ppda": 10.0625,
+        "o_ppda": 8.777778
       }
     ]
   },
@@ -1404,6 +1470,28 @@
         "deep_allowed": 9,
         "ppda": 9.954545,
         "o_ppda": 10.208333
+      },
+      {
+        "match_id": 31238,
+        "date": "2026-10-11 15:30:00",
+        "opponent_id": 87,
+        "home": false,
+        "points": 3,
+        "expected_points": 2.1257,
+        "goals": 3,
+        "xg": 1.58703,
+        "npxg": 1.58703,
+        "ga": 0,
+        "xga": 0.75917,
+        "npxga": 0.75917,
+        "shots": 15,
+        "shots_on_target": 4,
+        "shots_against": 13,
+        "shots_on_target_against": 6,
+        "deep": 11,
+        "deep_allowed": 3,
+        "ppda": 8.777778,
+        "o_ppda": 10.0625
       }
     ]
   },
@@ -1658,6 +1746,28 @@
         "deep_allowed": 4,
         "ppda": 13.25,
         "o_ppda": 10.944444
+      },
+      {
+        "match_id": 31237,
+        "date": "2026-10-11 13:00:00",
+        "opponent_id": 72,
+        "home": true,
+        "points": 1,
+        "expected_points": 0.5845,
+        "goals": 2,
+        "xg": 1.53245,
+        "npxg": 1.53245,
+        "ga": 2,
+        "xga": 2.79588,
+        "npxga": 2.79588,
+        "shots": 9,
+        "shots_on_target": 4,
+        "shots_against": 15,
+        "shots_on_target_against": 6,
+        "deep": 10,
+        "deep_allowed": 8,
+        "ppda": 13.64,
+        "o_ppda": 7.1
       }
     ]
   },
@@ -2326,6 +2436,28 @@
         "deep_allowed": 2,
         "ppda": 11.866667,
         "o_ppda": 13.941176
+      },
+      {
+        "match_id": 31236,
+        "date": "2026-10-11 13:00:00",
+        "opponent_id": 78,
+        "home": false,
+        "points": 0,
+        "expected_points": 2.2577,
+        "goals": 1,
+        "xg": 3.76379,
+        "npxg": 3.76379,
+        "ga": 3,
+        "xga": 2.24807,
+        "npxga": 2.24807,
+        "shots": 24,
+        "shots_on_target": 5,
+        "shots_against": 13,
+        "shots_on_target_against": 7,
+        "deep": 9,
+        "deep_allowed": 6,
+        "ppda": 8.619048,
+        "o_ppda": 12.904762
       }
     ]
   },
