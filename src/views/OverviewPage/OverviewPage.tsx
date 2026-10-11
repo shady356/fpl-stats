@@ -2,6 +2,8 @@ import { useState } from 'react'
 
 import './OverviewPage.css'
 
+import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton.tsx'
+import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons.tsx'
 import type { TeamMatches } from '@/types/team.ts'
 import type { MatchWindow } from '@/utils/aggregateMatches.ts'
 import { computeTeamData } from '@/utils/computeTeamData.ts'
@@ -19,50 +21,74 @@ function OverviewPage({ teamMatches }: OverviewPageProps) {
   const teams = computeTeamData(teamMatches, matchWindow)
   return (
     <div className="overview-page">
-      <TableFilters setTeamRatingColor={setTeamRatingColor} setMatchWindow={setMatchWindow} />
+      <TableFilters
+        teamRatingColor={teamRatingColor}
+        setTeamRatingColor={setTeamRatingColor}
+        matchWindow={matchWindow}
+        setMatchWindow={setMatchWindow}
+      />
       <TeamStatsTable teams={teams} teamRatingColor={teamRatingColor} />
     </div>
   )
 }
 
+const MATCH_WINDOW_OPTIONS: { value: MatchWindow; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 3, label: 'Last 3' },
+  { value: 5, label: 'Last 5' },
+  { value: 10, label: 'Last 10' },
+]
+
+const TEAM_RATING_COLOR_OPTIONS: { value: TeamRatingColor; label: string }[] = [
+  { value: 'none', label: 'None' },
+  { value: 'total', label: 'Total' },
+  { value: 'attack', label: 'Attack' },
+  { value: 'defense', label: 'Defense' },
+]
+
 type TableFiltersProps = {
+  teamRatingColor: TeamRatingColor
   setTeamRatingColor: (color: TeamRatingColor) => void
+  matchWindow: MatchWindow
   setMatchWindow: (window: MatchWindow) => void
 }
 
-function TableFilters({ setTeamRatingColor, setMatchWindow }: TableFiltersProps) {
+function TableFilters({
+  teamRatingColor,
+  setTeamRatingColor,
+  matchWindow,
+  setMatchWindow,
+}: TableFiltersProps) {
   return (
     <div className="table-filters">
-      <label className="table-filters-label">
-        Matches
-        <select
-          name="match-window"
-          defaultValue="all"
-          onChange={(e) =>
-            setMatchWindow(
-              e.target.value === 'all' ? 'all' : (Number(e.target.value) as MatchWindow),
-            )
-          }
-        >
-          <option value="all">All</option>
-          <option value="3">Last 3</option>
-          <option value="5">Last 5</option>
-          <option value="10">Last 10</option>
-        </select>
-      </label>
-      <label className="table-filters-label">
-        FDR colors
-        <select
-          name="fdr-colors"
-          id=""
-          onChange={(e) => setTeamRatingColor(e.target.value as TeamRatingColor)}
-        >
-          <option value="none">None</option>
-          <option value="total">Total</option>
-          <option value="attack">Attack</option>
-          <option value="defense">Defense</option>
-        </select>
-      </label>
+      <div className="table-filters-label">
+        <span id="match-window-label">Matches</span>
+        <BaseSegmentedButtons aria-labelledby="match-window-label">
+          {MATCH_WINDOW_OPTIONS.map(({ value, label }) => (
+            <BaseSegmentedButton
+              key={value}
+              selected={matchWindow === value}
+              onClick={() => setMatchWindow(value)}
+            >
+              {label}
+            </BaseSegmentedButton>
+          ))}
+        </BaseSegmentedButtons>
+      </div>
+      <div className="table-filters-label">
+        <span id="fdr-colors-label">FDR colors</span>
+        <BaseSegmentedButtons aria-labelledby="fdr-colors-label">
+          {TEAM_RATING_COLOR_OPTIONS.map(({ value, label }) => (
+            <BaseSegmentedButton
+              key={value}
+              selected={teamRatingColor === value}
+              onClick={() => setTeamRatingColor(value)}
+            >
+              {label}
+            </BaseSegmentedButton>
+          ))}
+        </BaseSegmentedButtons>
+      </div>
     </div>
   )
 }

@@ -13,20 +13,9 @@
   align-items: center;
 }
 
-.table-filters label {
+.table-filters-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 14px;
-}
-
-.table-filters select {
-  background: var(--background-color);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-  padding: 8px;
-  margin-left: 12px;
-  border-radius: 12px;
-}
-
-.table-filters select:focus {
-  outline: 2px solid;
-  outline-color: var(--primary-color);
 }

@@ -1,0 +1,47 @@
+.base-segmented-buttons {
+  display: inline-flex;
+  height: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.base-segmented-buttons .base-segmented-button {
+  justify-content: center;
+  min-width: 48px;
+  height: 100%;
+  padding: 0 12px;
+  background: transparent;
+  color: var(--text-color);
+  border-radius: 0;
+  font-weight: 500;
+  transition: background-color 150ms ease;
+}
+
+.base-segmented-buttons .base-segmented-button-square {
+  padding: 0;
+}
+
+.base-segmented-buttons .base-segmented-button + .base-segmented-button {
+  border-left: 1px solid var(--border-color);
+}
+
+.base-segmented-buttons .base-segmented-button:hover {
+  background: var(--hover-color);
+}
+
+.base-segmented-buttons .base-segmented-button-selected,
+.base-segmented-buttons .base-segmented-button-selected:hover {
+  background: color-mix(in srgb, var(--primary-color) 20%, transparent);
+  color: var(--primary-color);
+}
+
+.base-segmented-buttons .base-segmented-button:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+}
+
+.base-segmented-buttons .base-segmented-button:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
