@@ -4,6 +4,7 @@ import './BaseButton.css'
 
 type ButtonProps = ComponentPropsWithoutRef<'button'> & {
   square?: boolean
+  ghost?: boolean
 }
 
 function BaseButton({
@@ -11,9 +12,15 @@ function BaseButton({
   className,
   square = false,
   type = 'button',
+  ghost = false,
   ...rest
 }: ButtonProps) {
-  const classes = ['base-button', square && 'base-button-square', className]
+  const classes = [
+    'base-button',
+    square && 'base-button-square',
+    ghost && 'base-button-ghost',
+    className,
+  ]
     .filter(Boolean)
     .join(' ')
 

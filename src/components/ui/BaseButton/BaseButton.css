@@ -7,7 +7,13 @@
   color: #ddd;
   border: none;
   border-radius: 12px;
+  font-family: inherit;
+  font-weight: 500;
   cursor: pointer;
+}
+
+.base-button-ghost {
+  background: transparent;
 }
 
 .base-button:hover {

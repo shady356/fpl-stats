@@ -7,15 +7,11 @@ type SegmentedButtonProps = ComponentPropsWithoutRef<typeof BaseButton> & {
 }
 
 function BaseSegmentedButton({ className, selected = false, ...rest }: SegmentedButtonProps) {
-  const classes = [
-    'base-segmented-button',
-    selected && 'base-segmented-button-selected',
-    className,
-  ]
+  const classes = ['base-segmented-button', selected && 'base-segmented-button-selected', className]
     .filter(Boolean)
     .join(' ')
 
-  return <BaseButton aria-pressed={selected} className={classes} {...rest} />
+  return <BaseButton aria-pressed={selected} ghost className={classes} {...rest} />
 }
 
 export default BaseSegmentedButton
