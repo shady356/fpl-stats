@@ -1,6 +1,6 @@
 .base-segmented-buttons {
   display: inline-flex;
-  padding: 8px;
+  padding: 4px;
   background-color: var(--background-2-color);
   border-radius: 999px;
   overflow: hidden;

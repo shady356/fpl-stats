@@ -1,6 +1,6 @@
 .overview-page {
   background: var(--background-color);
-  padding: 24px;
+  padding: 8px 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -9,8 +9,14 @@
 
 .table-filters {
   display: flex;
+  justify-content: space-between;
   gap: 12px;
   align-items: center;
+}
+
+.table-filters h1 {
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .table-filters-label {
@@ -18,4 +24,18 @@
   align-items: center;
   gap: 12px;
   font-size: 14px;
+}
+
+.table-filters select {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  margin-left: 12px;
+  border-radius: 12px;
+}
+
+.table-filters select:focus {
+  outline: 2px solid;
+  outline-color: var(--primary-color);
 }

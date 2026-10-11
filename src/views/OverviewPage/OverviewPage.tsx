@@ -39,13 +39,6 @@ const MATCH_WINDOW_OPTIONS: { value: MatchWindow; label: string }[] = [
   { value: 10, label: 'Last 10' },
 ]
 
-const TEAM_RATING_COLOR_OPTIONS: { value: TeamRatingColor; label: string }[] = [
-  { value: 'none', label: 'None' },
-  { value: 'total', label: 'Total' },
-  { value: 'attack', label: 'Attack' },
-  { value: 'defense', label: 'Defense' },
-]
-
 type TableFiltersProps = {
   teamRatingColor: TeamRatingColor
   setTeamRatingColor: (color: TeamRatingColor) => void
@@ -53,41 +46,34 @@ type TableFiltersProps = {
   setMatchWindow: (window: MatchWindow) => void
 }
 
-function TableFilters({
-  teamRatingColor,
-  setTeamRatingColor,
-  matchWindow,
-  setMatchWindow,
-}: TableFiltersProps) {
+function TableFilters({ setTeamRatingColor, matchWindow, setMatchWindow }: TableFiltersProps) {
   return (
     <div className="table-filters">
+      <h1>Teams</h1>
+
+      <BaseSegmentedButtons aria-labelledby="match-window-label">
+        {MATCH_WINDOW_OPTIONS.map(({ value, label }) => (
+          <BaseSegmentedButton
+            key={value}
+            selected={matchWindow === value}
+            onClick={() => setMatchWindow(value)}
+          >
+            {label}
+          </BaseSegmentedButton>
+        ))}
+      </BaseSegmentedButtons>
+
       <div className="table-filters-label">
-        <span id="match-window-label">Matches</span>
-        <BaseSegmentedButtons aria-labelledby="match-window-label">
-          {MATCH_WINDOW_OPTIONS.map(({ value, label }) => (
-            <BaseSegmentedButton
-              key={value}
-              selected={matchWindow === value}
-              onClick={() => setMatchWindow(value)}
-            >
-              {label}
-            </BaseSegmentedButton>
-          ))}
-        </BaseSegmentedButtons>
-      </div>
-      <div className="table-filters-label">
-        <span id="fdr-colors-label">FDR colors</span>
-        <BaseSegmentedButtons aria-labelledby="fdr-colors-label">
-          {TEAM_RATING_COLOR_OPTIONS.map(({ value, label }) => (
-            <BaseSegmentedButton
-              key={value}
-              selected={teamRatingColor === value}
-              onClick={() => setTeamRatingColor(value)}
-            >
-              {label}
-            </BaseSegmentedButton>
-          ))}
-        </BaseSegmentedButtons>
+        <select
+          name="fdr-colors"
+          id=""
+          onChange={(e) => setTeamRatingColor(e.target.value as TeamRatingColor)}
+        >
+          <option value="none">No colors</option>
+          <option value="total">Total</option>
+          <option value="attack">Attack</option>
+          <option value="defense">Defense</option>
+        </select>
       </div>
     </div>
   )
