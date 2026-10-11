@@ -13,7 +13,8 @@
     "format:check": "prettier --check .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "stats": "epl-stats/.venv/bin/python epl-stats/fetch_stats.py --refresh"
   },
   "dependencies": {
     "material-symbols": "^0.47.5",

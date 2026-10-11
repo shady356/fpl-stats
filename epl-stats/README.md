@@ -12,6 +12,8 @@ caches them to JSON, and renders a plain HTML table.
 .venv/bin/python fetch_stats.py --refresh  # re-fetches from understat.com
 ```
 
+Or, from the project root: `npm run stats` (same as `--refresh`).
+
 Output:
 
 - `data/epl_2026_teams.json` — cached team stats

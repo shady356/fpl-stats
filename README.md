@@ -1,5 +1,15 @@
 # React + Vite
 
+## Updating team stats
+
+```bash
+npm run stats
+```
+
+Re-fetches the current season's team stats from understat.com and overwrites
+`epl-stats/data/epl_2026_teams.json`. Requires the Python venv in
+`epl-stats/.venv` (see [epl-stats/README.md](epl-stats/README.md)).
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
