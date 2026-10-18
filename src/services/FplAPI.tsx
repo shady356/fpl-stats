@@ -43,3 +43,24 @@ export async function fetchFixtures({ future = true, team }: FixturesQuery = {})
     return []
   }
 }
+
+/**
+ * Fetch the current gameweek from the Premier League config.
+ * @returns The current gameweek number; undefined if the request fails.
+ */
+export async function fetchCurrentGameweek(): Promise<number | undefined> {
+  try {
+    const response = await fetch('/pl-resources/premierleague25/config/current-gameweek.json')
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const data: { matchweek: number } = await response.json()
+
+    return data.matchweek
+  } catch (error) {
+    console.error(`Failed to fetch: ${error}`)
+    return undefined
+  }
+}

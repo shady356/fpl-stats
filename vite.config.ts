@@ -21,6 +21,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/fpl-api/, '/api'),
       },
+      '/pl-resources': {
+        target: 'https://resources.premierleague.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/pl-resources/, ''),
+      },
     },
   },
 })
