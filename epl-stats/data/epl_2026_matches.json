@@ -156,6 +156,28 @@
         "deep_allowed": 11,
         "ppda": 9.090909,
         "o_ppda": 7.16129
+      },
+      {
+        "match_id": 31251,
+        "date": "2026-10-24 11:30:00",
+        "opponent_id": 88,
+        "home": true,
+        "points": 3,
+        "expected_points": 0.332,
+        "goals": 2,
+        "xg": 0.645964,
+        "npxg": 0.645964,
+        "ga": 1,
+        "xga": 2.28542,
+        "npxga": 2.28542,
+        "shots": 8,
+        "shots_on_target": 2,
+        "shots_against": 15,
+        "shots_on_target_against": 7,
+        "deep": 4,
+        "deep_allowed": 11,
+        "ppda": 10.384615,
+        "o_ppda": 8.416667
       }
     ]
   },
@@ -1094,6 +1116,28 @@
         "deep_allowed": 8,
         "ppda": 8.344828,
         "o_ppda": 7.647059
+      },
+      {
+        "match_id": 31249,
+        "date": "2026-10-19 19:00:00",
+        "opponent_id": 294,
+        "home": true,
+        "points": 3,
+        "expected_points": 1.1601,
+        "goals": 3,
+        "xg": 0.971825,
+        "npxg": 0.971825,
+        "ga": 1,
+        "xga": 1.1439,
+        "npxga": 1.1439,
+        "shots": 16,
+        "shots_on_target": 5,
+        "shots_against": 12,
+        "shots_on_target_against": 1,
+        "deep": 5,
+        "deep_allowed": 11,
+        "ppda": 6.375,
+        "o_ppda": 13.375
       }
     ]
   },
@@ -1734,6 +1778,28 @@
         "deep_allowed": 2,
         "ppda": 9.95,
         "o_ppda": 12.633333
+      },
+      {
+        "match_id": 31251,
+        "date": "2026-10-24 11:30:00",
+        "opponent_id": 71,
+        "home": false,
+        "points": 0,
+        "expected_points": 2.5247,
+        "goals": 1,
+        "xg": 2.28542,
+        "npxg": 2.28542,
+        "ga": 2,
+        "xga": 0.645964,
+        "npxga": 0.645964,
+        "shots": 15,
+        "shots_on_target": 7,
+        "shots_against": 8,
+        "shots_on_target_against": 2,
+        "deep": 11,
+        "deep_allowed": 4,
+        "ppda": 8.416667,
+        "o_ppda": 10.384615
       }
     ]
   },
@@ -2854,6 +2920,28 @@
         "deep_allowed": 10,
         "ppda": 24.0,
         "o_ppda": 5.227273
+      },
+      {
+        "match_id": 31250,
+        "date": "2026-10-23 19:00:00",
+        "opponent_id": 285,
+        "home": false,
+        "points": 1,
+        "expected_points": 2.5998,
+        "goals": 1,
+        "xg": 2.75509,
+        "npxg": 2.75509,
+        "ga": 1,
+        "xga": 0.856862,
+        "npxga": 0.856862,
+        "shots": 17,
+        "shots_on_target": 4,
+        "shots_against": 7,
+        "shots_on_target_against": 3,
+        "deep": 6,
+        "deep_allowed": 4,
+        "ppda": 12.761905,
+        "o_ppda": 14.526316
       }
     ]
   },
@@ -3014,6 +3102,28 @@
         "deep_allowed": 12,
         "ppda": 12.633333,
         "o_ppda": 9.95
+      },
+      {
+        "match_id": 31250,
+        "date": "2026-10-23 19:00:00",
+        "opponent_id": 249,
+        "home": true,
+        "points": 1,
+        "expected_points": 0.2793,
+        "goals": 1,
+        "xg": 0.856862,
+        "npxg": 0.856862,
+        "ga": 1,
+        "xga": 2.75509,
+        "npxga": 2.75509,
+        "shots": 7,
+        "shots_on_target": 3,
+        "shots_against": 17,
+        "shots_on_target_against": 4,
+        "deep": 4,
+        "deep_allowed": 6,
+        "ppda": 14.526316,
+        "o_ppda": 12.761905
       }
     ]
   },
@@ -3152,6 +3262,28 @@
         "deep_allowed": 7,
         "ppda": 42.142857,
         "o_ppda": 5.4
+      },
+      {
+        "match_id": 31249,
+        "date": "2026-10-19 19:00:00",
+        "opponent_id": 82,
+        "home": false,
+        "points": 0,
+        "expected_points": 1.5333,
+        "goals": 1,
+        "xg": 1.1439,
+        "npxg": 1.1439,
+        "ga": 3,
+        "xga": 0.971825,
+        "npxga": 0.971825,
+        "shots": 12,
+        "shots_on_target": 1,
+        "shots_against": 16,
+        "shots_on_target_against": 5,
+        "deep": 11,
+        "deep_allowed": 5,
+        "ppda": 13.375,
+        "o_ppda": 6.375
       }
     ]
   }
