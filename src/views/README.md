@@ -8,12 +8,12 @@ A view gets its own folder once it has more than one file (styles, view-local co
 views/
   AboutPage/
     AboutPage.tsx
-    AboutPage.scss
+    AboutPage.css
     components/
       AboutHelper.tsx      # used only by this view — not shared elsewhere
     ContactPage/            # sub-view nested under `AboutPage`
       ContactPage.tsx
-      ContactPage.scss
+      ContactPage.css
   FixturesPage/
     FixturesPage.tsx
 ```

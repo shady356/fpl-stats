@@ -1,4 +1,4 @@
-import './main.scss'
+import './main.css'
 import 'material-symbols/rounded.css'
 
 import { StrictMode } from 'react'

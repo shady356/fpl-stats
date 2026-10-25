@@ -1,6 +1,6 @@
 import { teamBadgeUrl } from '@/utils/teamBadges.ts'
 
-import './TeamBadge.scss'
+import './TeamBadge.css'
 
 type TeamBadgeProps = {
   /** understat team_id. */

@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef } from 'react'
 
-import './BaseSegmentedButtons.scss'
+import './BaseSegmentedButtons.css'
 
 type SegmentedButtonsProps = ComponentPropsWithoutRef<'div'>
 

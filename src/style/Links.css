@@ -1,7 +1,7 @@
 a {
   color: var(--text-color);
   text-decoration: none;
-  padding: 8px 0px;
+  padding: var(--sp-8) 0px;
 }
 
 a:hover {

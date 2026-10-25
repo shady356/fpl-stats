@@ -1,5 +1,5 @@
 header {
-  padding: 12px;
+  padding: var(--sp-12);
   background: var(--background-color);
 }
 
@@ -19,7 +19,7 @@ header {
 
 .header-content nav ul {
   display: flex;
-  gap: 20px;
+  gap: var(--sp-20);
   list-style: none;
   padding: 0;
 }

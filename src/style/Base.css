@@ -9,8 +9,8 @@ body {
 main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sp-16);
   max-width: var(--screen-max-width);
   margin: 0 auto;
-  padding: 16px;
+  padding: var(--sp-16);
 }

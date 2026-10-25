@@ -1,11 +1,11 @@
 .fixtures-page {
   background: var(--background-color);
-  padding: 24px;
+  padding: var(--sp-24);
   border-radius: 20px;
 }
 
 .table-fixture-opponent {
-  padding: 8px 40px;
+  padding: var(--sp-8) var(--sp-40);
   border-radius: 8px;
-  margin: 0 32px;
+  margin: 0 var(--sp-32);
 }

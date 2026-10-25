@@ -1,8 +1,8 @@
 .base-button {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 8px;
+  gap: var(--sp-12);
+  padding: var(--sp-12) var(--sp-8);
   background: var(--background-3-color);
   color: #ddd;
   border: none;
@@ -22,6 +22,6 @@
 
 .base-button-square {
   justify-content: center;
-  padding: 8px;
+  padding: var(--sp-8);
   aspect-ratio: 1;
 }
