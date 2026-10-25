@@ -2,7 +2,7 @@ import { NavLink } from 'react-router'
 
 import plLogoSVG from '@/assets/pl_logo.svg'
 
-import './Header.css'
+import './Header.scss'
 
 import BaseButton from '../../ui/BaseButton/BaseButton'
 import Icon from '../../ui/Icon/Icon'

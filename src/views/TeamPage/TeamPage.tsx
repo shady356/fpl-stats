@@ -1,6 +1,6 @@
 import type { Team } from '@/types/team'
 
-import './TeamPage.css'
+import './TeamPage.scss'
 
 import { Suspense, use } from 'react'
 

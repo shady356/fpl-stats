@@ -7,7 +7,7 @@ import { fetchCurrentGameweek, fetchFixtures } from '@/services/FplAPI'
 import type { Team } from '@/types/team.ts'
 import { getTeamFixtureList } from '@/utils/teamFixtures.ts'
 
-import './FixturesPage.css'
+import './FixturesPage.scss'
 
 const fixturesPromise = fetchFixtures()
 const currentGameweekPromise = fetchCurrentGameweek()

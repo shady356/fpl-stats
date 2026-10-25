@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef } from 'react'
 
-import './Table.css'
+import './Table.scss'
 
 type TableProps = ComponentPropsWithoutRef<'table'> & {
   /**

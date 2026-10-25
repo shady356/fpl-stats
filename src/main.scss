@@ -1,20 +1,4 @@
-@import './style/Colors.css';
-@import './style/Responsive.css';
-@import './style/Links.css';
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
-  background: var(--body-color);
-  color: var(--text-color);
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: var(--screen-max-width);
-  margin: 0 auto;
-  padding: 16px;
-}
+@use './style/Colors';
+@use './style/Responsive';
+@use './style/Base';
+@use './style/Links';

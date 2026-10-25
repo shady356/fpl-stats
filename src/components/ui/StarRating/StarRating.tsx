@@ -1,4 +1,4 @@
-import './StarRating.css'
+import './StarRating.scss'
 
 type StarRatingProps = {
   /** Rating from 0 (1 star) to 100 (5 stars). */

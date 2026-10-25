@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import './Table.css'
+import './Table.scss'
 
 export type SortOrder = 'asc' | 'desc'
 

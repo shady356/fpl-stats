@@ -3,7 +3,7 @@ import { NavLink } from 'react-router'
 import TeamBadge from '@/components/ui/TeamBadge/TeamBadge.tsx'
 import type { Team } from '@/types/team.ts'
 
-import './TeamName.css'
+import './TeamName.scss'
 
 type TeamNameProps = {
   team: Pick<Team, 'team_id' | 'team_name'>

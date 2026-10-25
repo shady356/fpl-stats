@@ -1,6 +1,3 @@
-import './App.css'
-import 'material-symbols/rounded.css'
-
 import { Navigate, Route, Routes } from 'react-router'
 
 import epl_2026_matches from '@data/epl_2026_matches.json'

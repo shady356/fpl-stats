@@ -1,4 +1,4 @@
-import './Icon.css'
+import './Icon.scss'
 
 type IconProps = {
   icon: string

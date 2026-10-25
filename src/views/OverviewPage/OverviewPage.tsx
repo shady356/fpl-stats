@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import './OverviewPage.css'
+import './OverviewPage.scss'
 
 import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton.tsx'
 import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons.tsx'

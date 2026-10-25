@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef } from 'react'
 
-import './BaseButton.css'
+import './BaseButton.scss'
 
 type ButtonProps = ComponentPropsWithoutRef<'button'> & {
   square?: boolean
