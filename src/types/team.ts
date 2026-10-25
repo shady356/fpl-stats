@@ -84,6 +84,26 @@ export type TeamPlayStyle = {
 }
 
 /**
+ * One match in a team's recent form, built by computeForm.
+ */
+export type FormMatch = {
+  match_id: number
+  result: 'W' | 'D' | 'L'
+  home_team: string
+  away_team: string
+  home_goals: number
+  away_goals: number
+}
+
+/**
+ * Fields computed by computeForm.
+ */
+export type TeamForm = {
+  /** Last 5 matches of the season, oldest first. */
+  form: FormMatch[]
+}
+
+/**
  * Display assets for a team.
  */
 export type TeamAssets = {
@@ -93,4 +113,4 @@ export type TeamAssets = {
 /**
  * A team with stats, ratings, play style and assets, as built by computeTeamData.
  */
-export type Team = TeamStats & TeamRatings & TeamPlayStyle & TeamAssets
+export type Team = TeamStats & TeamRatings & TeamPlayStyle & TeamForm & TeamAssets

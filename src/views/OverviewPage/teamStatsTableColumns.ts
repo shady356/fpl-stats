@@ -225,4 +225,11 @@ export const COLUMNS: Column[] = [
     align: 'right',
     tooltip: "Opponents' passes allowed per defensive action in the opposition half.",
   },
+  {
+    key: 'form',
+    label: 'Form',
+    hidden: false,
+    align: 'left',
+    tooltip: 'Results of the last 5 matches, oldest first',
+  },
 ]

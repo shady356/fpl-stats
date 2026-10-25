@@ -5,7 +5,9 @@ import Table from '@/components/ui/Table/Table.tsx'
 import TableHeaderCell from '@/components/ui/Table/TableHeaderCell.tsx'
 import type { SortOrder } from '@/components/ui/Table/TableHeaderCell.tsx'
 import TeamName from '@/components/ui/TeamName/TeamName.tsx'
-import type { Team } from '@/types/team.ts'
+import type { FormMatch, Team } from '@/types/team.ts'
+import { formPoints } from '@/utils/form.ts'
+import { RATING_COLORS } from '@/utils/ratings.ts'
 
 import { COLUMNS, isRatingColumnKey } from '../teamStatsTableColumns.ts'
 import type { Column, ColumnKey } from '../teamStatsTableColumns.ts'
@@ -15,8 +17,8 @@ export type TeamRatingColor = 'none' | 'total' | 'attack' | 'defense'
 function sortTeams(teamsToSort: Team[], sortKey: ColumnKey, sortOrder: SortOrder): Team[] {
   const direction = sortOrder === 'asc' ? 1 : -1
   return [...teamsToSort].sort((a, b) => {
-    const aVal = a[sortKey]
-    const bVal = b[sortKey]
+    const aVal = sortKey === 'form' ? formPoints(a.form) : a[sortKey]
+    const bVal = sortKey === 'form' ? formPoints(b.form) : b[sortKey]
     if (typeof aVal === 'number' && typeof bVal === 'number') {
       return (aVal - bVal) * direction
     }
@@ -24,11 +26,20 @@ function sortTeams(teamsToSort: Team[], sortKey: ColumnKey, sortOrder: SortOrder
   })
 }
 
-function formatValue(value: Team[ColumnKey], column: Column): string | number {
+function formatValue(value: Team[Exclude<ColumnKey, 'form'>], column: Column): string | number {
   if (column.to_fixed !== undefined && typeof value === 'number') {
     return value.toFixed(column.to_fixed)
   }
   return value
+}
+
+/**
+ * Win, draw and loss colors, matching rating levels 2-4.
+ */
+const FORM_COLORS: Record<FormMatch['result'], string> = {
+  W: RATING_COLORS[2],
+  D: RATING_COLORS[3],
+  L: RATING_COLORS[4],
 }
 
 type TeamStatsTableProps = {
@@ -129,6 +140,10 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
     )
   }
 
+  if (column.key === 'form') {
+    return <FormCell form={team.form} />
+  }
+
   if (isRatingColumnKey(column.key)) {
     return (
       <td title={`${column.label}: ${formatValue(team[column.key], column)}`}>
@@ -140,6 +155,29 @@ function TableCell({ column, team, teamRatingColor }: TableCellProps) {
   return (
     <td className={column.numeric ? 'numeric' : undefined} style={{ textAlign: column.align }}>
       {formatValue(team[column.key], column)}
+    </td>
+  )
+}
+
+type FormCellProps = {
+  form: FormMatch[]
+}
+
+function FormCell({ form }: FormCellProps) {
+  return (
+    <td>
+      <div className="form">
+        {form.map((match) => (
+          <span
+            key={match.match_id}
+            className="form-result"
+            style={{ background: FORM_COLORS[match.result] }}
+            title={`${match.home_team} ${match.home_goals} - ${match.away_goals} ${match.away_team}`}
+          >
+            {match.result}
+          </span>
+        ))}
+      </div>
     </td>
   )
 }

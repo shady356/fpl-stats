@@ -39,3 +39,21 @@
   outline: 2px solid;
   outline-color: var(--primary-color);
 }
+
+.form {
+  display: flex;
+  gap: 4px;
+}
+
+.form-result {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  cursor: default;
+}
