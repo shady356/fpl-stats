@@ -7,6 +7,7 @@ import { Suspense, use, useState } from 'react'
 import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton'
 import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons'
 import Icon from '@/components/ui/Icon/Icon'
+import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto'
 import StarRating from '@/components/ui/StarRating/StarRating'
 import Table from '@/components/ui/Table/Table'
 import TableHeaderCell from '@/components/ui/Table/TableHeaderCell'
@@ -31,11 +32,12 @@ function TeamPage({ team, teams }: TeamPageProps) {
   return (
     <div className="team-page">
       <TeamHeader team={team} />
-      <Suspense fallback={<p>Loading fixtures…</p>}>
-        <MatchTimeline team={team} teams={teams} fixturesPromise={fixturesPromise} />
-      </Suspense>
+      <MatchTimeline team={team} teams={teams} fixturesPromise={fixturesPromise} />
       <Suspense fallback={<p>Loading players…</p>}>
-        <Squad team={team} />
+        <div className="team-players">
+          <Squad team={team} />
+          <TopList team={team} />
+        </div>
       </Suspense>
     </div>
   )
@@ -87,13 +89,6 @@ function MatchTimeline({
   teams: Team[]
   fixturesPromise: Promise<Fixture[]>
 }) {
-  const fixtures = use(fixturesPromise).toSorted((a, b) =>
-    a.kickoff_time.localeCompare(b.kickoff_time),
-  )
-  const [next, ...upcoming] = fixtures
-  const teamName = (teamId: number) =>
-    teamShortName(teams.find((t) => t.team_id === teamId)?.team_name ?? '')
-
   return (
     <section className="match-timeline">
       <ol className="timeline-side past">
@@ -102,6 +97,34 @@ function MatchTimeline({
         ))}
       </ol>
 
+      <Suspense fallback={<UpcomingFixturesSkeleton />}>
+        <UpcomingFixtures team={team} teams={teams} fixturesPromise={fixturesPromise} />
+      </Suspense>
+    </section>
+  )
+}
+
+/**
+ * The next game and the games after it, once the fixtures have loaded.
+ */
+function UpcomingFixtures({
+  team,
+  teams,
+  fixturesPromise,
+}: {
+  team: Team
+  teams: Team[]
+  fixturesPromise: Promise<Fixture[]>
+}) {
+  const fixtures = use(fixturesPromise).toSorted((a, b) =>
+    a.kickoff_time.localeCompare(b.kickoff_time),
+  )
+  const [next, ...upcoming] = fixtures
+  const teamName = (teamId: number) =>
+    teamShortName(teams.find((t) => t.team_id === teamId)?.team_name ?? '')
+
+  return (
+    <>
       <NextGameCard next={next} teamName={teamName} />
 
       <ol className="timeline-side upcoming">
@@ -114,7 +137,38 @@ function MatchTimeline({
           />
         ))}
       </ol>
-    </section>
+    </>
+  )
+}
+
+/** Placeholder for the next game and upcoming matches while fixtures load. */
+function UpcomingFixturesSkeleton() {
+  return (
+    <>
+      <section className="card next-game" aria-busy="true" aria-label="Loading next game">
+        <h2>Next game</h2>
+        <span className="skeleton next-game-meta skeleton-meta" />
+        <div className="next-game-teams">
+          {[0, 1].map((i) => (
+            <div key={i} className="next-game-team">
+              <span className="skeleton skeleton-badge medium" />
+              <span className="skeleton skeleton-text" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <ol className="timeline-side upcoming" aria-hidden="true">
+        {Array.from({ length: TIMELINE_SIDE_LENGTH }, (_, i) => (
+          <li key={i} className="timeline-match">
+            <span className="skeleton skeleton-icon" />
+            <span className="skeleton skeleton-badge small" />
+            <span className="skeleton skeleton-text" />
+            <span className="skeleton skeleton-text short" />
+          </li>
+        ))}
+      </ol>
+    </>
   )
 }
 
@@ -281,21 +335,121 @@ function Squad({ team }: { team: Team }) {
 
   return (
     <section className="card squad">
-      <h2 id="players-label">Players</h2>
-
-      <BaseSegmentedButtons aria-labelledby="players-label">
-        {POSITIONS.map(({ position: value, label }) => (
-          <BaseSegmentedButton
-            key={value}
-            selected={position === value}
-            onClick={() => setPosition(value)}
-          >
-            {label}
-          </BaseSegmentedButton>
-        ))}
-      </BaseSegmentedButtons>
+      <div className="card-header">
+        <h2 id="players-label">Players</h2>
+        <BaseSegmentedButtons aria-labelledby="players-label">
+          {POSITIONS.map(({ position: value, label }) => (
+            <BaseSegmentedButton
+              key={value}
+              selected={position === value}
+              onClick={() => setPosition(value)}
+            >
+              {label}
+            </BaseSegmentedButton>
+          ))}
+        </BaseSegmentedButtons>
+      </div>
 
       <PlayerList players={players} />
+    </section>
+  )
+}
+
+const POSITION_SHORT_LABELS: Record<PlayerPosition, string> = {
+  1: 'GKP',
+  2: 'DEF',
+  3: 'MID',
+  4: 'FWD',
+}
+
+/** Players shown in the top list. */
+const TOP_LIST_COUNT = 5
+
+type TopListStat = {
+  label: string
+  title: string
+  value: (player: Player) => number
+  render: (player: Player) => string | number
+}
+
+const TOP_LIST_STATS: TopListStat[] = [
+  {
+    label: 'Form',
+    title: 'Average points per game over the last 30 days',
+    value: (player) => Number(player.form),
+    render: (player) => player.form,
+  },
+  {
+    label: 'Goals',
+    title: 'Goals scored',
+    value: (player) => player.goals_scored,
+    render: (player) => player.goals_scored,
+  },
+  {
+    label: 'Assists',
+    title: 'Assists',
+    value: (player) => player.assists,
+    render: (player) => player.assists,
+  },
+  {
+    label: 'Def con',
+    title: 'Defensive contributions',
+    value: (player) => player.defensive_contribution,
+    render: (player) => player.defensive_contribution,
+  },
+]
+
+/**
+ * The team's available players ranked by the selected stat.
+ */
+function TopList({ team }: { team: Team }) {
+  const [statIndex, setStatIndex] = useState(0)
+  const stat = TOP_LIST_STATS[statIndex]
+  const players = usePlayers()
+    .filter((player) => player.team === team.team_id && player.status === 'a')
+    .filter((player) => stat.value(player) > 0)
+    .toSorted((a, b) => stat.value(b) - stat.value(a))
+    .slice(0, TOP_LIST_COUNT)
+
+  return (
+    <section className="card top-list">
+      <div className="card-header">
+        <h2 id="top-list-label">Top list</h2>
+        <BaseSegmentedButtons aria-labelledby="top-list-label">
+          {TOP_LIST_STATS.map(({ label, title }, index) => (
+            <BaseSegmentedButton
+              key={label}
+              title={title}
+              selected={statIndex === index}
+              onClick={() => setStatIndex(index)}
+            >
+              {label}
+            </BaseSegmentedButton>
+          ))}
+        </BaseSegmentedButtons>
+      </div>
+
+      {players.length === 0 ? (
+        <p>No players yet.</p>
+      ) : (
+        <ol className="top-list-players">
+          {players.map((player) => (
+            <li key={player.id} className="top-list-player">
+              <PlayerPhoto code={player.code} />
+              <div className="top-list-name">
+                <span>{player.web_name}</span>
+                <span className="top-list-details">
+                  {POSITION_SHORT_LABELS[player.element_type]} · £
+                  {(player.now_cost / 10).toFixed(1)}m
+                </span>
+              </div>
+              <span className="top-list-score" title={stat.title}>
+                {stat.render(player)}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
     </section>
   )
 }

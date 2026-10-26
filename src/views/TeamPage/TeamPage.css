@@ -162,15 +162,125 @@
   color: var(--text-secondary-color);
 }
 
+.skeleton {
+  display: block;
+  border-radius: 4px;
+  background: var(--background-3-color);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+/* Text placeholders are one line tall, the same as the text they stand in for. */
+.skeleton.skeleton-meta {
+  width: 140px;
+  height: 1lh;
+}
+
+.skeleton.skeleton-badge {
+  border-radius: 50%;
+}
+
+.skeleton.skeleton-badge.small {
+  width: 24px;
+  height: 24px;
+}
+
+.skeleton.skeleton-badge.medium {
+  width: 56px;
+  height: 56px;
+}
+
+.skeleton.skeleton-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.skeleton.skeleton-text {
+  width: 36px;
+  height: 1lh;
+}
+
+.skeleton.skeleton-text.short {
+  width: 28px;
+  font-size: 12px;
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+/* Title on the left, controls on the right. */
+.card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+}
+
+.card-header h2 {
+  margin: 0;
+}
+
+.team-players {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--sp-24);
+  width: 100%;
+}
+
+.top-list {
+  align-items: stretch;
+  gap: var(--sp-16);
+}
+
+.top-list .top-list-players {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.top-list .top-list-player {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+}
+
+.top-list .top-list-name {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+.top-list .top-list-details {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--text-secondary-color);
+}
+
+.top-list .top-list-score {
+  font-size: 18px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
 .squad {
   align-items: stretch;
   gap: var(--sp-16);
   width: 100%;
   max-width: 640px;
-}
-
-.squad h2 {
-  margin: 0;
 }
 
 /* Match the card behind the sticky header. */
