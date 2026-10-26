@@ -18,6 +18,7 @@ export type Player = {
   /** Price in tenths of a million, e.g. 62 = £6.2m. */
   now_cost: number
   total_points: number
+  minutes: number
   goals_scored: number
   assists: number
   /** Defensive contribution actions this season (tackles, interceptions, clearances, blocks, recoveries). */

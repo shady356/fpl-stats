@@ -299,6 +299,13 @@ const PLAYER_COLUMNS: PlayerColumn[] = [
     render: (player) => `£${(player.now_cost / 10).toFixed(1)}m`,
   },
   {
+    label: 'Min',
+    title: 'Minutes played',
+    align: 'right',
+    value: (player) => player.minutes,
+    render: (player) => player.minutes,
+  },
+  {
     label: 'Form',
     title: 'Average points per game over the last 30 days',
     align: 'right',
