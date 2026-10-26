@@ -6,8 +6,7 @@ import TableHeaderCell from '@/components/ui/Table/TableHeaderCell.tsx'
 import type { SortOrder } from '@/components/ui/Table/TableHeaderCell.tsx'
 import TeamName from '@/components/ui/TeamName/TeamName.tsx'
 import type { FormMatch, Team } from '@/types/team.ts'
-import { formPoints } from '@/utils/form.ts'
-import { RATING_COLORS } from '@/utils/ratings.ts'
+import { FORM_COLORS, formPoints } from '@/utils/form.ts'
 
 import { COLUMNS, isRatingColumnKey } from '../teamStatsTableColumns.ts'
 import type { Column, ColumnKey } from '../teamStatsTableColumns.ts'
@@ -31,15 +30,6 @@ function formatValue(value: Team[Exclude<ColumnKey, 'form'>], column: Column): s
     return value.toFixed(column.to_fixed)
   }
   return value
-}
-
-/**
- * Win, draw and loss colors, matching rating levels 2-4.
- */
-const FORM_COLORS: Record<FormMatch['result'], string> = {
-  W: RATING_COLORS[2],
-  D: RATING_COLORS[3],
-  L: RATING_COLORS[4],
 }
 
 type TeamStatsTableProps = {

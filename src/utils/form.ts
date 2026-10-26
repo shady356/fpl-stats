@@ -1,9 +1,19 @@
 import type { FormMatch, TeamMatches } from '@/types/team.ts'
+import { RATING_COLORS } from '@/utils/ratings.ts'
 
 /**
  * How many of each team's most recent matches make up its form.
  */
 export const FORM_LENGTH = 5
+
+/**
+ * Win, draw and loss colors, matching rating levels 2-4.
+ */
+export const FORM_COLORS: Record<FormMatch['result'], string> = {
+  W: RATING_COLORS[2],
+  D: RATING_COLORS[3],
+  L: RATING_COLORS[4],
+}
 
 /**
  * Each team's last FORM_LENGTH results, oldest first.
@@ -18,7 +28,10 @@ export function computeForm(teams: TeamMatches[]): FormMatch[][] {
       const opponentName = namesById.get(match.opponent_id) ?? 'Unknown'
       return {
         match_id: match.match_id,
+        date: match.date,
         result: match.points === 3 ? 'W' : match.points === 1 ? 'D' : 'L',
+        home_team_id: match.home ? team.team_id : match.opponent_id,
+        away_team_id: match.home ? match.opponent_id : team.team_id,
         home_team: match.home ? team.team_name : opponentName,
         away_team: match.home ? opponentName : team.team_name,
         home_goals: match.home ? match.goals : match.ga,

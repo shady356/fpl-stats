@@ -88,7 +88,10 @@ export type TeamPlayStyle = {
  */
 export type FormMatch = {
   match_id: number
+  date: string
   result: 'W' | 'D' | 'L'
+  home_team_id: number
+  away_team_id: number
   home_team: string
   away_team: string
   home_goals: number

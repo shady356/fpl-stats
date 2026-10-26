@@ -14,7 +14,7 @@ function TeamRoute({ teams }: TeamRouteProps) {
 
   if (!team) return <p>Team not found</p>
 
-  return <TeamPage team={team} />
+  return <TeamPage team={team} teams={teams} />
 }
 
 export default TeamRoute

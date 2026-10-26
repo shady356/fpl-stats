@@ -1,8 +1,61 @@
 .team-page {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-24);
   padding: var(--sp-24);
+}
+
+.team-header {
+  display: flex;
+  gap: var(--sp-16);
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.team-header .left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+}
+
+.team-header .team-name-rating {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.team-header .team-name {
+  font-size: 24px;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+}
+
+.team-header .team-ratings {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-24);
+}
+
+.team-header .team-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.team-header .team-rating .label {
+  font-size: 12px;
+  color: var(--text-color);
+  margin-bottom: var(--sp-4);
+}
+
+.team-header .team-rating .score {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-color);
 }
 
 .card {
@@ -15,38 +68,96 @@
   background: var(--background-2-color);
 }
 
-.team .team-badge {
-  margin-bottom: var(--sp-16);
-}
-
-.team .team-name {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: var(--sp-8);
-}
-
-.team .team-ratings {
+.match-timeline {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--sp-24);
-  margin-top: var(--sp-16);
+  /* safe: start-align instead of clipping the left side when the row overflows. */
+  justify-content: safe center;
+  gap: var(--sp-16);
+  width: 100%;
+  overflow-x: auto;
 }
 
-.team .team-rating {
+/* The line the matches sit on. */
+.match-timeline::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--background-3-color);
+}
+
+.match-timeline .card {
+  position: relative;
+  flex-shrink: 0;
+  width: 320px;
+}
+
+.timeline-side {
+  position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: var(--sp-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-match {
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: var(--sp-8);
+  width: 72px;
+  padding: var(--sp-12) var(--sp-8);
+  border-radius: 12px;
+  background: var(--background-2-color);
 }
 
-.team .team-rating .label {
-  font-size: 14px;
-  color: var(--text-color);
-  margin-bottom: var(--sp-4);
+.timeline-venue {
+  display: flex;
+  color: var(--text-secondary-color);
 }
 
-.team .team-rating .score {
-  font-size: 24px;
+.timeline-opponent {
+  font-weight: 600;
+}
+
+.timeline-result {
+  padding: var(--sp-4) var(--sp-8);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.timeline-gw {
+  font-size: 12px;
+  color: var(--text-secondary-color);
+}
+
+.next-game .next-game-meta {
+  margin: var(--sp-4) 0 var(--sp-16);
+  color: var(--text-secondary-color);
+}
+
+.next-game .next-game-teams {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-32);
+}
+
+.next-game .next-game-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-8);
   font-weight: bold;
-  color: var(--text-color);
+}
+
+.next-game .next-game-vs {
+  color: var(--text-secondary-color);
 }

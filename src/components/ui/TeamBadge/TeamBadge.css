@@ -15,11 +15,11 @@
 }
 
 .team-badge.medium {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
 }
 
 .team-badge.large {
-  width: 150px;
-  height: 150px;
+  width: 80px;
+  height: 80px;
 }
