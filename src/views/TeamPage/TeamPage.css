@@ -161,3 +161,24 @@
 .next-game .next-game-vs {
   color: var(--text-secondary-color);
 }
+
+.squad {
+  align-items: stretch;
+  gap: var(--sp-16);
+  width: 100%;
+  max-width: 640px;
+}
+
+.squad h2 {
+  margin: 0;
+}
+
+/* Match the card behind the sticky header. */
+.player-list thead tr th {
+  background: var(--background-2-color);
+}
+
+.player-list .unavailable {
+  color: var(--text-secondary-color);
+  opacity: 0.6;
+}
