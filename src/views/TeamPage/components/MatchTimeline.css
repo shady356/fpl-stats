@@ -1,0 +1,165 @@
+.match-timeline {
+  align-self: start;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+/* The line the matches sit on. */
+.match-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: var(--background-3-color);
+}
+
+.match-timeline .card {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.timeline-side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-match {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  padding: var(--sp-12) var(--sp-16);
+  border-radius: 12px;
+  background: var(--background-2-color);
+}
+
+.timeline-venue {
+  display: flex;
+  color: var(--text-secondary-color);
+}
+
+.timeline-opponent {
+  flex: 1;
+  font-weight: 600;
+}
+
+.timeline-result {
+  padding: var(--sp-4) var(--sp-8);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.timeline-gw {
+  font-size: 12px;
+  color: var(--text-secondary-color);
+}
+
+.next-game .next-game-gw {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary-color);
+}
+
+.next-game h2 {
+  margin-bottom: 0;
+}
+
+.next-game .next-game-meta {
+  margin: var(--sp-4) 0 var(--sp-16);
+  color: var(--text-secondary-color);
+}
+
+.next-game .next-game-teams {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-32);
+}
+
+.next-game .next-game-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-8);
+  font-weight: bold;
+}
+
+.next-game .next-game-vs {
+  color: var(--text-secondary-color);
+}
+
+.skeleton {
+  display: block;
+  border-radius: 4px;
+  background: var(--background-3-color);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+/* Text placeholders are one line tall, the same as the text they stand in for. */
+.skeleton.skeleton-meta {
+  width: 140px;
+  height: 1lh;
+}
+
+.skeleton.skeleton-gw {
+  width: 80px;
+  height: 1lh;
+}
+
+.skeleton.skeleton-heading {
+  width: 120px;
+  height: 1lh;
+}
+
+.skeleton.skeleton-badge {
+  border-radius: 50%;
+}
+
+.skeleton.skeleton-badge.small {
+  width: 24px;
+  height: 24px;
+}
+
+.skeleton.skeleton-badge.medium {
+  width: 56px;
+  height: 56px;
+}
+
+.skeleton.skeleton-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.skeleton.skeleton-text {
+  width: 36px;
+  height: 1lh;
+}
+
+.skeleton.skeleton-text.short {
+  width: 28px;
+  font-size: 12px;
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

@@ -1,0 +1,58 @@
+.squad {
+  width: 100%;
+  align-items: stretch;
+  gap: var(--sp-16);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.player-list thead tr th {
+  background: none;
+}
+
+/* Fixed column widths keep the columns lined up across the position tables; the player name takes the rest. */
+.player-list {
+  table-layout: fixed;
+}
+
+.player-list thead tr th:not(:first-child) {
+  width: 72px;
+}
+
+.player-list-name {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  min-width: 0;
+}
+
+.player-list-name > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-list .unavailable {
+  color: var(--text-secondary-color);
+  opacity: 0.6;
+}
+
+.squad-sort {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  font-size: 14px;
+}
+
+.squad-sort select {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: var(--sp-8);
+  border-radius: 12px;
+}
+
+.squad-sort select:focus {
+  outline: 2px solid;
+  outline-color: var(--primary-color);
+}

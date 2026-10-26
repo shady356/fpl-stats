@@ -1,0 +1,42 @@
+.base-tabs {
+  display: flex;
+  gap: var(--sp-4);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.base-tab {
+  position: relative;
+  padding: var(--sp-12) var(--sp-16);
+  background: transparent;
+  color: var(--text-secondary-color);
+  border: none;
+  border-radius: 8px 8px 0 0;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.base-tab:hover {
+  color: var(--text-color);
+  background-color: var(--background-2-color);
+}
+
+/* The selected tab is underlined, the line sitting on top of the tab list border. */
+.base-tab-selected,
+.base-tab-selected:hover {
+  color: var(--primary-color);
+}
+
+.base-tab-selected::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  background-color: var(--primary-color);
+  border-radius: 2px 2px 0 0;
+}
+
+.base-tab:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+}

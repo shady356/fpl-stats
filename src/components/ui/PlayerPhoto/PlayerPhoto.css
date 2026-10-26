@@ -23,3 +23,10 @@
   margin-top: calc(var(--size) * 0.06);
   margin-left: calc(var(--size) * (1 - var(--zoom)) / 2);
 }
+
+/* The silhouette is square, so it fills the circle without the photo cropping. */
+.player-photo img.placeholder {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}

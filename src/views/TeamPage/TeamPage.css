@@ -6,12 +6,17 @@
   gap: var(--sp-24);
 }
 
+.team-tabs {
+  align-self: stretch;
+}
+
 .team-header {
   display: flex;
   gap: var(--sp-16);
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding-top: var(--sp-12);
 }
 
 .team-header .left {
@@ -68,184 +73,24 @@
   background: var(--background-color);
 }
 
-/* Matches on the left, players on the right. */
+/* Matches on the left, then players, then style. */
 .team-body {
   display: grid;
   flex: 1 1 0;
-  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-columns: 320px minmax(0, 440px) minmax(0, 320px);
   gap: var(--sp-24);
   width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .team-body {
+    grid-template-columns: 320px minmax(0, 440px);
+  }
 }
 
 @media (max-width: 900px) {
   .team-body {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.match-timeline {
-  align-self: start;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-12);
-}
-
-/* The line the matches sit on. */
-.match-timeline::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: var(--background-3-color);
-}
-
-.match-timeline .card {
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.timeline-side {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-12);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.timeline-match {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-12);
-  padding: var(--sp-12) var(--sp-16);
-  border-radius: 12px;
-  background: var(--background-2-color);
-}
-
-.timeline-venue {
-  display: flex;
-  color: var(--text-secondary-color);
-}
-
-.timeline-opponent {
-  flex: 1;
-  font-weight: 600;
-}
-
-.timeline-result {
-  padding: var(--sp-4) var(--sp-8);
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: #fff;
-}
-
-.timeline-gw {
-  font-size: 12px;
-  color: var(--text-secondary-color);
-}
-
-.next-game .next-game-gw {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary-color);
-}
-
-.next-game h2 {
-  margin-bottom: 0;
-}
-
-.next-game .next-game-meta {
-  margin: var(--sp-4) 0 var(--sp-16);
-  color: var(--text-secondary-color);
-}
-
-.next-game .next-game-teams {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-32);
-}
-
-.next-game .next-game-team {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sp-8);
-  font-weight: bold;
-}
-
-.next-game .next-game-vs {
-  color: var(--text-secondary-color);
-}
-
-.skeleton {
-  display: block;
-  border-radius: 4px;
-  background: var(--background-3-color);
-  animation: skeleton-pulse 1.4s ease-in-out infinite;
-}
-
-/* Text placeholders are one line tall, the same as the text they stand in for. */
-.skeleton.skeleton-meta {
-  width: 140px;
-  height: 1lh;
-}
-
-.skeleton.skeleton-gw {
-  width: 80px;
-  height: 1lh;
-}
-
-.skeleton.skeleton-heading {
-  width: 120px;
-  height: 1lh;
-}
-
-.skeleton.skeleton-badge {
-  border-radius: 50%;
-}
-
-.skeleton.skeleton-badge.small {
-  width: 24px;
-  height: 24px;
-}
-
-.skeleton.skeleton-badge.medium {
-  width: 56px;
-  height: 56px;
-}
-
-.skeleton.skeleton-icon {
-  width: 24px;
-  height: 24px;
-}
-
-.skeleton.skeleton-text {
-  width: 36px;
-  height: 1lh;
-}
-
-.skeleton.skeleton-text.short {
-  width: 28px;
-  font-size: 12px;
-}
-
-@keyframes skeleton-pulse {
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skeleton {
-    animation: none;
   }
 }
 
@@ -260,102 +105,4 @@
 
 .card-header h2 {
   margin: 0;
-}
-
-.team-players {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-24);
-  min-width: 0;
-}
-
-/* Players fill the space down to the bottom of the page, the top list keeps its width beside them. */
-.team-players .squad {
-  flex: 1 1 0;
-  min-width: min(400px, 100%);
-}
-
-.top-list {
-  flex: 0 1 360px;
-  align-self: flex-start;
-  align-items: stretch;
-  box-sizing: border-box;
-  gap: var(--sp-16);
-}
-
-.top-list .top-list-players {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-12);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.top-list .top-list-player {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-12);
-}
-
-.top-list .top-list-name {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  font-weight: 600;
-}
-
-.top-list .top-list-details {
-  font-size: 12px;
-  font-weight: normal;
-  color: var(--text-secondary-color);
-}
-
-.top-list .top-list-score {
-  font-size: 18px;
-  font-weight: bold;
-  font-variant-numeric: tabular-nums;
-}
-
-.squad {
-  align-items: stretch;
-  gap: var(--sp-16);
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-/* The tables scroll inside the card, each header sticking to the top in turn. */
-.squad-tables {
-  max-height: 600px;
-  overflow-y: auto;
-}
-
-/* Match the card behind the sticky header. */
-.player-list thead tr th {
-  background: var(--background-2-color);
-}
-
-.player-list .unavailable {
-  color: var(--text-secondary-color);
-  opacity: 0.6;
-}
-
-.squad-sort {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-8);
-  font-size: 14px;
-}
-
-.squad-sort select {
-  background: var(--background-color);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-  padding: var(--sp-8);
-  border-radius: 12px;
-}
-
-.squad-sort select:focus {
-  outline: 2px solid;
-  outline-color: var(--primary-color);
 }

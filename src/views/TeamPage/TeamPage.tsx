@@ -1,24 +1,22 @@
-import type { FormMatch, Team } from '@/types/team'
+import type { Team } from '@/types/team'
 
 import './TeamPage.css'
 
-import { Suspense, use, useState } from 'react'
+import { Suspense, useState } from 'react'
 
-import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton'
-import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons'
-import Icon from '@/components/ui/Icon/Icon'
-import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto'
+import BaseTab from '@/components/ui/BaseTabs/BaseTab'
+import BaseTabs from '@/components/ui/BaseTabs/BaseTabs'
 import StarRating from '@/components/ui/StarRating/StarRating'
-import Table from '@/components/ui/Table/Table'
-import TableHeaderCell from '@/components/ui/Table/TableHeaderCell'
 import TeamBadge from '@/components/ui/TeamBadge/TeamBadge'
-import { usePlayers } from '@/hooks/usePlayers'
 import { fetchFixtures } from '@/services/FplAPI'
-import type { Fixture } from '@/types/fixture'
-import type { Player, PlayerPosition } from '@/types/player'
-import { FORM_COLORS } from '@/utils/form'
+import { ordinal } from '@/utils/ordinal'
+import { teamFullName } from '@/utils/teamFullNames'
 import { fplTeamId } from '@/utils/teamIds'
-import { teamShortName } from '@/utils/teamShortNames'
+
+import MatchTimeline from './components/MatchTimeline'
+import Squad from './components/Squad'
+import TeamStyle from './components/TeamStyle'
+import TopList from './components/TopList'
 
 type TeamPageProps = {
   team: Team
@@ -26,20 +24,41 @@ type TeamPageProps = {
   teams: Team[]
 }
 
+type TeamTab = 'overview' | 'players'
+
+const TEAM_TABS: { tab: TeamTab; label: string }[] = [
+  { tab: 'overview', label: 'Overview' },
+  { tab: 'players', label: 'Players' },
+]
+
 function TeamPage({ team, teams }: TeamPageProps) {
+  const [tab, setTab] = useState<TeamTab>('overview')
   const fixturesPromise = fetchFixtures({ team: fplTeamId(team.team_id), future: true })
   return (
     <div className="team-page">
       <TeamHeader team={team} />
-      <div className="team-body">
-        <MatchTimeline team={team} teams={teams} fixturesPromise={fixturesPromise} />
-        <Suspense fallback={<p>Loading players…</p>}>
-          <div className="team-players">
-            <Squad team={team} />
+
+      <BaseTabs className="team-tabs" aria-label="Team view">
+        {TEAM_TABS.map(({ tab: value, label }) => (
+          <BaseTab key={value} selected={tab === value} onClick={() => setTab(value)}>
+            {label}
+          </BaseTab>
+        ))}
+      </BaseTabs>
+
+      {tab === 'overview' ? (
+        <div className="team-body">
+          <MatchTimeline team={team} teams={teams} fixturesPromise={fixturesPromise} />
+          <Suspense fallback={<p>Loading players…</p>}>
             <TopList team={team} />
-          </div>
+          </Suspense>
+          <TeamStyle team={team} teams={teams} />
+        </div>
+      ) : (
+        <Suspense fallback={<p>Loading players…</p>}>
+          <Squad team={team} />
         </Suspense>
-      </div>
+      )}
     </div>
   )
 }
@@ -50,8 +69,8 @@ function TeamHeader({ team }: { team: Team }) {
       <div className="left">
         <TeamBadge teamId={team.team_id} size="medium" />
         <div className="team-name-rating">
-          <h1 className="team-name">{team.team_name}</h1>
-          <div>{team.position}th place</div>
+          <h1 className="team-name">{teamFullName(team.team_name)}</h1>
+          <div>{ordinal(team.position)} place</div>
         </div>
       </div>
 
@@ -72,462 +91,6 @@ function TeamHeader({ team }: { team: Team }) {
         </div>
       </div>
     </section>
-  )
-}
-
-/** Past matches shown before the next game. */
-const TIMELINE_PAST_LENGTH = 3
-
-/** Upcoming matches shown after the next game. */
-const TIMELINE_UPCOMING_LENGTH = 4
-
-/**
- * Last games, the next game and the games after it, top to bottom.
- */
-function MatchTimeline({
-  team,
-  teams,
-  fixturesPromise,
-}: {
-  team: Team
-  teams: Team[]
-  fixturesPromise: Promise<Fixture[]>
-}) {
-  return (
-    <section className="match-timeline">
-      <ol className="timeline-side past">
-        {team.form.slice(-TIMELINE_PAST_LENGTH).map((match) => (
-          <PastMatch key={match.match_id} match={match} teamId={team.team_id} />
-        ))}
-      </ol>
-
-      <Suspense fallback={<UpcomingFixturesSkeleton />}>
-        <UpcomingFixtures team={team} teams={teams} fixturesPromise={fixturesPromise} />
-      </Suspense>
-    </section>
-  )
-}
-
-/**
- * The next game and the games after it, once the fixtures have loaded.
- */
-function UpcomingFixtures({
-  team,
-  teams,
-  fixturesPromise,
-}: {
-  team: Team
-  teams: Team[]
-  fixturesPromise: Promise<Fixture[]>
-}) {
-  const fixtures = use(fixturesPromise).toSorted((a, b) =>
-    a.kickoff_time.localeCompare(b.kickoff_time),
-  )
-  const [next, ...upcoming] = fixtures
-  const teamName = (teamId: number) =>
-    teamShortName(teams.find((t) => t.team_id === teamId)?.team_name ?? '')
-
-  return (
-    <>
-      <NextGameCard next={next} teamName={teamName} />
-
-      <ol className="timeline-side upcoming">
-        {upcoming.slice(0, TIMELINE_UPCOMING_LENGTH).map((fixture) => (
-          <UpcomingMatch
-            key={fixture.id}
-            fixture={fixture}
-            teamId={team.team_id}
-            teamName={teamName}
-          />
-        ))}
-      </ol>
-    </>
-  )
-}
-
-/** Placeholder for the next game and upcoming matches while fixtures load. */
-function UpcomingFixturesSkeleton() {
-  return (
-    <>
-      <section className="card next-game" aria-busy="true" aria-label="Loading next game">
-        <span className="skeleton next-game-gw skeleton-gw" />
-        <h2>
-          <span className="skeleton skeleton-heading" />
-        </h2>
-        <span className="skeleton next-game-meta skeleton-meta" />
-        <div className="next-game-teams">
-          {[0, 1].map((i) => (
-            <div key={i} className="next-game-team">
-              <span className="skeleton skeleton-badge medium" />
-              <span className="skeleton skeleton-text" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <ol className="timeline-side upcoming" aria-hidden="true">
-        {Array.from({ length: TIMELINE_UPCOMING_LENGTH }, (_, i) => (
-          <li key={i} className="timeline-match">
-            <span className="skeleton skeleton-icon" />
-            <span className="skeleton skeleton-badge small" />
-            <span className="skeleton skeleton-text" />
-            <span className="skeleton skeleton-text short" />
-          </li>
-        ))}
-      </ol>
-    </>
-  )
-}
-
-function VenueIcon({ isHome }: { isHome: boolean }) {
-  return (
-    <span className="timeline-venue" title={isHome ? 'Home' : 'Away'}>
-      <Icon icon={isHome ? 'stadium' : 'flight_takeoff'} />
-    </span>
-  )
-}
-
-function PastMatch({ match, teamId }: { match: FormMatch; teamId: number }) {
-  const isHome = match.home_team_id === teamId
-  const opponentId = isHome ? match.away_team_id : match.home_team_id
-  const opponent = isHome ? match.away_team : match.home_team
-  const [goalsFor, goalsAgainst] = isHome
-    ? [match.home_goals, match.away_goals]
-    : [match.away_goals, match.home_goals]
-
-  return (
-    <li className="timeline-match">
-      <VenueIcon isHome={isHome} />
-      <TeamBadge teamId={opponentId} size="small" />
-      <span className="timeline-opponent">{teamShortName(opponent)}</span>
-      <span className="timeline-result" style={{ background: FORM_COLORS[match.result] }}>
-        {goalsFor} - {goalsAgainst}
-      </span>
-    </li>
-  )
-}
-
-function UpcomingMatch({
-  fixture,
-  teamId,
-  teamName,
-}: {
-  fixture: Fixture
-  teamId: number
-  teamName: (teamId: number) => string
-}) {
-  const isHome = fixture.team_h === teamId
-  const opponentId = isHome ? fixture.team_a : fixture.team_h
-
-  return (
-    <li className="timeline-match">
-      <VenueIcon isHome={isHome} />
-      <TeamBadge teamId={opponentId} size="small" />
-      <span className="timeline-opponent">{teamName(opponentId)}</span>
-      <span className="timeline-gw">GW {fixture.event}</span>
-    </li>
-  )
-}
-
-/** Kickoff times are shown in Norwegian time. */
-const KICKOFF_TIME_ZONE = 'Europe/Oslo'
-
-function NextGameCard({
-  next,
-  teamName,
-}: {
-  next: Fixture | undefined
-  teamName: (teamId: number) => string
-}) {
-  if (!next) {
-    return (
-      <section className="card next-game">
-        <h2>Next game</h2>
-        <p>No upcoming games.</p>
-      </section>
-    )
-  }
-
-  const kickoff = new Date(next.kickoff_time)
-  const date = kickoff.toLocaleDateString(undefined, {
-    month: 'long',
-    day: 'numeric',
-    timeZone: KICKOFF_TIME_ZONE,
-  })
-  const weekday = kickoff.toLocaleDateString(undefined, {
-    weekday: 'long',
-    timeZone: KICKOFF_TIME_ZONE,
-  })
-  const time = kickoff.toLocaleTimeString(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-    timeZone: KICKOFF_TIME_ZONE,
-  })
-
-  return (
-    <section className="card next-game">
-      <span className="next-game-gw">Gameweek {next.event}</span>
-      <h2>{date}</h2>
-      <p className="next-game-meta">
-        {weekday} · {time}
-      </p>
-      <div className="next-game-teams">
-        <div className="next-game-team">
-          <TeamBadge teamId={next.team_h} size="medium" />
-          {teamName(next.team_h)}
-        </div>
-        <span className="next-game-vs">vs</span>
-        <div className="next-game-team">
-          <TeamBadge teamId={next.team_a} size="medium" />
-          {teamName(next.team_a)}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-const POSITIONS: { position: PlayerPosition; label: string }[] = [
-  { position: 1, label: 'GK' },
-  { position: 2, label: 'DEF' },
-  { position: 3, label: 'MID' },
-  { position: 4, label: 'FWD' },
-]
-
-type PlayerColumn = {
-  label: string
-  title: string
-  align: 'left' | 'right'
-  /** Value to sort by. */
-  value: (player: Player) => number | string
-  render: (player: Player) => string | number
-}
-
-const PLAYER_COLUMNS: PlayerColumn[] = [
-  {
-    label: 'Player',
-    title: 'Player',
-    align: 'left',
-    value: (player) => player.web_name,
-    render: (player) => player.web_name,
-  },
-  {
-    label: 'Price',
-    title: 'Price',
-    align: 'right',
-    value: (player) => player.now_cost,
-    render: (player) => `£${(player.now_cost / 10).toFixed(1)}m`,
-  },
-  {
-    label: '+/-',
-    title: 'Price change',
-    align: 'right',
-    value: (player) => player.cost_change_start,
-    render: (player) =>
-      `${player.cost_change_start > 0 ? '+' : ''}${(player.cost_change_start / 10).toFixed(1)}`,
-  },
-  {
-    label: 'Min',
-    title: 'Minutes played',
-    align: 'right',
-    value: (player) => player.minutes,
-    render: (player) => player.minutes,
-  },
-  {
-    label: 'Form',
-    title: 'Form',
-    align: 'right',
-    value: (player) => Number(player.form),
-    render: (player) => player.form,
-  },
-  {
-    label: 'Sel.',
-    title: 'Selected by',
-    align: 'right',
-    value: (player) => Number(player.selected_by_percent),
-    render: (player) => `${player.selected_by_percent}%`,
-  },
-  {
-    label: 'Pts',
-    title: 'Total points',
-    align: 'right',
-    value: (player) => player.total_points,
-    render: (player) => player.total_points,
-  },
-]
-
-/** Index of the column the tables are sorted by initially (total points). */
-const DEFAULT_SORT_COLUMN = PLAYER_COLUMNS.length - 1
-
-/**
- * The team's players, one table per position, all sorted by the selected column.
- */
-function Squad({ team }: { team: Team }) {
-  const [sortColumn, setSortColumn] = useState(DEFAULT_SORT_COLUMN)
-  const players = usePlayers().filter((player) => player.team === team.team_id)
-
-  const { value } = PLAYER_COLUMNS[sortColumn]
-  const sortedPlayers = players.toSorted((a, b) => {
-    const aVal = value(a)
-    const bVal = value(b)
-    if (typeof aVal === 'number' && typeof bVal === 'number') {
-      return bVal - aVal
-    }
-    return String(aVal).localeCompare(String(bVal))
-  })
-
-  return (
-    <section className="card squad">
-      <div className="card-header">
-        <h2>Players</h2>
-        <label className="squad-sort">
-          Sort by
-          <select value={sortColumn} onChange={(e) => setSortColumn(Number(e.target.value))}>
-            {PLAYER_COLUMNS.map((column, index) => (
-              <option key={column.label} value={index}>
-                {column.title}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <div className="squad-tables">
-        {POSITIONS.map(({ position, label }) => (
-          <PlayerList
-            key={position}
-            label={label}
-            players={sortedPlayers.filter((player) => player.element_type === position)}
-          />
-        ))}
-      </div>
-    </section>
-  )
-}
-
-const POSITION_SHORT_LABELS: Record<PlayerPosition, string> = {
-  1: 'GK',
-  2: 'DEF',
-  3: 'MID',
-  4: 'FWD',
-}
-
-/** Players shown in the top list. */
-const TOP_LIST_COUNT = 5
-
-type TopListStat = {
-  label: string
-  title: string
-  value: (player: Player) => number
-  render: (player: Player) => string | number
-}
-
-const TOP_LIST_STATS: TopListStat[] = [
-  {
-    label: 'Form',
-    title: 'Average points per game over the last 30 days',
-    value: (player) => Number(player.form),
-    render: (player) => player.form,
-  },
-  {
-    label: 'Goals',
-    title: 'Goals scored',
-    value: (player) => player.goals_scored,
-    render: (player) => player.goals_scored,
-  },
-  {
-    label: 'Assists',
-    title: 'Assists',
-    value: (player) => player.assists,
-    render: (player) => player.assists,
-  },
-  {
-    label: 'Def con',
-    title: 'Defensive contributions',
-    value: (player) => player.defensive_contribution,
-    render: (player) => player.defensive_contribution,
-  },
-]
-
-/**
- * The team's available players ranked by the selected stat.
- */
-function TopList({ team }: { team: Team }) {
-  const [statIndex, setStatIndex] = useState(0)
-  const stat = TOP_LIST_STATS[statIndex]
-  const players = usePlayers()
-    .filter((player) => player.team === team.team_id && player.status === 'a')
-    .filter((player) => stat.value(player) > 0)
-    .toSorted((a, b) => stat.value(b) - stat.value(a))
-    .slice(0, TOP_LIST_COUNT)
-
-  return (
-    <section className="card top-list">
-      <div className="card-header">
-        <h2 id="top-list-label">Top list</h2>
-        <BaseSegmentedButtons aria-labelledby="top-list-label">
-          {TOP_LIST_STATS.map(({ label, title }, index) => (
-            <BaseSegmentedButton
-              key={label}
-              title={title}
-              selected={statIndex === index}
-              onClick={() => setStatIndex(index)}
-            >
-              {label}
-            </BaseSegmentedButton>
-          ))}
-        </BaseSegmentedButtons>
-      </div>
-
-      {players.length === 0 ? (
-        <p>No players yet.</p>
-      ) : (
-        <ol className="top-list-players">
-          {players.map((player, index) => (
-            <li key={player.id} className="top-list-player">
-              <PlayerPhoto code={player.code} size={index === 0 ? 'large' : 'small'} />
-              <div className="top-list-name">
-                <span>{player.web_name}</span>
-                <span className="top-list-details">
-                  {POSITION_SHORT_LABELS[player.element_type]} · £
-                  {(player.now_cost / 10).toFixed(1)}m
-                </span>
-              </div>
-              <span className="top-list-score" title={stat.title}>
-                {stat.render(player)}
-              </span>
-            </li>
-          ))}
-        </ol>
-      )}
-    </section>
-  )
-}
-
-function PlayerList({ label, players }: { label: string; players: Player[] }) {
-  return (
-    <Table className="player-list">
-      <thead>
-        <tr>
-          {PLAYER_COLUMNS.map((column, index) => (
-            <TableHeaderCell key={column.label} align={column.align} title={column.title}>
-              {index === 0 ? label : column.label}
-            </TableHeaderCell>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {players.map((player) => (
-          <tr key={player.id} className={player.status === 'a' ? undefined : 'unavailable'}>
-            {PLAYER_COLUMNS.map((column) => (
-              <td key={column.label} style={{ textAlign: column.align }}>
-                {column.render(player)}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </Table>
   )
 }
 

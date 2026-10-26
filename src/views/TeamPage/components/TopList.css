@@ -1,0 +1,95 @@
+.top-list {
+  width: 100%;
+  min-width: 0;
+  align-self: start;
+  align-items: stretch;
+  box-sizing: border-box;
+  gap: var(--sp-16);
+}
+
+.top-list .top-list-players {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.top-list .top-list-player {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+}
+
+.top-list .top-list-name {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+.top-list .top-list-details {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--text-secondary-color);
+}
+
+.top-list .top-list-score {
+  font-size: 18px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The #1 player gets a highlighted panel of their own. */
+.top-list .top-list-leader {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-16);
+  padding: var(--sp-16);
+  border-radius: 12px;
+  background: var(--background-2-color);
+}
+
+.top-list .top-list-leader .top-list-name {
+  gap: var(--sp-4);
+}
+
+.top-list .top-list-leader-name {
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.top-list .top-list-leader-score {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.top-list .top-list-rank {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary-color);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Fixed width so the photos line up under each other. */
+.top-list .top-list-player .top-list-rank {
+  width: 1ch;
+  text-align: center;
+}
+
+.top-list .top-list-players {
+  padding: 0 var(--sp-16);
+}
+
+/* Too many stats to fit on narrow cards, so scroll them sideways. */
+.top-list .top-list-stats {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.top-list .top-list-stats .base-segmented-button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}

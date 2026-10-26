@@ -16,4 +16,9 @@
   --text-secondary-color: hsl(var(--color-background-hue), 10%, 70%);
   --hover-color: hsl(var(--color-background-hue), var(--color-background-saturation), 27%);
   --border-color: hsl(var(--color-background-hue), var(--color-background-saturation), 22%);
+
+  --goalkeeper-color: hsl(48, 90%, 55%);
+  --defender-color: hsl(140, 60%, 45%);
+  --midfielder-color: hsl(185, 75%, 50%);
+  --forward-color: hsl(0, 75%, 58%);
 }
