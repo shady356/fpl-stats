@@ -8,19 +8,21 @@ import './PlayerPhoto.css'
 type PlayerPhotoProps = {
   /** Premier League player code. */
   code: number
+  size?: 'small' | 'large'
 }
 
-export default function PlayerPhoto({ code }: PlayerPhotoProps) {
+export default function PlayerPhoto({ code, size = 'small' }: PlayerPhotoProps) {
   // Not every player has a photo; fall back to a silhouette.
   const [failed, setFailed] = useState(false)
 
   return (
-    <img
-      className="player-photo"
-      src={failed ? placeholderUrl : playerPhotoUrl(code)}
-      alt=""
-      loading="lazy"
-      onError={() => setFailed(true)}
-    />
+    <span className={`player-photo ${size}`}>
+      <img
+        src={failed ? placeholderUrl : playerPhotoUrl(code)}
+        alt=""
+        loading="lazy"
+        onError={() => setFailed(true)}
+      />
+    </span>
   )
 }

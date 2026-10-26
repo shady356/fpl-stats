@@ -1,10 +1,25 @@
 .player-photo {
+  --size: 56px;
+  /* How far the photo is zoomed in on the face. */
+  --zoom: 1.4;
   display: block;
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: var(--size);
+  height: var(--size);
   border-radius: 50%;
-  object-fit: cover;
-  object-position: top;
+  overflow: hidden;
   background: var(--background-3-color);
+}
+
+.player-photo.large {
+  --size: 96px;
+}
+
+/* Centered horizontally, nudged down so the head sits in the middle of the circle. */
+.player-photo img {
+  display: block;
+  width: calc(var(--size) * var(--zoom));
+  height: auto;
+  margin-top: calc(var(--size) * 0.06);
+  margin-left: calc(var(--size) * (1 - var(--zoom)) / 2);
 }

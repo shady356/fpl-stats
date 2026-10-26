@@ -1,9 +1,9 @@
 .team-page {
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-24);
-  padding: var(--sp-24);
 }
 
 .team-header {
@@ -65,40 +65,53 @@
   padding: var(--sp-24);
   border-radius: 16px;
   width: 400px;
-  background: var(--background-2-color);
+  background: var(--background-color);
+}
+
+/* Matches on the left, players on the right. */
+.team-body {
+  display: grid;
+  flex: 1 1 0;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: var(--sp-24);
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .team-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .match-timeline {
+  align-self: start;
   position: relative;
   display: flex;
-  align-items: center;
-  /* safe: start-align instead of clipping the left side when the row overflows. */
-  justify-content: safe center;
-  gap: var(--sp-16);
-  width: 100%;
-  overflow-x: auto;
+  flex-direction: column;
+  gap: var(--sp-12);
 }
 
 /* The line the matches sit on. */
 .match-timeline::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 2px;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
   background: var(--background-3-color);
 }
 
 .match-timeline .card {
   position: relative;
-  flex-shrink: 0;
-  width: 320px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .timeline-side {
   position: relative;
   display: flex;
+  flex-direction: column;
   gap: var(--sp-12);
   margin: 0;
   padding: 0;
@@ -107,11 +120,9 @@
 
 .timeline-match {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--sp-8);
-  width: 72px;
-  padding: var(--sp-12) var(--sp-8);
+  gap: var(--sp-12);
+  padding: var(--sp-12) var(--sp-16);
   border-radius: 12px;
   background: var(--background-2-color);
 }
@@ -122,6 +133,7 @@
 }
 
 .timeline-opponent {
+  flex: 1;
   font-weight: 600;
 }
 
@@ -137,6 +149,17 @@
 .timeline-gw {
   font-size: 12px;
   color: var(--text-secondary-color);
+}
+
+.next-game .next-game-gw {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary-color);
+}
+
+.next-game h2 {
+  margin-bottom: 0;
 }
 
 .next-game .next-game-meta {
@@ -172,6 +195,16 @@
 /* Text placeholders are one line tall, the same as the text they stand in for. */
 .skeleton.skeleton-meta {
   width: 140px;
+  height: 1lh;
+}
+
+.skeleton.skeleton-gw {
+  width: 80px;
+  height: 1lh;
+}
+
+.skeleton.skeleton-heading {
+  width: 120px;
   height: 1lh;
 }
 
@@ -232,13 +265,21 @@
 .team-players {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
   gap: var(--sp-24);
-  width: 100%;
+  min-width: 0;
+}
+
+/* Players fill the space down to the bottom of the page, the top list keeps its width beside them. */
+.team-players .squad {
+  flex: 1 1 0;
+  min-width: min(400px, 100%);
 }
 
 .top-list {
+  flex: 0 1 360px;
+  align-self: flex-start;
   align-items: stretch;
+  box-sizing: border-box;
   gap: var(--sp-16);
 }
 
@@ -279,8 +320,14 @@
 .squad {
   align-items: stretch;
   gap: var(--sp-16);
-  width: 100%;
-  max-width: 640px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* The tables scroll inside the card, each header sticking to the top in turn. */
+.squad-tables {
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 /* Match the card behind the sticky header. */
@@ -291,4 +338,24 @@
 .player-list .unavailable {
   color: var(--text-secondary-color);
   opacity: 0.6;
+}
+
+.squad-sort {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  font-size: 14px;
+}
+
+.squad-sort select {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: var(--sp-8);
+  border-radius: 12px;
+}
+
+.squad-sort select:focus {
+  outline: 2px solid;
+  outline-color: var(--primary-color);
 }

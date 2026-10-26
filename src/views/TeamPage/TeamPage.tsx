@@ -11,7 +11,6 @@ import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto'
 import StarRating from '@/components/ui/StarRating/StarRating'
 import Table from '@/components/ui/Table/Table'
 import TableHeaderCell from '@/components/ui/Table/TableHeaderCell'
-import type { SortOrder } from '@/components/ui/Table/TableHeaderCell'
 import TeamBadge from '@/components/ui/TeamBadge/TeamBadge'
 import { usePlayers } from '@/hooks/usePlayers'
 import { fetchFixtures } from '@/services/FplAPI'
@@ -32,13 +31,15 @@ function TeamPage({ team, teams }: TeamPageProps) {
   return (
     <div className="team-page">
       <TeamHeader team={team} />
-      <MatchTimeline team={team} teams={teams} fixturesPromise={fixturesPromise} />
-      <Suspense fallback={<p>Loading players…</p>}>
-        <div className="team-players">
-          <Squad team={team} />
-          <TopList team={team} />
-        </div>
-      </Suspense>
+      <div className="team-body">
+        <MatchTimeline team={team} teams={teams} fixturesPromise={fixturesPromise} />
+        <Suspense fallback={<p>Loading players…</p>}>
+          <div className="team-players">
+            <Squad team={team} />
+            <TopList team={team} />
+          </div>
+        </Suspense>
+      </div>
     </div>
   )
 }
@@ -74,11 +75,14 @@ function TeamHeader({ team }: { team: Team }) {
   )
 }
 
-/** Matches shown on each side of the next game. */
-const TIMELINE_SIDE_LENGTH = 4
+/** Past matches shown before the next game. */
+const TIMELINE_PAST_LENGTH = 3
+
+/** Upcoming matches shown after the next game. */
+const TIMELINE_UPCOMING_LENGTH = 4
 
 /**
- * Last games, the next game and the games after it, left to right.
+ * Last games, the next game and the games after it, top to bottom.
  */
 function MatchTimeline({
   team,
@@ -92,7 +96,7 @@ function MatchTimeline({
   return (
     <section className="match-timeline">
       <ol className="timeline-side past">
-        {team.form.slice(-TIMELINE_SIDE_LENGTH).map((match) => (
+        {team.form.slice(-TIMELINE_PAST_LENGTH).map((match) => (
           <PastMatch key={match.match_id} match={match} teamId={team.team_id} />
         ))}
       </ol>
@@ -128,7 +132,7 @@ function UpcomingFixtures({
       <NextGameCard next={next} teamName={teamName} />
 
       <ol className="timeline-side upcoming">
-        {upcoming.slice(0, TIMELINE_SIDE_LENGTH).map((fixture) => (
+        {upcoming.slice(0, TIMELINE_UPCOMING_LENGTH).map((fixture) => (
           <UpcomingMatch
             key={fixture.id}
             fixture={fixture}
@@ -146,7 +150,10 @@ function UpcomingFixturesSkeleton() {
   return (
     <>
       <section className="card next-game" aria-busy="true" aria-label="Loading next game">
-        <h2>Next game</h2>
+        <span className="skeleton next-game-gw skeleton-gw" />
+        <h2>
+          <span className="skeleton skeleton-heading" />
+        </h2>
         <span className="skeleton next-game-meta skeleton-meta" />
         <div className="next-game-teams">
           {[0, 1].map((i) => (
@@ -159,7 +166,7 @@ function UpcomingFixturesSkeleton() {
       </section>
 
       <ol className="timeline-side upcoming" aria-hidden="true">
-        {Array.from({ length: TIMELINE_SIDE_LENGTH }, (_, i) => (
+        {Array.from({ length: TIMELINE_UPCOMING_LENGTH }, (_, i) => (
           <li key={i} className="timeline-match">
             <span className="skeleton skeleton-icon" />
             <span className="skeleton skeleton-badge small" />
@@ -175,7 +182,7 @@ function UpcomingFixturesSkeleton() {
 function VenueIcon({ isHome }: { isHome: boolean }) {
   return (
     <span className="timeline-venue" title={isHome ? 'Home' : 'Away'}>
-      <Icon icon={isHome ? 'home' : 'flight'} />
+      <Icon icon={isHome ? 'stadium' : 'flight_takeoff'} />
     </span>
   )
 }
@@ -222,6 +229,9 @@ function UpcomingMatch({
   )
 }
 
+/** Kickoff times are shown in Norwegian time. */
+const KICKOFF_TIME_ZONE = 'Europe/Oslo'
+
 function NextGameCard({
   next,
   teamName,
@@ -238,19 +248,29 @@ function NextGameCard({
     )
   }
 
-  const kickoff = new Date(next.kickoff_time).toLocaleString(undefined, {
-    weekday: 'short',
+  const kickoff = new Date(next.kickoff_time)
+  const date = kickoff.toLocaleDateString(undefined, {
+    month: 'long',
     day: 'numeric',
-    month: 'short',
+    timeZone: KICKOFF_TIME_ZONE,
+  })
+  const weekday = kickoff.toLocaleDateString(undefined, {
+    weekday: 'long',
+    timeZone: KICKOFF_TIME_ZONE,
+  })
+  const time = kickoff.toLocaleTimeString(undefined, {
     hour: '2-digit',
     minute: '2-digit',
+    hourCycle: 'h23',
+    timeZone: KICKOFF_TIME_ZONE,
   })
 
   return (
     <section className="card next-game">
-      <h2>Next game</h2>
+      <span className="next-game-gw">Gameweek {next.event}</span>
+      <h2>{date}</h2>
       <p className="next-game-meta">
-        GW {next.event} · {kickoff}
+        {weekday} · {time}
       </p>
       <div className="next-game-teams">
         <div className="next-game-team">
@@ -268,10 +288,10 @@ function NextGameCard({
 }
 
 const POSITIONS: { position: PlayerPosition; label: string }[] = [
-  { position: 1, label: 'Goalkeepers' },
-  { position: 2, label: 'Defenders' },
-  { position: 3, label: 'Midfielders' },
-  { position: 4, label: 'Forwards' },
+  { position: 1, label: 'GK' },
+  { position: 2, label: 'DEF' },
+  { position: 3, label: 'MID' },
+  { position: 4, label: 'FWD' },
 ]
 
 type PlayerColumn = {
@@ -299,6 +319,14 @@ const PLAYER_COLUMNS: PlayerColumn[] = [
     render: (player) => `£${(player.now_cost / 10).toFixed(1)}m`,
   },
   {
+    label: '+/-',
+    title: 'Price change',
+    align: 'right',
+    value: (player) => player.cost_change_start,
+    render: (player) =>
+      `${player.cost_change_start > 0 ? '+' : ''}${(player.cost_change_start / 10).toFixed(1)}`,
+  },
+  {
     label: 'Min',
     title: 'Minutes played',
     align: 'right',
@@ -307,14 +335,14 @@ const PLAYER_COLUMNS: PlayerColumn[] = [
   },
   {
     label: 'Form',
-    title: 'Average points per game over the last 30 days',
+    title: 'Form',
     align: 'right',
     value: (player) => Number(player.form),
     render: (player) => player.form,
   },
   {
     label: 'Sel.',
-    title: 'Selected by percent of managers',
+    title: 'Selected by',
     align: 'right',
     value: (player) => Number(player.selected_by_percent),
     render: (player) => `${player.selected_by_percent}%`,
@@ -328,42 +356,57 @@ const PLAYER_COLUMNS: PlayerColumn[] = [
   },
 ]
 
-/** Index of the column the table is sorted by initially (total points). */
+/** Index of the column the tables are sorted by initially (total points). */
 const DEFAULT_SORT_COLUMN = PLAYER_COLUMNS.length - 1
 
 /**
- * The team's players for the selected position.
+ * The team's players, one table per position, all sorted by the selected column.
  */
 function Squad({ team }: { team: Team }) {
-  const [position, setPosition] = useState<PlayerPosition>(1)
-  const players = usePlayers().filter(
-    (player) => player.team === team.team_id && player.element_type === position,
-  )
+  const [sortColumn, setSortColumn] = useState(DEFAULT_SORT_COLUMN)
+  const players = usePlayers().filter((player) => player.team === team.team_id)
+
+  const { value } = PLAYER_COLUMNS[sortColumn]
+  const sortedPlayers = players.toSorted((a, b) => {
+    const aVal = value(a)
+    const bVal = value(b)
+    if (typeof aVal === 'number' && typeof bVal === 'number') {
+      return bVal - aVal
+    }
+    return String(aVal).localeCompare(String(bVal))
+  })
 
   return (
     <section className="card squad">
       <div className="card-header">
-        <h2 id="players-label">Players</h2>
-        <BaseSegmentedButtons aria-labelledby="players-label">
-          {POSITIONS.map(({ position: value, label }) => (
-            <BaseSegmentedButton
-              key={value}
-              selected={position === value}
-              onClick={() => setPosition(value)}
-            >
-              {label}
-            </BaseSegmentedButton>
-          ))}
-        </BaseSegmentedButtons>
+        <h2>Players</h2>
+        <label className="squad-sort">
+          Sort by
+          <select value={sortColumn} onChange={(e) => setSortColumn(Number(e.target.value))}>
+            {PLAYER_COLUMNS.map((column, index) => (
+              <option key={column.label} value={index}>
+                {column.title}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
 
-      <PlayerList players={players} />
+      <div className="squad-tables">
+        {POSITIONS.map(({ position, label }) => (
+          <PlayerList
+            key={position}
+            label={label}
+            players={sortedPlayers.filter((player) => player.element_type === position)}
+          />
+        ))}
+      </div>
     </section>
   )
 }
 
 const POSITION_SHORT_LABELS: Record<PlayerPosition, string> = {
-  1: 'GKP',
+  1: 'GK',
   2: 'DEF',
   3: 'MID',
   4: 'FWD',
@@ -440,9 +483,9 @@ function TopList({ team }: { team: Team }) {
         <p>No players yet.</p>
       ) : (
         <ol className="top-list-players">
-          {players.map((player) => (
+          {players.map((player, index) => (
             <li key={player.id} className="top-list-player">
-              <PlayerPhoto code={player.code} />
+              <PlayerPhoto code={player.code} size={index === 0 ? 'large' : 'small'} />
               <div className="top-list-name">
                 <span>{player.web_name}</span>
                 <span className="top-list-details">
@@ -461,49 +504,20 @@ function TopList({ team }: { team: Team }) {
   )
 }
 
-function PlayerList({ players }: { players: Player[] }) {
-  const [sortColumn, setSortColumn] = useState(DEFAULT_SORT_COLUMN)
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
-
-  function sort(column: number) {
-    if (sortColumn === column) {
-      setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))
-    } else {
-      setSortColumn(column)
-      setSortOrder('desc')
-    }
-  }
-
-  const { value } = PLAYER_COLUMNS[sortColumn]
-  const direction = sortOrder === 'asc' ? 1 : -1
-  const sortedPlayers = players.toSorted((a, b) => {
-    const aVal = value(a)
-    const bVal = value(b)
-    if (typeof aVal === 'number' && typeof bVal === 'number') {
-      return (aVal - bVal) * direction
-    }
-    return String(aVal).localeCompare(String(bVal)) * direction
-  })
-
+function PlayerList({ label, players }: { label: string; players: Player[] }) {
   return (
     <Table className="player-list">
       <thead>
         <tr>
           {PLAYER_COLUMNS.map((column, index) => (
-            <TableHeaderCell
-              key={column.label}
-              align={column.align}
-              title={column.title}
-              sortOrder={sortColumn === index ? sortOrder : null}
-              onSort={() => sort(index)}
-            >
-              {column.label}
+            <TableHeaderCell key={column.label} align={column.align} title={column.title}>
+              {index === 0 ? label : column.label}
             </TableHeaderCell>
           ))}
         </tr>
       </thead>
       <tbody>
-        {sortedPlayers.map((player) => (
+        {players.map((player) => (
           <tr key={player.id} className={player.status === 'a' ? undefined : 'unavailable'}>
             {PLAYER_COLUMNS.map((column) => (
               <td key={column.label} style={{ textAlign: column.align }}>

@@ -17,6 +17,8 @@ export type Player = {
   element_type: PlayerPosition
   /** Price in tenths of a million, e.g. 62 = £6.2m. */
   now_cost: number
+  /** Price change since the start of the season, in tenths of a million, e.g. -3 = -£0.3m. */
+  cost_change_start: number
   total_points: number
   minutes: number
   goals_scored: number

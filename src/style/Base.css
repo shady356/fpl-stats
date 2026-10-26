@@ -6,10 +6,20 @@ body {
   color: var(--text-color);
 }
 
-main {
+/* Fill the window, so pages can stretch to its bottom. */
+#root {
   display: flex;
   flex-direction: column;
+  min-height: 100dvh;
+}
+
+main {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
   gap: var(--sp-16);
+  box-sizing: border-box;
+  width: 100%;
   max-width: var(--screen-max-width);
   margin: 0 auto;
   padding: var(--sp-16);
