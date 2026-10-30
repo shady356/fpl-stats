@@ -34,9 +34,30 @@ function toTeamFixture(fixture: Fixture, opponent: Team, isHome: boolean): TeamF
     opponent: {
       team_name: opponent.team_name,
       team_name_short: opponent.team_name_short,
+      rating_total: opponent.rating_total,
       rating_total_color: opponent.rating_total_color,
       rating_attack_color: opponent.rating_attack_color,
       rating_defense_color: opponent.rating_defense_color,
     },
   }
+}
+
+/**
+ * Average total rating of a team's opponents over a run of gameweeks; lower is easier.
+ * @param fixtures - The team's fixtures.
+ * @param firstGameweek - First gameweek of the run.
+ * @param gameweeks - Number of gameweeks in the run.
+ * @returns Average opponent rating (0-100), or undefined if the team has no fixtures in the run.
+ */
+export function fixtureDifficulty(
+  fixtures: TeamFixture[],
+  firstGameweek: number,
+  gameweeks: number,
+): number | undefined {
+  const inRun = fixtures.filter(
+    (fixture) => fixture.event >= firstGameweek && fixture.event < firstGameweek + gameweeks,
+  )
+  if (inRun.length === 0) return undefined
+
+  return inRun.reduce((total, fixture) => total + fixture.opponent.rating_total, 0) / inRun.length
 }
