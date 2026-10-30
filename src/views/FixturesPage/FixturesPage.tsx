@@ -3,14 +3,13 @@ import { Suspense, use } from 'react'
 import Table from '@/components/ui/Table/Table.tsx'
 import TableHeaderCell from '@/components/ui/Table/TableHeaderCell.tsx'
 import TeamName from '@/components/ui/TeamName/TeamName.tsx'
-import { fetchCurrentGameweek, fetchFixtures } from '@/services/FplAPI'
+import { fetchFixtures } from '@/services/FplAPI'
 import type { Team } from '@/types/team.ts'
 import { getTeamFixtureList } from '@/utils/teamFixtures.ts'
 
 import './FixturesPage.css'
 
 const fixturesPromise = fetchFixtures()
-const currentGameweekPromise = fetchCurrentGameweek()
 
 type FixturesPageProps = {
   teams: Team[]
@@ -28,14 +27,15 @@ function FixturesPage({ teams }: FixturesPageProps) {
 
 function FixtureList({ teams }: FixturesPageProps) {
   const fixtures = use(fixturesPromise)
-  const currentGameweek = use(currentGameweekPromise)
   const teamWithFixtures = getTeamFixtureList(teams, fixtures)
   const MAX_GAMEWEEKS = 38
-  if (currentGameweek === undefined) {
-    return <p>Could not load the current gameweek.</p>
+  if (fixtures.length === 0) {
+    return <p>Could not load fixtures.</p>
   }
 
-  const remainingGames = MAX_GAMEWEEKS - currentGameweek
+  // Future fixtures exclude played games, so the earliest one is the next gameweek
+  const nextGameweek = Math.min(...fixtures.map((fixture) => fixture.event))
+  const remainingGames = MAX_GAMEWEEKS - nextGameweek + 1
   const gameweeks = new Array(remainingGames).fill(0)
 
   return (
@@ -44,7 +44,7 @@ function FixtureList({ teams }: FixturesPageProps) {
         <tr>
           <TableHeaderCell align="left">Teams</TableHeaderCell>
           {gameweeks.map((_, i) => (
-            <TableHeaderCell key={i}>{`GW ${currentGameweek + i + 1}`}</TableHeaderCell>
+            <TableHeaderCell key={i}>{`GW ${nextGameweek + i}`}</TableHeaderCell>
           ))}
         </tr>
       </thead>
@@ -57,7 +57,7 @@ function FixtureList({ teams }: FixturesPageProps) {
             {gameweeks.map((_, i) => (
               <td key={i}>
                 {team.fixtures
-                  .filter((fixture) => fixture.event === currentGameweek + i + 1)
+                  .filter((fixture) => fixture.event === nextGameweek + i)
                   .map((fixture) => (
                     <div
                       key={fixture.fixture_id}
