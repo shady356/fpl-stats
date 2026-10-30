@@ -1,0 +1,81 @@
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  padding: var(--sp-16);
+  border-radius: 16px;
+  background: var(--background-2-color);
+}
+
+/* Average | Final | Highest, with the final points in the middle and biggest. */
+.scoreboard-scores {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-16);
+}
+
+.scoreboard-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.scoreboard-value {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.scoreboard-label {
+  font-size: 12px;
+  color: var(--text-secondary-color);
+}
+
+.scoreboard-score-main {
+  padding: var(--sp-12) var(--sp-24);
+  border-radius: 12px;
+  background: var(--background-3-color);
+}
+
+.scoreboard-score-main .scoreboard-label {
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.scoreboard-score-main .scoreboard-value {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--primary-color);
+}
+
+.scoreboard-details {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-48);
+  margin: 0;
+  font-size: 14px;
+}
+
+.scoreboard-details > div {
+  display: flex;
+  gap: var(--sp-8);
+}
+
+.scoreboard-details dt {
+  color: var(--text-secondary-color);
+}
+
+.scoreboard-details dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.scoreboard-chip {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-color);
+}

@@ -1,4 +1,6 @@
 import type { Fixture } from '@/types/fixture'
+import type { Gameweek } from '@/types/gameweek'
+import type { Entry, EntryHistory, EntryPicks, LivePlayerStats } from '@/types/myTeam'
 import type { Player } from '@/types/player'
 import { understatTeamId } from '@/utils/teamIds'
 
@@ -45,11 +47,19 @@ export async function fetchFixtures({ future = true, team }: FixturesQuery = {})
   }
 }
 
+export type Bootstrap = {
+  /** Players with team converted to understat team ids. */
+  players: Player[]
+  gameweeks: Gameweek[]
+  /** Number of FPL managers this season. */
+  total_players: number
+}
+
 /**
- * Fetch all players from bootstrap-static, with team converted to understat team ids.
- * @returns The players; empty if the request fails.
+ * Fetch bootstrap-static: all players and gameweeks.
+ * @returns The bootstrap data; undefined if the request fails.
  */
-export async function fetchPlayers(): Promise<Player[]> {
+export async function fetchBootstrap(): Promise<Bootstrap | undefined> {
   try {
     const response = await fetch('/fpl-api/bootstrap-static/')
 
@@ -57,9 +67,10 @@ export async function fetchPlayers(): Promise<Player[]> {
       throw new Error(`HTTP error! Status: ${response.status}`)
     }
 
-    const data: { elements: Player[] } = await response.json()
+    const data: { elements: Player[]; events: Gameweek[]; total_players: number } =
+      await response.json()
 
-    return data.elements.flatMap((player) => {
+    const players = data.elements.flatMap((player) => {
       const team = understatTeamId(player.team)
 
       if (team === undefined) {
@@ -69,9 +80,11 @@ export async function fetchPlayers(): Promise<Player[]> {
 
       return [{ ...player, team }]
     })
+
+    return { players, gameweeks: data.events, total_players: data.total_players }
   } catch (error) {
     console.error(`Failed to fetch: ${error}`)
-    return []
+    return undefined
   }
 }
 
@@ -90,6 +103,92 @@ export async function fetchCurrentGameweek(): Promise<number | undefined> {
     const data: { matchweek: number } = await response.json()
 
     return data.matchweek
+  } catch (error) {
+    console.error(`Failed to fetch: ${error}`)
+    return undefined
+  }
+}
+
+/**
+ * Fetch an FPL manager's team.
+ * @param teamId - The manager's team id, as in the FPL app's points page URL.
+ * @returns The team; undefined if the request fails.
+ */
+export async function fetchEntry(teamId: number): Promise<Entry | undefined> {
+  try {
+    const response = await fetch(`/fpl-api/entry/${teamId}/`)
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error(`Failed to fetch: ${error}`)
+    return undefined
+  }
+}
+
+/**
+ * Fetch a manager's picks for a gameweek, with automatic subs already applied.
+ * @param teamId - The manager's team id.
+ * @param gameweek - The gameweek.
+ * @returns The picks; undefined if the request fails.
+ */
+export async function fetchEntryPicks(
+  teamId: number,
+  gameweek: number,
+): Promise<EntryPicks | undefined> {
+  try {
+    const response = await fetch(`/fpl-api/entry/${teamId}/event/${gameweek}/picks/`)
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error(`Failed to fetch: ${error}`)
+    return undefined
+  }
+}
+
+/**
+ * Fetch every player's stats for a gameweek.
+ * @param gameweek - The gameweek.
+ * @returns Stats by player id; empty if the request fails.
+ */
+export async function fetchLiveGameweek(gameweek: number): Promise<Map<number, LivePlayerStats>> {
+  try {
+    const response = await fetch(`/fpl-api/event/${gameweek}/live/`)
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const data: { elements: { id: number; stats: LivePlayerStats }[] } = await response.json()
+
+    return new Map(data.elements.map((element) => [element.id, element.stats]))
+  } catch (error) {
+    console.error(`Failed to fetch: ${error}`)
+    return new Map()
+  }
+}
+
+/**
+ * Fetch a manager's season so far: each gameweek's result and the chips played.
+ * @param teamId - The manager's team id.
+ * @returns The history; undefined if the request fails.
+ */
+export async function fetchEntryHistory(teamId: number): Promise<EntryHistory | undefined> {
+  try {
+    const response = await fetch(`/fpl-api/entry/${teamId}/history/`)
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    return await response.json()
   } catch (error) {
     console.error(`Failed to fetch: ${error}`)
     return undefined

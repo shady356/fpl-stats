@@ -1,0 +1,85 @@
+.season-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+}
+
+.season-stats-card {
+  padding: var(--sp-16);
+  border-radius: 16px;
+  background: var(--background-color);
+}
+
+.season-stats h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.season-stats-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary-color);
+}
+
+.season-stats h3 {
+  margin: 0 0 var(--sp-12);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.season-stats-players {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.season-stats-players li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  font-size: 14px;
+}
+
+.season-stats-player-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.season-stats-player-points {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.season-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8);
+}
+
+.season-stats-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: var(--sp-12);
+  border-radius: 12px;
+  background: var(--background-2-color);
+}
+
+.season-stats-label,
+.season-stats-detail {
+  font-size: 12px;
+  color: var(--text-secondary-color);
+}
+
+.season-stats-value {
+  font-size: 20px;
+  font-weight: 600;
+}

@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header/Header'
 import type { Team, TeamMatches } from '@/types/team.ts'
 import { computeTeamData } from '@/utils/computeTeamData.ts'
 import FixturesPage from '@/views/FixturesPage/FixturesPage.tsx'
+import MyTeamPage from '@/views/MyTeamPage/MyTeamPage.tsx'
 import OverviewPage from '@/views/OverviewPage/OverviewPage.tsx'
 import TeamRoute from '@/views/TeamPage/TeamRoute'
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<Navigate to="/overview" replace />} />
           <Route path="/overview" element={<OverviewPage teamMatches={teamMatches} />} />
           <Route path="/fixtures" element={<FixturesPage teams={teams} />} />
+          <Route path="/my-team" element={<MyTeamPage />} />
           <Route path="/team/:teamId" element={<TeamRoute teams={teams} />} />
           <Route path="*" element={<p>Page not found</p>}></Route>
         </Routes>

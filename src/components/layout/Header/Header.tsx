@@ -21,6 +21,9 @@ function Header() {
             <li>
               <NavLink to="/fixtures">Fixtures</NavLink>
             </li>
+            <li>
+              <NavLink to="/my-team">My Team</NavLink>
+            </li>
           </ul>
         </nav>
 
