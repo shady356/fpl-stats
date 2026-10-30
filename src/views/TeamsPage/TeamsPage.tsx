@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import './OverviewPage.css'
+import './TeamsPage.css'
 
 import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton.tsx'
 import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons.tsx'
@@ -11,16 +11,16 @@ import { computeTeamData } from '@/utils/computeTeamData.ts'
 import TeamStatsTable from './components/TeamStatsTable.tsx'
 import type { TeamRatingColor } from './components/TeamStatsTable.tsx'
 
-type OverviewPageProps = {
+type TeamsPageProps = {
   teamMatches: TeamMatches[]
 }
 
-function OverviewPage({ teamMatches }: OverviewPageProps) {
+function TeamsPage({ teamMatches }: TeamsPageProps) {
   const [teamRatingColor, setTeamRatingColor] = useState<TeamRatingColor>('none')
   const [matchWindow, setMatchWindow] = useState<MatchWindow>('all')
   const teams = computeTeamData(teamMatches, matchWindow)
   return (
-    <div className="overview-page">
+    <div className="teams-page">
       <TableFilters
         teamRatingColor={teamRatingColor}
         setTeamRatingColor={setTeamRatingColor}
@@ -79,4 +79,4 @@ function TableFilters({ setTeamRatingColor, matchWindow, setMatchWindow }: Table
   )
 }
 
-export default OverviewPage
+export default TeamsPage

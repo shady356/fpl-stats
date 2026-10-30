@@ -16,7 +16,7 @@ function Header() {
         <nav>
           <ul>
             <li>
-              <NavLink to="/overview">Overview</NavLink>
+              <NavLink to="/teams">Teams</NavLink>
             </li>
             <li>
               <NavLink to="/fixtures">Fixtures</NavLink>

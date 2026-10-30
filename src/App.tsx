@@ -6,7 +6,7 @@ import type { Team, TeamMatches } from '@/types/team.ts'
 import { computeTeamData } from '@/utils/computeTeamData.ts'
 import FixturesPage from '@/views/FixturesPage/FixturesPage.tsx'
 import MyTeamPage from '@/views/MyTeamPage/MyTeamPage.tsx'
-import OverviewPage from '@/views/OverviewPage/OverviewPage.tsx'
+import TeamsPage from '@/views/TeamsPage/TeamsPage.tsx'
 import TeamRoute from '@/views/TeamPage/TeamRoute'
 
 const teamMatches: TeamMatches[] = epl_2026_matches
@@ -18,8 +18,8 @@ function App() {
       <Header />
       <main>
         <Routes>
-          <Route path="/" element={<Navigate to="/overview" replace />} />
-          <Route path="/overview" element={<OverviewPage teamMatches={teamMatches} />} />
+          <Route path="/" element={<Navigate to="/teams" replace />} />
+          <Route path="/teams" element={<TeamsPage teamMatches={teamMatches} />} />
           <Route path="/fixtures" element={<FixturesPage teams={teams} />} />
           <Route path="/my-team" element={<MyTeamPage />} />
           <Route path="/team/:teamId" element={<TeamRoute teams={teams} />} />
