@@ -15,3 +15,13 @@ const POSITION_COLORS: Record<PlayerPosition, string> = {
 export function positionColor(position: PlayerPosition): string {
   return POSITION_COLORS[position]
 }
+
+/**
+ * Short label for each position, e.g. MID.
+ */
+export const POSITION_SHORT_LABELS: Record<PlayerPosition, string> = {
+  1: 'GK',
+  2: 'DEF',
+  3: 'MID',
+  4: 'FWD',
+}

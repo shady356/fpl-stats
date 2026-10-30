@@ -1,0 +1,90 @@
+.player-list-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  min-width: 0;
+  padding: var(--sp-24);
+  border-radius: 16px;
+  background: var(--background-color);
+}
+
+/* Title on the left, controls on the right. */
+.player-list-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+}
+
+.player-list-card-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.player-list-card-header p {
+  margin: var(--sp-4) 0 0;
+  font-size: 12px;
+  color: var(--text-secondary-color);
+}
+
+.player-list-card-players {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.player-list-card-players li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  padding: var(--sp-8) var(--sp-12);
+  border-radius: 12px;
+  background: var(--background-2-color);
+}
+
+.player-list-card-rank {
+  width: 2ch;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-secondary-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.player-list-card-name {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.player-list-card-details {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--text-secondary-color);
+}
+
+.player-list-card-value {
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.player-list-card-value.positive {
+  color: var(--defender-color);
+}
+
+.player-list-card-value.negative {
+  color: var(--forward-color);
+}

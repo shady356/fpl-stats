@@ -26,7 +26,15 @@ export type Player = {
   /** Defensive contribution actions this season (tackles, interceptions, clearances, blocks, recoveries). */
   defensive_contribution: number
   form: string
+  points_per_game: string
+  expected_goal_involvements_per_90: number
   selected_by_percent: string
+  /** Managers who brought the player in during the current gameweek. */
+  transfers_in_event: number
+  /** Managers who sold the player during the current gameweek. */
+  transfers_out_event: number
+  /** Price change this gameweek, in tenths of a million. */
+  cost_change_event: number
   /** a = available, d = doubtful, i = injured, s = suspended, u = unavailable, n = not eligible. */
   status: string
 }

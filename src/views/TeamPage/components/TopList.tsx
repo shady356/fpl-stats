@@ -4,17 +4,11 @@ import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmen
 import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons'
 import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto'
 import { usePlayers } from '@/hooks/usePlayers'
-import type { Player, PlayerPosition } from '@/types/player'
+import type { Player } from '@/types/player'
 import type { Team } from '@/types/team'
+import { POSITION_SHORT_LABELS } from '@/utils/positions'
 
 import './TopList.css'
-
-const POSITION_SHORT_LABELS: Record<PlayerPosition, string> = {
-  1: 'GK',
-  2: 'DEF',
-  3: 'MID',
-  4: 'FWD',
-}
 
 /** Players shown in the top list. */
 const TOP_LIST_COUNT = 5
