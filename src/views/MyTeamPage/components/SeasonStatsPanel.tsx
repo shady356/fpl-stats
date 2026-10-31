@@ -55,9 +55,7 @@ export default function SeasonStatsPanel({ entry }: { entry: Entry }) {
         <ol className="season-stats-players">
           {stats.topPlayers.map(({ element, player, points }) => (
             <li key={element}>
-              {player && (
-                <PlayerThumbnail code={player.code} position={player.element_type} size="large" />
-              )}
+              {player && <PlayerThumbnail code={player.code} size="large" />}
               <span className="season-stats-player-name">
                 {player ? (
                   <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>

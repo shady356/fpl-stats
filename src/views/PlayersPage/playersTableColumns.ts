@@ -3,12 +3,12 @@ import { formColor } from '@/utils/playerForm.ts'
 
 export type PlayerColumnKey =
   | 'web_name'
-  | 'team'
+  | 'element_type'
+  | 'form'
   | 'now_cost'
   | 'cost_change_start'
   | 'total_points'
   | 'points_per_game'
-  | 'form'
   | 'minutes'
   | 'goals_scored'
   | 'assists'
@@ -25,7 +25,7 @@ export type PlayerColumn = {
   tooltip: string
   align: 'left' | 'right'
   /** Value to sort by; strings sort alphabetically. */
-  value: (player: Player, teamShortNames: Map<number, string>) => number | string
+  value: (player: Player) => number | string
   /** Cell text; the raw value when unset. */
   format?: (player: Player) => string
   /** Cell text color, e.g. to grade the value; the row's color when unset. */
@@ -45,11 +45,20 @@ export const PLAYER_COLUMNS: PlayerColumn[] = [
     value: (player) => player.web_name,
   },
   {
-    key: 'team',
-    label: 'Team',
-    tooltip: 'Team',
+    key: 'element_type',
+    label: 'Pos',
+    tooltip: 'Position',
     align: 'left',
-    value: (player, teamShortNames) => teamShortNames.get(player.team) ?? '',
+    value: (player) => player.element_type,
+  },
+  {
+    key: 'form',
+    label: 'Form',
+    tooltip: 'Average points per game over the last 30 days',
+    align: 'right',
+    value: (player) => Number(player.form),
+    format: (player) => player.form,
+    color: (player) => formColor(Number(player.form)),
   },
   {
     key: 'now_cost',
@@ -82,15 +91,6 @@ export const PLAYER_COLUMNS: PlayerColumn[] = [
     align: 'right',
     value: (player) => Number(player.points_per_game),
     format: (player) => player.points_per_game,
-  },
-  {
-    key: 'form',
-    label: 'Form',
-    tooltip: 'Average points per game over the last 30 days',
-    align: 'right',
-    value: (player) => Number(player.form),
-    format: (player) => player.form,
-    color: (player) => formColor(Number(player.form)),
   },
   {
     key: 'minutes',
@@ -160,6 +160,9 @@ export const PLAYER_COLUMNS: PlayerColumn[] = [
   },
 ]
 
+/** Players are sorted by form until another column is picked. */
+export const DEFAULT_SORT_KEY: PlayerColumnKey = 'form'
+
 /**
  * Sort players by a column, breaking ties in number columns by total points.
  */
@@ -167,13 +170,12 @@ export function sortPlayers(
   players: Player[],
   key: PlayerColumnKey,
   order: 'asc' | 'desc',
-  teamShortNames: Map<number, string>,
 ): Player[] {
   const { value } = PLAYER_COLUMNS.find((column) => column.key === key)!
   const direction = order === 'asc' ? 1 : -1
   return players.toSorted((a, b) => {
-    const aVal = value(a, teamShortNames)
-    const bVal = value(b, teamShortNames)
+    const aVal = value(a)
+    const bVal = value(b)
     if (typeof aVal === 'number' && typeof bVal === 'number') {
       return (aVal - bVal) * direction || b.total_points - a.total_points
     }

@@ -38,16 +38,13 @@
   color: var(--text-secondary-color);
 }
 
-/* Club crest over its short name, on the far right like a game's player card. */
+/* Club crest beside its name, under the player's name. */
 .player-header-team {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: var(--sp-8);
-  margin-left: auto;
   padding: 0;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-weight: 500;
 }
 
 .player-header-status {
@@ -55,27 +52,20 @@
   font-weight: 600;
 }
 
-/* Form stands out above the name. */
-.player-header-form {
+/* Form and price on the far right. */
+.player-header-stats {
   display: flex;
   align-items: baseline;
-  gap: var(--sp-8);
-  margin-bottom: var(--sp-4);
-}
-
-/* Colored by how good the form is, set inline. */
-.player-header-form-value {
-  font-size: 32px;
-  font-weight: 300;
+  gap: var(--sp-16);
+  margin-left: auto;
+  font-size: 20px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
-.player-header-form-label {
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-secondary-color);
+/* Colored by how good the form is, set inline. */
+.player-header-form {
+  font-weight: 300;
 }
 
 /* Matches and charts take three quarters, with the season stats beside them on the right. */
@@ -196,18 +186,19 @@
 }
 
 .player-stats-list {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
   margin: 0;
 }
 
-/* Stacked and wide enough: two columns filled row by row, split by a divider like the game's summary. */
+/* Stacked and wide enough: two columns filled top to bottom, so related stats stay together. */
 @media (min-width: 601px) and (max-width: 900px) {
   .player-stats-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    columns: 2;
     column-gap: var(--sp-32);
-    background: linear-gradient(var(--border-color), var(--border-color)) center / 1px 100%
-      no-repeat;
+    column-rule: 1px solid var(--border-color);
+  }
+
+  .player-stats-row {
+    break-inside: avoid;
   }
 }
 

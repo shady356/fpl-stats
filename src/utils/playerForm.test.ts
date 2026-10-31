@@ -3,8 +3,12 @@ import { describe, expect, it } from 'vitest'
 import { formColor } from './playerForm.ts'
 
 describe('formColor', () => {
-  it('is red below 3', () => {
-    expect(formColor(0)).toBe('var(--forward-color)')
+  it('is gray at 0', () => {
+    expect(formColor(0)).toBe('var(--text-secondary-color)')
+  })
+
+  it('is red above 0 and below 3', () => {
+    expect(formColor(0.1)).toBe('var(--forward-color)')
     expect(formColor(2.9)).toBe('var(--forward-color)')
   })
 

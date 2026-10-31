@@ -34,7 +34,7 @@ const PLAYER_COLUMNS: PlayerColumn[] = [
     value: (player) => player.web_name,
     render: (player) => (
       <span className="player-list-name">
-        <PlayerThumbnail code={player.code} size="small" position={player.element_type} />
+        <PlayerThumbnail code={player.code} size="small" />
         <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
       </span>
     ),

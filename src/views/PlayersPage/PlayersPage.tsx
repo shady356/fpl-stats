@@ -15,6 +15,7 @@ import './PlayersPage.css'
 
 import PlayersTable from './components/PlayersTable'
 import {
+  DEFAULT_SORT_KEY,
   defaultSortOrder,
   isPlayerColumnKey,
   sortPlayers,
@@ -59,7 +60,7 @@ function PlayersList({ teams }: PlayersPageProps) {
     teams.map((team) => team.team_id),
   )
   const sortParam = params.get('sort')
-  const sortKey: PlayerColumnKey = isPlayerColumnKey(sortParam) ? sortParam : 'total_points'
+  const sortKey: PlayerColumnKey = isPlayerColumnKey(sortParam) ? sortParam : DEFAULT_SORT_KEY
   const sortOrder: SortOrder = params.get('order') === 'asc' ? 'asc' : 'desc'
   const limit = Number(params.get('limit')) || PAGE_SIZE
 
@@ -89,12 +90,11 @@ function PlayersList({ teams }: PlayersPageProps) {
 
   if (players.length === 0) return <p>Could not load players.</p>
 
-  const teamShortNames = new Map(teams.map((team) => [team.team_id, team.team_name_short]))
+  const teamNames = new Map(teams.map((team) => [team.team_id, team.team_name]))
   const filtered = sortPlayers(
     filterPlayers(players, { search, position, team }),
     sortKey,
     sortOrder,
-    teamShortNames,
   )
 
   return (
@@ -155,7 +155,7 @@ function PlayersList({ teams }: PlayersPageProps) {
       ) : (
         <PlayersTable
           players={filtered.slice(0, limit)}
-          teamShortNames={teamShortNames}
+          teamNames={teamNames}
           sortKey={sortKey}
           sortOrder={sortOrder}
           onSort={sort}

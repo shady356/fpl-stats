@@ -24,7 +24,7 @@ export default function PitchPlayer({ lineupPlayer }: { lineupPlayer: LineupPlay
   return (
     <div className={classes} title={title}>
       <div className="pitch-player-photo">
-        {player && <PlayerPhoto code={player.code} position={pick.element_type} />}
+        {player && <PlayerPhoto code={player.code} />}
         {(pick.is_captain || pick.is_vice_captain) && (
           <span className="pitch-player-armband">{pick.is_captain ? 'C' : 'V'}</span>
         )}

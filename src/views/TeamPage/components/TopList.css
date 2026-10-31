@@ -35,6 +35,10 @@
   color: var(--text-secondary-color);
 }
 
+.top-list .top-list-details .position-tag {
+  margin-right: var(--sp-4);
+}
+
 .top-list .top-list-score {
   font-size: 18px;
   font-weight: 500;

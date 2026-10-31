@@ -3,8 +3,8 @@ import type { ReactNode } from 'react'
 import PlayerLink from '@/components/PlayerLink/PlayerLink'
 import Icon from '@/components/ui/Icon/Icon'
 import PlayerThumbnail from '@/components/ui/PlayerThumbnail/PlayerThumbnail'
+import PositionTag from '@/components/ui/PositionTag/PositionTag'
 import type { Player } from '@/types/player'
-import { POSITION_SHORT_LABELS } from '@/utils/positions'
 
 import './PlayerListCard.css'
 
@@ -68,14 +68,14 @@ export default function PlayerListCard({
           {rows.map(({ player, value, extra }, index) => (
             <li key={player.id}>
               <span className="player-list-card-rank">{index + 1}</span>
-              <PlayerThumbnail code={player.code} position={player.element_type} size="large" />
+              <PlayerThumbnail code={player.code} size="large" />
               <div className="player-list-card-main">
                 <div className="player-list-card-name">
                   <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
                   <span className="player-list-card-details">
-                    {teamShortNames.get(player.team) ?? '–'} ·{' '}
-                    {POSITION_SHORT_LABELS[player.element_type]} · £
-                    {(player.now_cost / 10).toFixed(1)}m · {player.selected_by_percent}%
+                    <PositionTag position={player.element_type} />
+                    {teamShortNames.get(player.team) ?? '–'} · £{(player.now_cost / 10).toFixed(1)}m
+                    · {player.selected_by_percent}%
                   </span>
                 </div>
                 {extra && <div className="player-list-card-extra">{extra}</div>}

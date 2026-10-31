@@ -115,6 +115,10 @@
   color: var(--text-secondary-color);
 }
 
+.player-list-card-details .position-tag {
+  margin-right: var(--sp-4);
+}
+
 .player-list-card-extra {
   min-width: 0;
 }

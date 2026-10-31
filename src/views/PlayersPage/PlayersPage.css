@@ -54,8 +54,15 @@
   font-weight: 500;
 }
 
-.players-table-position {
+/* Name over the team. */
+.players-table-name-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.players-table-team {
   font-size: 12px;
+  font-weight: normal;
   color: var(--text-secondary-color);
 }
 

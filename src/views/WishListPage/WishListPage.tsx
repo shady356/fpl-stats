@@ -7,6 +7,7 @@ import { usePlayers } from '@/hooks/usePlayers'
 import type { Team } from '@/types/team'
 import PlayersTable from '@/views/PlayersPage/components/PlayersTable'
 import {
+  DEFAULT_SORT_KEY,
   defaultSortOrder,
   sortPlayers,
   type PlayerColumnKey,
@@ -33,7 +34,7 @@ function WishListPage({ teams }: WishListPageProps) {
 function WishList({ teams }: WishListPageProps) {
   const players = usePlayers()
   const { favoriteIds } = useFavoritePlayers()
-  const [sortKey, setSortKey] = useState<PlayerColumnKey>('total_points')
+  const [sortKey, setSortKey] = useState<PlayerColumnKey>(DEFAULT_SORT_KEY)
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
 
   function sort(key: PlayerColumnKey) {
@@ -56,13 +57,13 @@ function WishList({ teams }: WishListPageProps) {
 
   if (players.length === 0) return <p>Could not load players.</p>
 
-  const teamShortNames = new Map(teams.map((team) => [team.team_id, team.team_name_short]))
+  const teamNames = new Map(teams.map((team) => [team.team_id, team.team_name]))
   const favorites = players.filter((player) => favoriteIds.includes(player.id))
 
   return (
     <PlayersTable
-      players={sortPlayers(favorites, sortKey, sortOrder, teamShortNames)}
-      teamShortNames={teamShortNames}
+      players={sortPlayers(favorites, sortKey, sortOrder)}
+      teamNames={teamNames}
       sortKey={sortKey}
       sortOrder={sortOrder}
       onSort={sort}

@@ -5,13 +5,13 @@ import FavoriteButton from '@/components/FavoriteButton/FavoriteButton'
 import BarChart from '@/components/ui/Chart/BarChart'
 import LineChart from '@/components/ui/Chart/LineChart'
 import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto'
+import PositionTag from '@/components/ui/PositionTag/PositionTag'
 import TeamBadge from '@/components/ui/TeamBadge/TeamBadge'
 import { usePlayerSummary } from '@/hooks/usePlayerSummary'
 import type { Player } from '@/types/player'
 import type { Team } from '@/types/team'
 import { formColor } from '@/utils/playerForm'
 import { playerGameweeks, type PlayerGameweek } from '@/utils/playerHistory'
-import { POSITION_SHORT_LABELS } from '@/utils/positions'
 import { teamFullName } from '@/utils/teamFullNames'
 
 import './PlayerPage.css'
@@ -44,17 +44,8 @@ function PlayerPage({ player, teams }: PlayerPageProps) {
   return (
     <div className="player-page">
       <section className="player-header">
-        <PlayerPhoto code={player.code} position={player.element_type} size="large" />
+        <PlayerPhoto code={player.code} size="large" />
         <div className="player-header-name">
-          <div className="player-header-form" title="Average points over the last 30 days">
-            <span
-              className="player-header-form-value"
-              style={{ color: formColor(Number(player.form)) }}
-            >
-              {player.form}
-            </span>
-            <span className="player-header-form-label">Form</span>
-          </div>
           <div className="player-header-title">
             <h1>
               {player.first_name} {player.second_name}
@@ -65,21 +56,26 @@ function PlayerPage({ player, teams }: PlayerPageProps) {
             />
           </div>
           <div className="player-header-details">
-            <span>{POSITION_SHORT_LABELS[player.element_type]}</span>
-            <span>{formatPrice(player.now_cost)}</span>
+            {team && (
+              <Link to={`/team/${team.team_id}`} className="player-header-team">
+                <TeamBadge teamId={team.team_id} size="small" />
+                {teamFullName(team.team_name)}
+              </Link>
+            )}
+            <PositionTag position={player.element_type} />
             {status && <span className="player-header-status">{status}</span>}
           </div>
         </div>
-        {team && (
-          <Link
-            to={`/team/${team.team_id}`}
-            className="player-header-team"
-            title={teamFullName(team.team_name)}
+        <div className="player-header-stats">
+          <span
+            className="player-header-form"
+            title="Form: average points over the last 30 days"
+            style={{ color: formColor(Number(player.form)) }}
           >
-            <TeamBadge teamId={team.team_id} size="medium" />
-            {team.team_name_short}
-          </Link>
-        )}
+            {player.form}
+          </span>
+          <span>{formatPrice(player.now_cost)}</span>
+        </div>
       </section>
 
       <div className="player-body">

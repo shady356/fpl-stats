@@ -4,10 +4,10 @@ import PlayerLink from '@/components/PlayerLink/PlayerLink'
 import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton'
 import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons'
 import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto'
+import PositionTag from '@/components/ui/PositionTag/PositionTag'
 import { usePlayers } from '@/hooks/usePlayers'
 import type { Player } from '@/types/player'
 import type { Team } from '@/types/team'
-import { POSITION_SHORT_LABELS } from '@/utils/positions'
 
 import './TopList.css'
 
@@ -102,7 +102,7 @@ export default function TopList({ team }: { team: Team }) {
       ) : (
         <>
           <div className="top-list-leader">
-            <PlayerPhoto code={leader.code} size="large" position={leader.element_type} />
+            <PlayerPhoto code={leader.code} size="large" />
             <div className="top-list-name">
               <span className="top-list-rank">#1</span>
               <PlayerLink playerId={leader.id} className="top-list-leader-name">
@@ -120,7 +120,7 @@ export default function TopList({ team }: { team: Team }) {
               {rest.map((player, index) => (
                 <li key={player.id} className="top-list-player">
                   <span className="top-list-rank">{index + 2}</span>
-                  <PlayerPhoto code={player.code} size="small" position={player.element_type} />
+                  <PlayerPhoto code={player.code} size="small" />
                   <div className="top-list-name">
                     <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
                     <PlayerDetails player={player} />
@@ -141,7 +141,7 @@ export default function TopList({ team }: { team: Team }) {
 function PlayerDetails({ player }: { player: Player }) {
   return (
     <span className="top-list-details">
-      {POSITION_SHORT_LABELS[player.element_type]} · £{(player.now_cost / 10).toFixed(1)}m
+      <PositionTag position={player.element_type} />£{(player.now_cost / 10).toFixed(1)}m
     </span>
   )
 }

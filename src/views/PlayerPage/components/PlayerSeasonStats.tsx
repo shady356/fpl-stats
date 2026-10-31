@@ -11,7 +11,7 @@ function formatChange(tenths: number): string {
 
 /**
  * The player's season totals from bootstrap-static, laid out like a game's player card:
- * key facts, then a summary list.
+ * key facts, then a summary list ordered general, attack, defence, discipline.
  * Longer explanations are in each row's hover title.
  */
 export default function PlayerSeasonStats({ player }: { player: Player }) {
@@ -41,28 +41,24 @@ export default function PlayerSeasonStats({ player }: { player: Player }) {
         <h3>Summary</h3>
         <dl className="player-stats-list">
           <StatRow
-            icon="sports_soccer"
-            label="Goals"
-            value={player.goals_scored}
-            title={`${player.expected_goals} xG`}
-          />
-          <StatRow
             icon="timer"
             color="time"
             label="Minutes"
             value={player.minutes}
             title={`${player.starts} starts`}
           />
+          <StatRow icon="add_circle" label="Bonus" value={player.bonus} />
+          <StatRow
+            icon="sports_soccer"
+            label="Goals"
+            value={player.goals_scored}
+            title={`${player.expected_goals} xG`}
+          />
           <StatRow
             icon="handshake"
             label="Assists"
             value={player.assists}
             title={`${player.expected_assists} xA`}
-          />
-          <StatRow
-            icon={<BookingCard color="yellow" />}
-            label="Yellow cards"
-            value={player.yellow_cards}
           />
           {isKeeper ? (
             <StatRow icon="sports_handball" label="Saves" value={player.saves} />
@@ -74,8 +70,12 @@ export default function PlayerSeasonStats({ player }: { player: Player }) {
               title="Defensive contributions"
             />
           )}
+          <StatRow
+            icon={<BookingCard color="yellow" />}
+            label="Yellow cards"
+            value={player.yellow_cards}
+          />
           <StatRow icon={<BookingCard color="red" />} label="Red cards" value={player.red_cards} />
-          <StatRow icon="add_circle" label="Bonus" value={player.bonus} />
         </dl>
       </div>
     </section>
