@@ -9,6 +9,7 @@ import TeamBadge from '@/components/ui/TeamBadge/TeamBadge'
 import { usePlayerSummary } from '@/hooks/usePlayerSummary'
 import type { Player } from '@/types/player'
 import type { Team } from '@/types/team'
+import { formColor } from '@/utils/playerForm'
 import { playerGameweeks, type PlayerGameweek } from '@/utils/playerHistory'
 import { POSITION_SHORT_LABELS } from '@/utils/positions'
 import { teamFullName } from '@/utils/teamFullNames'
@@ -45,6 +46,15 @@ function PlayerPage({ player, teams }: PlayerPageProps) {
       <section className="player-header">
         <PlayerPhoto code={player.code} position={player.element_type} size="large" />
         <div className="player-header-name">
+          <div className="player-header-form" title="Average points over the last 30 days">
+            <span
+              className="player-header-form-value"
+              style={{ color: formColor(Number(player.form)) }}
+            >
+              {player.form}
+            </span>
+            <span className="player-header-form-label">Form</span>
+          </div>
           <div className="player-header-title">
             <h1>
               {player.first_name} {player.second_name}
@@ -55,17 +65,21 @@ function PlayerPage({ player, teams }: PlayerPageProps) {
             />
           </div>
           <div className="player-header-details">
-            {team && (
-              <Link to={`/team/${team.team_id}`} className="player-header-team">
-                <TeamBadge teamId={team.team_id} size="tiny" />
-                {teamFullName(team.team_name)}
-              </Link>
-            )}
             <span>{POSITION_SHORT_LABELS[player.element_type]}</span>
             <span>{formatPrice(player.now_cost)}</span>
             {status && <span className="player-header-status">{status}</span>}
           </div>
         </div>
+        {team && (
+          <Link
+            to={`/team/${team.team_id}`}
+            className="player-header-team"
+            title={teamFullName(team.team_name)}
+          >
+            <TeamBadge teamId={team.team_id} size="medium" />
+            {team.team_name_short}
+          </Link>
+        )}
       </section>
 
       <div className="player-body">

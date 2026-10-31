@@ -1,5 +1,5 @@
 import type { TeamFixture, TeamWithFixtures } from '@/types/fixture.ts'
-import type { Player } from '@/types/player.ts'
+import type { Player, PlayerPosition } from '@/types/player.ts'
 
 /** Players with fewer minutes than this are too small a sample to recommend. */
 export const MIN_MINUTES = 270
@@ -115,4 +115,122 @@ export function rankPicks(
  */
 export function isDifferential(player: Player): boolean {
   return Number(player.selected_by_percent) < DIFFERENTIAL_MAX_SELECTED
+}
+
+/**
+ * Players whose price changed this gameweek, biggest change first.
+ * @param players - All players; not modified.
+ * @param direction - 'rise' for price rises, 'fall' for drops.
+ * @param count - How many to return.
+ * @returns The players, ties broken by ownership.
+ */
+export function priceChanges(
+  players: Player[],
+  direction: 'rise' | 'fall',
+  count: number,
+): Player[] {
+  const change = (player: Player) =>
+    direction === 'rise' ? player.cost_change_event : -player.cost_change_event
+
+  return players
+    .filter((player) => change(player) > 0)
+    .toSorted(
+      (a, b) =>
+        change(b) - change(a) || Number(b.selected_by_percent) - Number(a.selected_by_percent),
+    )
+    .slice(0, count)
+}
+
+/** Statuses that mean a player may miss the next match. Loans and transfers ('u', 'n') are left out. */
+const FLAGGED_STATUSES = new Set(['d', 'i', 's'])
+
+/**
+ * Doubtful, injured and suspended players, most owned first, since those affect
+ * the most managers.
+ * @param players - All players; not modified.
+ * @param count - How many to return.
+ * @returns The flagged players.
+ */
+export function flaggedPlayers(players: Player[], count: number): Player[] {
+  return players
+    .filter((player) => FLAGGED_STATUSES.has(player.status))
+    .toSorted((a, b) => Number(b.selected_by_percent) - Number(a.selected_by_percent))
+    .slice(0, count)
+}
+
+/**
+ * Defensive contributions needed in a match for the 2 bonus points: clearances,
+ * blocks, interceptions and tackles for defenders, plus recoveries for midfielders
+ * and forwards. Goalkeepers can't earn them.
+ */
+export const DEFENSIVE_CONTRIBUTION_THRESHOLDS: Record<Exclude<PlayerPosition, 1>, number> = {
+  2: 10,
+  3: 12,
+  4: 12,
+}
+
+/**
+ * A player ranked by defensive contributions.
+ */
+export type DefensiveContributor = {
+  player: Player
+  /** Defensive contributions per 90 minutes. */
+  per90: number
+  /** Contributions per match needed for the points at the player's position. */
+  threshold: number
+}
+
+/**
+ * Regular outfield players ranked by defensive contributions per 90 relative to
+ * their position's threshold, so defenders and midfielders compare fairly.
+ * @param players - All players; not modified.
+ * @param filter - Extra condition a player must meet, e.g. a position.
+ * @returns Contributors, closest to (or furthest past) the threshold first.
+ */
+export function rankDefensiveContributors(
+  players: Player[],
+  filter: (player: Player) => boolean = () => true,
+): DefensiveContributor[] {
+  return players
+    .filter(
+      (player) => player.element_type !== 1 && player.minutes >= MIN_MINUTES && filter(player),
+    )
+    .map((player) => ({
+      player,
+      per90: (player.defensive_contribution / player.minutes) * 90,
+      threshold:
+        DEFENSIVE_CONTRIBUTION_THRESHOLDS[player.element_type as Exclude<PlayerPosition, 1>],
+    }))
+    .toSorted((a, b) => b.per90 / b.threshold - a.per90 / a.threshold)
+}
+
+/**
+ * A player compared with their expected goal involvements.
+ */
+export type ExpectedReturn = {
+  player: Player
+  /** Expected goals plus expected assists this season. */
+  xgi: number
+  /** Goals plus assists this season. */
+  gi: number
+}
+
+/**
+ * Regular players whose goals and assists trail their xG and xA the most, so are
+ * due a return if the chances keep coming.
+ * @param players - All players; not modified.
+ * @param count - How many to return.
+ * @returns The players, biggest shortfall first.
+ */
+export function dueAReturn(players: Player[], count: number): ExpectedReturn[] {
+  return players
+    .filter((player) => player.status === 'a' && player.minutes >= MIN_MINUTES)
+    .map((player) => ({
+      player,
+      xgi: Number(player.expected_goals) + Number(player.expected_assists),
+      gi: player.goals_scored + player.assists,
+    }))
+    .filter(({ xgi, gi }) => xgi > gi)
+    .toSorted((a, b) => b.xgi - b.gi - (a.xgi - a.gi))
+    .slice(0, count)
 }

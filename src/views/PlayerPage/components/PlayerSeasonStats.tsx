@@ -11,7 +11,7 @@ function formatChange(tenths: number): string {
 
 /**
  * The player's season totals from bootstrap-static, laid out like a game's player card:
- * a headline points total with key facts, then a summary list.
+ * key facts, then a summary list.
  * Longer explanations are in each row's hover title.
  */
 export default function PlayerSeasonStats({ player }: { player: Player }) {
@@ -19,29 +19,23 @@ export default function PlayerSeasonStats({ player }: { player: Player }) {
 
   return (
     <section className="player-card player-season-stats" aria-label="Season stats">
-      <div className="player-stats-hero">
-        <div className="player-stats-total">
-          <span className="player-stats-total-value">{player.total_points}</span>
-          <span className="player-stats-total-label">Points</span>
-        </div>
-        <dl className="player-stats-facts">
-          <Fact label="Form" value={player.form} title="Average points over the last 30 days" />
-          <Fact
-            label="Price change"
-            value={formatChange(player.cost_change_start)}
-            title={
-              player.cost_change_event === 0
-                ? 'Since the start of the season'
-                : `${formatChange(player.cost_change_event)} this GW`
-            }
-          />
-          <Fact
-            label="Owned"
-            value={`${player.selected_by_percent}%`}
-            title="Percentage of FPL managers who own the player"
-          />
-        </dl>
-      </div>
+      <dl className="player-stats-facts">
+        <Fact label="Points" value={player.total_points} title="Total points this season" />
+        <Fact
+          label="Price change"
+          value={formatChange(player.cost_change_start)}
+          title={
+            player.cost_change_event === 0
+              ? 'Since the start of the season'
+              : `${formatChange(player.cost_change_event)} this GW`
+          }
+        />
+        <Fact
+          label="Owned"
+          value={`${player.selected_by_percent}%`}
+          title="Percentage of FPL managers who own the player"
+        />
+      </dl>
 
       <div className="player-stats-summary">
         <h3>Summary</h3>

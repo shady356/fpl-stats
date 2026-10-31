@@ -1,4 +1,5 @@
 import type { Player } from '@/types/player.ts'
+import { formColor } from '@/utils/playerForm.ts'
 
 export type PlayerColumnKey =
   | 'web_name'
@@ -27,6 +28,8 @@ export type PlayerColumn = {
   value: (player: Player, teamShortNames: Map<number, string>) => number | string
   /** Cell text; the raw value when unset. */
   format?: (player: Player) => string
+  /** Cell text color, e.g. to grade the value; the row's color when unset. */
+  color?: (player: Player) => string
 }
 
 function formatPrice(tenths: number): string {
@@ -87,6 +90,7 @@ export const PLAYER_COLUMNS: PlayerColumn[] = [
     align: 'right',
     value: (player) => Number(player.form),
     format: (player) => player.form,
+    color: (player) => formColor(Number(player.form)),
   },
   {
     key: 'minutes',

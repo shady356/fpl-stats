@@ -38,16 +38,44 @@
   color: var(--text-secondary-color);
 }
 
+/* Club crest over its short name, on the far right like a game's player card. */
 .player-header-team {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: var(--sp-8);
+  margin-left: auto;
   padding: 0;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .player-header-status {
   color: var(--goalkeeper-color);
   font-weight: 600;
+}
+
+/* Form stands out above the name. */
+.player-header-form {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-8);
+  margin-bottom: var(--sp-4);
+}
+
+/* Colored by how good the form is, set inline. */
+.player-header-form-value {
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.player-header-form-label {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary-color);
 }
 
 /* Matches and charts take three quarters, with the season stats beside them on the right. */
@@ -99,36 +127,9 @@
   font-weight: 600;
 }
 
-/* Headline total and key facts, then the summary list. */
+/* Key facts, then the summary list. */
 .player-season-stats {
   gap: var(--sp-24);
-}
-
-.player-stats-hero {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-16);
-}
-
-.player-stats-total {
-  display: flex;
-  align-items: baseline;
-  gap: var(--sp-12);
-}
-
-.player-stats-total-value {
-  font-size: 64px;
-  font-weight: 300;
-  line-height: 1;
-  color: var(--primary-color);
-  font-variant-numeric: tabular-nums;
-}
-
-.player-stats-total-label {
-  font-size: 18px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-secondary-color);
 }
 
 .player-stats-facts {

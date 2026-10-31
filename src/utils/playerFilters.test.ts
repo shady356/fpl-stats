@@ -37,6 +37,9 @@ function makePlayer(id: number, overrides: Partial<Player> = {}): Player {
     transfers_in_event: 0,
     transfers_out_event: 0,
     status: 'a',
+    news: '',
+    news_added: null,
+    chance_of_playing_next_round: null,
     ...overrides,
   }
 }

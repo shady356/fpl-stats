@@ -7,7 +7,7 @@
 .overview-header {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: var(--sp-12);
 }
 
@@ -17,24 +17,53 @@
   font-weight: 600;
 }
 
-.overview-header span {
-  font-size: 14px;
+.overview-gameweeks {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-12);
+  border-radius: 999px;
+  background: var(--background-color);
+  font-size: 13px;
+  font-weight: 500;
   color: var(--text-secondary-color);
 }
 
-/* Transfers on top, recommendations below; stacked on small screens. */
+.overview-gameweeks .material-symbols-rounded {
+  font-size: 18px;
+  color: var(--primary-color);
+}
+
+/* Main lists take two thirds, quick-glance lists the last third; stacked on small screens. */
 .overview-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   gap: var(--sp-16);
+}
+
+.overview-wide {
+  grid-column: 1;
+}
+
+.overview-narrow {
+  grid-column: 2;
+}
+
+@media (max-width: 1000px) {
+  .overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .overview-wide,
+  .overview-narrow {
+    grid-column: 1;
+  }
 }
 
 .overview-fixtures {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-4);
-  margin-top: var(--sp-4);
 }
 
 .overview-fixture {
@@ -45,8 +74,49 @@
   color: white;
 }
 
-@media (max-width: 900px) {
-  .overview-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
+.overview-news,
+.overview-stat-line {
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--text-secondary-color);
+}
+
+/* Keep news to two lines; the full text is in the tooltip. */
+.overview-news {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* 50% or better is more likely to play than not, so warn rather than alarm. */
+.overview-chance-likely {
+  color: var(--goalkeeper-color);
+}
+
+.overview-dc {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+/* Progress towards the position's threshold; full means the points are likely. */
+.overview-dc-meter {
+  flex: 0 0 64px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--background-color);
+}
+
+.overview-dc-fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--defender-color);
+}
+
+.overview-dc-above {
+  color: var(--defender-color);
 }

@@ -4,10 +4,14 @@ import type { TeamFixture, TeamWithFixtures } from '@/types/fixture.ts'
 import type { Player } from '@/types/player.ts'
 
 import {
+  dueAReturn,
   fixtureMultiplier,
+  flaggedPlayers,
   isDifferential,
   mostTransferred,
+  priceChanges,
   projectPoints,
+  rankDefensiveContributors,
   rankPicks,
 } from './playerPicks.ts'
 
@@ -47,6 +51,9 @@ function makePlayer(overrides: Partial<Player> = {}): Player {
     transfers_in_event: 0,
     transfers_out_event: 0,
     status: 'a',
+    news: '',
+    news_added: null,
+    chance_of_playing_next_round: null,
     ...overrides,
   }
 }
@@ -143,5 +150,68 @@ describe('rankPicks', () => {
     expect(rankPicks(players, teams, 9, 3, isDifferential).map((pick) => pick.player.id)).toEqual([
       2,
     ])
+  })
+})
+
+describe('priceChanges', () => {
+  const players = [
+    makePlayer({ id: 1, cost_change_event: 1, selected_by_percent: '5.0' }),
+    makePlayer({ id: 2, cost_change_event: -1 }),
+    makePlayer({ id: 3, cost_change_event: 1, selected_by_percent: '30.0' }),
+    makePlayer({ id: 4, cost_change_event: 0 }),
+  ]
+
+  it('lists risers, most owned first on a tie', () => {
+    expect(priceChanges(players, 'rise', 5).map((p) => p.id)).toEqual([3, 1])
+  })
+
+  it('lists fallers', () => {
+    expect(priceChanges(players, 'fall', 5).map((p) => p.id)).toEqual([2])
+  })
+})
+
+describe('flaggedPlayers', () => {
+  it('lists doubtful, injured and suspended players, most owned first', () => {
+    const players = [
+      makePlayer({ id: 1, status: 'd', selected_by_percent: '3.0' }),
+      makePlayer({ id: 2, status: 'a' }),
+      makePlayer({ id: 3, status: 'i', selected_by_percent: '40.0' }),
+      makePlayer({ id: 4, status: 'u', selected_by_percent: '60.0' }),
+      makePlayer({ id: 5, status: 's', selected_by_percent: '10.0' }),
+    ]
+    expect(flaggedPlayers(players, 5).map((p) => p.id)).toEqual([3, 5, 1])
+  })
+})
+
+describe('rankDefensiveContributors', () => {
+  it('ranks against each position threshold and skips goalkeepers', () => {
+    const players = [
+      // 11 per 90 for a midfielder is under the 12 threshold
+      makePlayer({ id: 1, element_type: 3, minutes: 900, defensive_contribution: 110 }),
+      // 10 per 90 for a defender meets the 10 threshold
+      makePlayer({ id: 2, element_type: 2, minutes: 900, defensive_contribution: 100 }),
+      makePlayer({ id: 3, element_type: 1, minutes: 900, defensive_contribution: 200 }),
+    ]
+    const ranked = rankDefensiveContributors(players)
+    expect(ranked.map((c) => c.player.id)).toEqual([2, 1])
+    expect(ranked[0]).toMatchObject({ per90: 10, threshold: 10 })
+  })
+
+  it('skips rarely played players', () => {
+    const players = [makePlayer({ element_type: 2, minutes: 90, defensive_contribution: 20 })]
+    expect(rankDefensiveContributors(players)).toEqual([])
+  })
+})
+
+describe('dueAReturn', () => {
+  it('ranks by xGI shortfall and skips overperformers', () => {
+    const players = [
+      makePlayer({ id: 1, expected_goals: '3.00', expected_assists: '1.00', goals_scored: 2 }),
+      makePlayer({ id: 2, expected_goals: '6.00', expected_assists: '0.00', goals_scored: 1 }),
+      makePlayer({ id: 3, expected_goals: '1.00', expected_assists: '0.00', goals_scored: 4 }),
+    ]
+    const due = dueAReturn(players, 5)
+    expect(due.map((d) => d.player.id)).toEqual([2, 1])
+    expect(due[0]).toMatchObject({ xgi: 6, gi: 1 })
   })
 })

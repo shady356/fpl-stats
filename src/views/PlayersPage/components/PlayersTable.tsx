@@ -76,7 +76,7 @@ function PlayerCell({ column, player, teamShortNames }: PlayerCellProps) {
   }
 
   return (
-    <td style={{ textAlign: column.align }}>
+    <td style={{ textAlign: column.align, color: column.color?.(player) }}>
       {column.format ? column.format(player) : column.value(player, teamShortNames)}
     </td>
   )

@@ -50,6 +50,12 @@ export type Player = {
   cost_change_event: number
   /** a = available, d = doubtful, i = injured, s = suspended, u = unavailable, n = not eligible. */
   status: string
+  /** FPL's injury or suspension note, e.g. "Hamstring injury - 75% chance of playing"; empty when there is none. */
+  news: string
+  /** When `news` was last updated, ISO 8601; null if never. */
+  news_added: string | null
+  /** 0, 25, 50, 75 or 100; null when the player isn't flagged. */
+  chance_of_playing_next_round: number | null
 }
 
 /**
