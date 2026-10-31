@@ -48,7 +48,7 @@ const PLAYER_COLUMNS: PlayerColumn[] = [
   },
   {
     label: '+/-',
-    title: 'Price change',
+    title: 'Price change since the start of the season',
     align: 'right',
     value: (player) => player.cost_change_start,
     render: (player) =>
@@ -63,14 +63,14 @@ const PLAYER_COLUMNS: PlayerColumn[] = [
   },
   {
     label: 'Form',
-    title: 'Form',
+    title: 'Average points per game over the last 30 days',
     align: 'right',
     value: (player) => Number(player.form),
     render: (player) => player.form,
   },
   {
     label: 'Sel.',
-    title: 'Selected by',
+    title: 'Percentage of FPL managers who own the player',
     align: 'right',
     value: (player) => Number(player.selected_by_percent),
     render: (player) => `${player.selected_by_percent}%`,

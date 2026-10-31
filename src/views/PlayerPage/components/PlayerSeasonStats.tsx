@@ -35,7 +35,11 @@ export default function PlayerSeasonStats({ player }: { player: Player }) {
                 : `${formatChange(player.cost_change_event)} this GW`
             }
           />
-          <Fact label="Owned" value={`${player.selected_by_percent}%`} title="Selected by" />
+          <Fact
+            label="Owned"
+            value={`${player.selected_by_percent}%`}
+            title="Percentage of FPL managers who own the player"
+          />
         </dl>
       </div>
 

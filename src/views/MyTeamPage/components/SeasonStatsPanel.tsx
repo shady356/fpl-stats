@@ -45,7 +45,7 @@ export default function SeasonStatsPanel({ entry }: { entry: Entry }) {
           {entry.player_first_name} {entry.player_last_name}
         </h2>
         <span className="season-stats-subtitle">
-          {entry.summary_overall_points} pts · Rank{' '}
+          {entry.summary_overall_points} pts · OR{' '}
           {entry.summary_overall_rank?.toLocaleString() ?? '–'}
         </span>
       </div>
@@ -91,9 +91,9 @@ export default function SeasonStatsPanel({ entry }: { entry: Entry }) {
           />
           <StatTile label="Points on bench" value={stats.benchPoints} detail="Wasted this season" />
           <StatTile
-            label="Squad value"
+            label="Team value"
             value={formatMoney(stats.teamValue)}
-            detail={`${formatChange(stats.teamValueChange)} · ${formatMoney(stats.bank)} in bank`}
+            detail={`${formatChange(stats.teamValueChange)} · ${formatMoney(stats.bank)} ITB`}
           />
           <StatTile label="Captain points" value={stats.captainPoints} />
           <StatTile

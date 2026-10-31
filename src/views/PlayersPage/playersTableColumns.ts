@@ -142,7 +142,7 @@ export const PLAYER_COLUMNS: PlayerColumn[] = [
   {
     key: 'bonus',
     label: 'Bonus',
-    tooltip: 'Bonus points',
+    tooltip: 'Bonus points: 3, 2 and 1 for the top three BPS scores in each match',
     align: 'right',
     value: (player) => player.bonus,
   },

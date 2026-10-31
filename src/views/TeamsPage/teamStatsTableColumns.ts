@@ -30,7 +30,7 @@ export const COLUMNS: Column[] = [
     hidden: false,
     numeric: true,
     align: 'center',
-    tooltip: 'No description',
+    tooltip: 'League position',
   },
   {
     key: 'team_name',
@@ -84,7 +84,7 @@ export const COLUMNS: Column[] = [
     hidden: false,
     numeric: true,
     align: 'right',
-    tooltip: 'No description',
+    tooltip: 'Matches played',
   },
   {
     key: 'points',
@@ -92,7 +92,7 @@ export const COLUMNS: Column[] = [
     hidden: false,
     numeric: true,
     align: 'right',
-    tooltip: 'No description',
+    tooltip: 'League points',
   },
   {
     key: 'expected_points',
@@ -101,7 +101,7 @@ export const COLUMNS: Column[] = [
     hidden: false,
     numeric: true,
     align: 'right',
-    tooltip: 'No description',
+    tooltip: 'Expected league points, based on xG and xGA',
   },
   {
     key: 'goals',
@@ -186,7 +186,7 @@ export const COLUMNS: Column[] = [
     hidden: true,
     numeric: true,
     align: 'right',
-    tooltip: 'shots on target against',
+    tooltip: 'Shots on target against',
   },
   {
     key: 'deep_per_game',

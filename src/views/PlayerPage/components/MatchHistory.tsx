@@ -25,7 +25,11 @@ const COLUMNS: { label: string; title: string; align: 'left' | 'right' }[] = [
   { label: 'xA', title: 'Expected assists', align: 'right' },
   { label: 'CS', title: 'Clean sheet', align: 'right' },
   { label: 'DC', title: 'Defensive contributions', align: 'right' },
-  { label: 'Bonus', title: 'Bonus points', align: 'right' },
+  {
+    label: 'Bonus',
+    title: 'Bonus points: 3, 2 and 1 for the top three BPS scores in each match',
+    align: 'right',
+  },
   { label: 'Cards', title: 'Yellow and red cards', align: 'right' },
   { label: 'Price', title: 'Price at the time of the match', align: 'right' },
   { label: 'Pts', title: 'Points', align: 'right' },

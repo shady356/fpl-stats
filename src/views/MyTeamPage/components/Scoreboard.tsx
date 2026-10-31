@@ -50,7 +50,7 @@ export default function Scoreboard({ entryPicks, gameweek }: ScoreboardProps) {
           <dt>Transfers</dt>
           <dd>
             {history.event_transfers}
-            {history.event_transfers_cost > 0 && ` (-${history.event_transfers_cost} pts)`}
+            {history.event_transfers_cost > 0 && ` (-${history.event_transfers_cost} hit)`}
           </dd>
         </div>
       </dl>
