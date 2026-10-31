@@ -1,0 +1,16 @@
+.favorite-button {
+  padding: var(--sp-4);
+  color: var(--text-secondary-color);
+}
+
+.favorite-button:hover {
+  color: var(--forward-color);
+}
+
+.favorite-button.active {
+  color: var(--forward-color);
+}
+
+.favorite-button .material-symbols-rounded {
+  font-size: 20px;
+}

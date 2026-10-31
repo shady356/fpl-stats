@@ -1,0 +1,29 @@
+.chart {
+  width: 100%;
+}
+
+/* Recharts focuses the chart surface on click; the hover tooltip is enough feedback. */
+.chart .recharts-surface:focus,
+.chart .recharts-wrapper:focus {
+  outline: none;
+}
+
+.chart-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-8) var(--sp-12);
+  border-radius: 8px;
+  background: var(--background-3-color);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.4);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.chart-tooltip-title {
+  font-weight: 600;
+}
+
+.chart-tooltip-line {
+  color: var(--text-secondary-color);
+}

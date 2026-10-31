@@ -11,6 +11,8 @@ export type Player = {
   id: number
   /** Premier League player code, used for the player's photo. */
   code: number
+  first_name: string
+  second_name: string
   web_name: string
   /** understat team_id (converted from the FPL team id). */
   team: number
@@ -23,6 +25,17 @@ export type Player = {
   minutes: number
   goals_scored: number
   assists: number
+  clean_sheets: number
+  goals_conceded: number
+  saves: number
+  bonus: number
+  starts: number
+  yellow_cards: number
+  red_cards: number
+  /** Decimal string, e.g. "4.31". */
+  expected_goals: string
+  /** Decimal string, e.g. "1.20". */
+  expected_assists: string
   /** Defensive contribution actions this season (tackles, interceptions, clearances, blocks, recoveries). */
   defensive_contribution: number
   form: string
@@ -37,4 +50,45 @@ export type Player = {
   cost_change_event: number
   /** a = available, d = doubtful, i = injured, s = suspended, u = unavailable, n = not eligible. */
   status: string
+}
+
+/**
+ * One match a player was involved in, from element-summary's `history` array.
+ * Double gameweeks have two entries with the same `round`.
+ */
+export type PlayerMatch = {
+  fixture: number
+  /** understat team_id (converted from the FPL team id). */
+  opponent_team: number
+  was_home: boolean
+  kickoff_time: string
+  team_h_score: number | null
+  team_a_score: number | null
+  /** Gameweek. */
+  round: number
+  total_points: number
+  minutes: number
+  goals_scored: number
+  assists: number
+  clean_sheets: number
+  bonus: number
+  /** Decimal string, e.g. "0.42". */
+  expected_goals: string
+  /** Decimal string, e.g. "0.10". */
+  expected_assists: string
+  defensive_contribution: number
+  yellow_cards: number
+  red_cards: number
+  /** Price at the time of the match, in tenths of a million. */
+  value: number
+  /** Managers who owned the player at the time of the match. */
+  selected: number
+}
+
+/**
+ * A player's season so far, from the `element-summary/{id}/` endpoint.
+ */
+export type PlayerSummary = {
+  /** Matches played this season, oldest first. */
+  history: PlayerMatch[]
 }

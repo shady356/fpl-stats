@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 
+import PlayerLink from '@/components/PlayerLink/PlayerLink'
 import PlayerThumbnail from '@/components/ui/PlayerThumbnail/PlayerThumbnail'
 import type { Player } from '@/types/player'
 import { POSITION_SHORT_LABELS } from '@/utils/positions'
@@ -56,7 +57,7 @@ export default function PlayerListCard({
               <span className="player-list-card-rank">{index + 1}</span>
               <PlayerThumbnail code={player.code} position={player.element_type} size="large" />
               <div className="player-list-card-name">
-                <span>{player.web_name}</span>
+                <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
                 <span className="player-list-card-details">
                   {teamShortNames.get(player.team) ?? '–'} ·{' '}
                   {POSITION_SHORT_LABELS[player.element_type]} · £

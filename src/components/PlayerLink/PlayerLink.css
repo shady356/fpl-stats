@@ -1,0 +1,6 @@
+/* Inherit the surrounding text style; the global link padding would break list layouts. */
+.player-link {
+  padding: 0;
+  color: inherit;
+  font: inherit;
+}

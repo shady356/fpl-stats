@@ -1,0 +1,12 @@
+.wish-list-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.wish-list-empty {
+  color: var(--text-secondary-color);
+}
+
+.wish-list-empty a {
+  padding: 0;
+}

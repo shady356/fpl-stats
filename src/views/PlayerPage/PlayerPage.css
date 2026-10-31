@@ -1,0 +1,303 @@
+.player-page {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--sp-24);
+  min-width: 0;
+}
+
+.player-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-16);
+  padding-top: var(--sp-12);
+}
+
+.player-header-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  margin-bottom: var(--sp-4);
+}
+
+.player-header-title .favorite-button .material-symbols-rounded {
+  font-size: 28px;
+}
+
+.player-header-name h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.player-header-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-12);
+  color: var(--text-secondary-color);
+}
+
+.player-header-team {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  padding: 0;
+}
+
+.player-header-status {
+  color: var(--goalkeeper-color);
+  font-weight: 600;
+}
+
+/* Matches and charts take three quarters, with the season stats beside them on the right. */
+.player-body {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+  gap: var(--sp-24);
+  align-items: start;
+  min-width: 0;
+}
+
+.player-body > .player-season-stats {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Stacked, the season stats come first. */
+@media (max-width: 900px) {
+  .player-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .player-body > .player-season-stats {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+.player-season {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-24);
+  min-width: 0;
+}
+
+.player-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  min-width: 0;
+  padding: var(--sp-24);
+  border-radius: 16px;
+  background: var(--background-color);
+}
+
+.player-card h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Headline total and key facts, then the summary list. */
+.player-season-stats {
+  gap: var(--sp-24);
+}
+
+.player-stats-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+}
+
+.player-stats-total {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-12);
+}
+
+.player-stats-total-value {
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--primary-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.player-stats-total-label {
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary-color);
+}
+
+.player-stats-facts {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+/* Label and value on one line in the narrow sidebar. */
+.player-stats-fact {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-12);
+  padding: var(--sp-8) 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.player-stats-fact:first-child {
+  border-top: none;
+}
+
+/* Full width when stacked, so the facts sit side by side. */
+@media (max-width: 900px) {
+  .player-stats-facts {
+    flex-direction: row;
+  }
+
+  .player-stats-fact {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--sp-4);
+    padding: 0 var(--sp-16);
+    border-top: none;
+    border-left: 1px solid var(--border-color);
+  }
+
+  .player-stats-fact:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+}
+
+.player-stats-fact dt {
+  color: var(--text-secondary-color);
+}
+
+.player-stats-fact dd {
+  margin: 0;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.player-stats-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.player-stats-summary h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.player-stats-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+}
+
+/* Stacked and wide enough: two columns filled row by row, split by a divider like the game's summary. */
+@media (min-width: 601px) and (max-width: 900px) {
+  .player-stats-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--sp-32);
+    background: linear-gradient(var(--border-color), var(--border-color)) center / 1px 100%
+      no-repeat;
+  }
+}
+
+.player-stats-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 28px;
+  gap: var(--sp-12);
+  align-items: center;
+  padding: var(--sp-8) 0;
+  font-size: 16px;
+  --stat-color: var(--text-color);
+}
+
+.player-stats-row.time {
+  --stat-color: var(--midfielder-color);
+}
+
+.player-stats-row dt {
+  color: var(--text-secondary-color);
+}
+
+.player-stats-row dd {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--stat-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.player-stats-row-icon {
+  display: flex;
+  justify-content: center;
+  color: var(--stat-color);
+}
+
+.player-stats-row-icon .material-symbols-rounded {
+  font-size: 22px;
+}
+
+.player-stats-row-icon .booking-card .material-symbols-rounded {
+  font-size: 24px;
+}
+
+.match-history td {
+  white-space: nowrap;
+}
+
+.match-history-opponent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  padding: 0;
+}
+
+.match-history-points {
+  font-weight: 600;
+}
+
+.match-history .did-not-play {
+  color: var(--text-secondary-color);
+  opacity: 0.6;
+}
+
+/* Upright cards are narrow, so they can go bigger than the other icons. */
+.player-stats-icon .booking-card .material-symbols-rounded {
+  font-size: 36px;
+}
+
+/* The landscape "rectangle" symbol turned upright reads as a referee's card. */
+.booking-card {
+  display: inline-flex;
+}
+
+.booking-card .material-symbols-rounded {
+  font-size: 18px;
+  transform: rotate(90deg);
+}
+
+.booking-card.yellow {
+  color: var(--goalkeeper-color);
+}
+
+.booking-card.red {
+  color: var(--forward-color);
+}
+
+.match-history-cards {
+  display: inline-flex;
+  gap: 0;
+}
+
+.match-history-cards .booking-card .material-symbols-rounded {
+  font-size: 16px;
+}

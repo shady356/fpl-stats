@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 
+import PlayerLink from '@/components/PlayerLink/PlayerLink'
 import PlayerThumbnail from '@/components/ui/PlayerThumbnail/PlayerThumbnail'
 import Table from '@/components/ui/Table/Table'
 import TableHeaderCell from '@/components/ui/Table/TableHeaderCell'
@@ -34,7 +35,7 @@ const PLAYER_COLUMNS: PlayerColumn[] = [
     render: (player) => (
       <span className="player-list-name">
         <PlayerThumbnail code={player.code} size="small" position={player.element_type} />
-        <span>{player.web_name}</span>
+        <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
       </span>
     ),
   },

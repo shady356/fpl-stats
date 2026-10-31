@@ -26,7 +26,7 @@
   min-width: 0;
 }
 
-.player-list-name > span:last-child {
+.player-list-name > a:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -1,7 +1,7 @@
 import type { Fixture } from '@/types/fixture'
 import type { Gameweek } from '@/types/gameweek'
 import type { Entry, EntryHistory, EntryPicks, LivePlayerStats } from '@/types/myTeam'
-import type { Player } from '@/types/player'
+import type { Player, PlayerMatch, PlayerSummary } from '@/types/player'
 import { understatTeamId } from '@/utils/teamIds'
 
 export type FixturesQuery = {
@@ -189,6 +189,39 @@ export async function fetchEntryHistory(teamId: number): Promise<EntryHistory | 
     }
 
     return await response.json()
+  } catch (error) {
+    console.error(`Failed to fetch: ${error}`)
+    return undefined
+  }
+}
+
+/**
+ * Fetch a player's season so far, with opponent_team converted to understat team ids.
+ * @param playerId - The player's id, the `id` field in bootstrap-static's `elements`.
+ * @returns The summary; undefined if the request fails.
+ */
+export async function fetchPlayerSummary(playerId: number): Promise<PlayerSummary | undefined> {
+  try {
+    const response = await fetch(`/fpl-api/element-summary/${playerId}/`)
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const data: { history: PlayerMatch[] } = await response.json()
+
+    const history = data.history.flatMap((match) => {
+      const opponent_team = understatTeamId(match.opponent_team)
+
+      if (opponent_team === undefined) {
+        console.warn(`Skipping fixture ${match.fixture}: unmapped FPL team id`)
+        return []
+      }
+
+      return [{ ...match, opponent_team }]
+    })
+
+    return { history }
   } catch (error) {
     console.error(`Failed to fetch: ${error}`)
     return undefined

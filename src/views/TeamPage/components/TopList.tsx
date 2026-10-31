@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import PlayerLink from '@/components/PlayerLink/PlayerLink'
 import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton'
 import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons'
 import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto'
@@ -104,7 +105,9 @@ export default function TopList({ team }: { team: Team }) {
             <PlayerPhoto code={leader.code} size="large" position={leader.element_type} />
             <div className="top-list-name">
               <span className="top-list-rank">#1</span>
-              <span className="top-list-leader-name">{leader.web_name}</span>
+              <PlayerLink playerId={leader.id} className="top-list-leader-name">
+                {leader.web_name}
+              </PlayerLink>
               <PlayerDetails player={leader} />
             </div>
             <span className="top-list-score top-list-leader-score" title={stat.title}>
@@ -119,7 +122,7 @@ export default function TopList({ team }: { team: Team }) {
                   <span className="top-list-rank">{index + 2}</span>
                   <PlayerPhoto code={player.code} size="small" position={player.element_type} />
                   <div className="top-list-name">
-                    <span>{player.web_name}</span>
+                    <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
                     <PlayerDetails player={player} />
                   </div>
                   <span className="top-list-score" title={stat.title}>

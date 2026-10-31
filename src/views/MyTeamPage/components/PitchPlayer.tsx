@@ -1,3 +1,4 @@
+import PlayerLink from '@/components/PlayerLink/PlayerLink'
 import Icon from '@/components/ui/Icon/Icon.tsx'
 import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto.tsx'
 import type { LineupPlayer } from '@/types/myTeam'
@@ -36,7 +37,9 @@ export default function PitchPlayer({ lineupPlayer }: { lineupPlayer: LineupPlay
           </span>
         )}
       </div>
-      <span className="pitch-player-name">{player?.web_name ?? 'Unknown'}</span>
+      <span className="pitch-player-name">
+        {player ? <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink> : 'Unknown'}
+      </span>
       <span className="pitch-player-points">{points}</span>
     </div>
   )

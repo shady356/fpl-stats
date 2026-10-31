@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 
+import PlayerLink from '@/components/PlayerLink/PlayerLink'
 import PlayerThumbnail from '@/components/ui/PlayerThumbnail/PlayerThumbnail.tsx'
 import { useEntryHistory, useSeasonGameweeks } from '@/hooks/useMyTeam'
 import { usePlayers } from '@/hooks/usePlayers'
@@ -57,7 +58,13 @@ export default function SeasonStatsPanel({ entry }: { entry: Entry }) {
               {player && (
                 <PlayerThumbnail code={player.code} position={player.element_type} size="large" />
               )}
-              <span className="season-stats-player-name">{player?.web_name ?? 'Unknown'}</span>
+              <span className="season-stats-player-name">
+                {player ? (
+                  <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
+                ) : (
+                  'Unknown'
+                )}
+              </span>
               <span className="season-stats-player-points">{points} pts</span>
             </li>
           ))}
