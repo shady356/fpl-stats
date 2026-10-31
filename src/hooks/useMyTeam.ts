@@ -15,6 +15,16 @@ const picksPromises = new Map<string, Promise<EntryPicks | undefined>>()
 const livePromises = new Map<number, Promise<Map<number, LivePlayerStats>>>()
 const historyPromises = new Map<number, Promise<EntryHistory | undefined>>()
 const seasonPromises = new Map<string, Promise<SeasonGameweek[]>>()
+const managersPromises = new Map<string, Promise<ManagerSeason[]>>()
+
+/**
+ * A manager's team and season history.
+ */
+export type ManagerSeason = {
+  teamId: number
+  entry: Entry | undefined
+  history: EntryHistory | undefined
+}
 
 /**
  * Cache a promise under a key, dropping it if it resolves to a failure so the next render retries.
@@ -97,6 +107,42 @@ export function useEntryHistory(teamId: number): EntryHistory | undefined {
       teamId,
       () => fetchEntryHistory(teamId),
       (history) => !history,
+    ),
+  )
+}
+
+/**
+ * Team and season history for each of the given managers, sharing the per-team caches.
+ * Suspends until all are loaded, so call it inside a Suspense boundary.
+ * @param teamIds - The managers' team ids.
+ * @returns One entry per manager, in the given order; failed requests are undefined.
+ */
+export function useManagerSeasons(teamIds: number[]): ManagerSeason[] {
+  return use(
+    cached(
+      managersPromises,
+      teamIds.join(','),
+      () =>
+        Promise.all(
+          teamIds.map(async (teamId) => {
+            const [entry, history] = await Promise.all([
+              cached(
+                entryPromises,
+                teamId,
+                () => fetchEntry(teamId),
+                (entry) => !entry,
+              ),
+              cached(
+                historyPromises,
+                teamId,
+                () => fetchEntryHistory(teamId),
+                (history) => !history,
+              ),
+            ])
+            return { teamId, entry, history }
+          }),
+        ),
+      (seasons) => seasons.some(({ entry, history }) => !entry || !history),
     ),
   )
 }

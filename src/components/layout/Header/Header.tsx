@@ -28,7 +28,7 @@ function Header() {
               <NavLink to="/fixtures">Fixtures</NavLink>
             </li>
             <li>
-              <NavLink to="/my-team">My Team</NavLink>
+              <NavLink to="/my-team">Malemesterne</NavLink>
             </li>
             <li>
               <NavLink to="/wish-list">Wish list</NavLink>

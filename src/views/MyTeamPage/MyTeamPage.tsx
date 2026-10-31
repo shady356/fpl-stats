@@ -1,6 +1,10 @@
 import { Suspense, useState, useTransition } from 'react'
 
 import BaseButton from '@/components/ui/BaseButton/BaseButton.tsx'
+import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton'
+import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons'
+import BaseTab from '@/components/ui/BaseTabs/BaseTab'
+import BaseTabs from '@/components/ui/BaseTabs/BaseTabs'
 import Icon from '@/components/ui/Icon/Icon.tsx'
 import { useBootstrap } from '@/hooks/useBootstrap'
 import { useEntry, useEntryPicks, useLiveGameweek } from '@/hooks/useMyTeam'
@@ -10,17 +14,86 @@ import './MyTeamPage.css'
 
 import Pitch from './components/Pitch.tsx'
 import Scoreboard from './components/Scoreboard.tsx'
+import SeasonProgress, { type Manager } from './components/SeasonProgress.tsx'
 import SeasonStatsPanel from './components/SeasonStatsPanel.tsx'
 
-/** The manager's team id from the FPL app. */
-const MY_TEAM_ID = 367026
+/** The managers' team ids from the FPL app, with their chart colors; the first is shown by default. */
+const MANAGERS: Manager[] = [
+  { teamId: 367026, color: 'var(--forward-color)' }, // Henrik
+  { teamId: 2782976, color: 'var(--goalkeeper-color)' }, // Ibrar
+  { teamId: 4776551, color: 'var(--midfielder-color)' }, // Andy
+]
+
+type MyTeamTab = 'teams' | 'progress'
+
+const MY_TEAM_TABS: { tab: MyTeamTab; label: string }[] = [
+  { tab: 'teams', label: 'Teams' },
+  { tab: 'progress', label: 'Season progress' },
+]
 
 function MyTeamPage() {
+  const [tab, setTab] = useState<MyTeamTab>('teams')
+  const [teamId, setTeamId] = useState(MANAGERS[0].teamId)
+  // Keep showing the current manager while the next one loads.
+  const [isPending, startTransition] = useTransition()
+
   return (
-    <Suspense fallback={<p>Loading team…</p>}>
-      <MyTeam teamId={MY_TEAM_ID} />
-    </Suspense>
+    <>
+      <BaseTabs className="my-team-tabs" aria-label="Malemesterne view">
+        {MY_TEAM_TABS.map(({ tab: value, label }) => (
+          <BaseTab key={value} selected={tab === value} onClick={() => setTab(value)}>
+            {label}
+          </BaseTab>
+        ))}
+      </BaseTabs>
+
+      {tab === 'teams' ? (
+        <Suspense fallback={<p>Loading team…</p>}>
+          <ManagerPicker
+            selected={teamId}
+            onSelect={(next) => startTransition(() => setTeamId(next))}
+          />
+          <div className={isPending ? 'my-team-pending' : undefined}>
+            {/* Keyed so the gameweek resets to the new manager's current one. */}
+            <MyTeam key={teamId} teamId={teamId} />
+          </div>
+        </Suspense>
+      ) : (
+        <Suspense fallback={<p>Loading season progress…</p>}>
+          <SeasonProgress managers={MANAGERS} />
+        </Suspense>
+      )}
+    </>
   )
+}
+
+type ManagerPickerProps = {
+  selected: number
+  onSelect: (teamId: number) => void
+}
+
+/**
+ * One button per manager, labelled with their first name.
+ */
+function ManagerPicker({ selected, onSelect }: ManagerPickerProps) {
+  return (
+    <BaseSegmentedButtons aria-label="Manager" className="my-team-managers">
+      {MANAGERS.map(({ teamId }) => (
+        <BaseSegmentedButton
+          key={teamId}
+          selected={selected === teamId}
+          onClick={() => onSelect(teamId)}
+        >
+          <ManagerName teamId={teamId} />
+        </BaseSegmentedButton>
+      ))}
+    </BaseSegmentedButtons>
+  )
+}
+
+function ManagerName({ teamId }: { teamId: number }) {
+  const entry = useEntry(teamId)
+  return entry?.player_first_name ?? `Team ${teamId}`
 }
 
 function MyTeam({ teamId }: { teamId: number }) {
@@ -40,16 +113,21 @@ function MyTeam({ teamId }: { teamId: number }) {
       <div className="my-team-main">
         <h1>Points - {entry.name}</h1>
         <div className="my-team-gameweek">
-          <BaseButton disabled={gameweek <= 1} onClick={() => changeGameweek(gameweek - 1)}>
+          <BaseButton
+            aria-label="Previous gameweek"
+            square
+            disabled={gameweek <= 1}
+            onClick={() => changeGameweek(gameweek - 1)}
+          >
             <Icon icon="chevron_left" />
-            Previous
           </BaseButton>
           <h2>Gameweek {gameweek}</h2>
           <BaseButton
+            aria-label="Next gameweek"
+            square
             disabled={gameweek >= entry.current_event}
             onClick={() => changeGameweek(gameweek + 1)}
           >
-            Next
             <Icon icon="chevron_right" />
           </BaseButton>
         </div>

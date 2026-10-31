@@ -1,0 +1,17 @@
+.season-progress {
+  padding: var(--sp-24);
+  border-radius: 20px;
+  background: var(--background-color);
+}
+
+.season-progress h2 {
+  margin: 0 0 var(--sp-16);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .season-progress {
+    padding: var(--sp-16);
+  }
+}

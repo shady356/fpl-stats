@@ -2,9 +2,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-16);
-  padding: var(--sp-16);
-  border-radius: 16px;
-  background: var(--background-2-color);
 }
 
 /* Average | Final | Highest, with the final points in the middle and biggest. */
@@ -30,12 +27,6 @@
 .scoreboard-label {
   font-size: 12px;
   color: var(--text-secondary-color);
-}
-
-.scoreboard-score-main {
-  padding: var(--sp-12) var(--sp-24);
-  border-radius: 12px;
-  background: var(--background-3-color);
 }
 
 .scoreboard-score-main .scoreboard-label {

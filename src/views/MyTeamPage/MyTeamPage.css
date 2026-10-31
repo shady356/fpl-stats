@@ -6,6 +6,14 @@
   gap: var(--sp-16);
 }
 
+.my-team-tabs {
+  margin-bottom: var(--sp-16);
+}
+
+.my-team-managers {
+  margin-bottom: var(--sp-16);
+}
+
 .my-team-main {
   padding: var(--sp-24);
   border-radius: 20px;
@@ -20,7 +28,7 @@
 
 .my-team-gameweek {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: var(--sp-12);
   margin-bottom: var(--sp-16);
@@ -30,10 +38,6 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-}
-
-.my-team-gameweek .base-button {
-  gap: var(--sp-4);
 }
 
 .my-team-gameweek .base-button:disabled {

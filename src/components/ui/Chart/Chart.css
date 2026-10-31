@@ -27,3 +27,43 @@
 .chart-tooltip-line {
   color: var(--text-secondary-color);
 }
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-16);
+  margin: 0 0 var(--sp-12);
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--text-secondary-color);
+}
+
+.chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+/* A short line in the series color (set via `color`). */
+.chart-legend-swatch {
+  flex: none;
+  width: 16px;
+  border-top: 2px solid currentColor;
+}
+
+.chart-legend-swatch-dashed {
+  border-top-style: dashed;
+}
+
+.chart-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+.chart-tooltip-value {
+  margin-left: auto;
+  padding-left: var(--sp-12);
+  font-weight: 600;
+}
