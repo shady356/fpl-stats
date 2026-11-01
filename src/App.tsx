@@ -6,7 +6,7 @@ import type { Team, TeamMatches } from '@/types/team.ts'
 import { computeTeamData } from '@/utils/computeTeamData.ts'
 import ComparePage from '@/views/ComparePage/ComparePage.tsx'
 import FixturesPage from '@/views/FixturesPage/FixturesPage.tsx'
-import MyTeamPage from '@/views/MyTeamPage/MyTeamPage.tsx'
+import MalemesternePage from '@/views/MalemesternePage/MalemesternePage.tsx'
 import PlayerRoute from '@/views/PlayerPage/PlayerRoute'
 import PlayersPage from '@/views/PlayersPage/PlayersPage.tsx'
 import TeamRoute from '@/views/TeamPage/TeamRoute'
@@ -26,7 +26,7 @@ function App() {
           <Route path="/teams" element={<TeamsPage teamMatches={teamMatches} />} />
           <Route path="/players" element={<PlayersPage teams={teams} />} />
           <Route path="/fixtures" element={<FixturesPage teams={teams} />} />
-          <Route path="/my-team" element={<MyTeamPage />} />
+          <Route path="/my-team" element={<MalemesternePage />} />
           <Route path="/wish-list" element={<WishListPage teams={teams} />} />
           <Route path="/team/:teamId" element={<TeamRoute teams={teams} />} />
           <Route path="/player/:playerId" element={<PlayerRoute teams={teams} />} />

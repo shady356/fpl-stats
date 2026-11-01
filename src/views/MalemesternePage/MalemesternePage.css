@@ -1,32 +1,32 @@
 /* Points page on the left, manager panel on the right; stacked on small screens. */
-.my-team-page {
+.malemesterne-page {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
   align-items: start;
   gap: var(--sp-16);
 }
 
-.my-team-tabs {
+.malemesterne-tabs {
   margin-bottom: var(--sp-16);
 }
 
-.my-team-managers {
+.malemesterne-managers {
   margin-bottom: var(--sp-16);
 }
 
-.my-team-main {
+.malemesterne-main {
   padding: var(--sp-24);
   border-radius: 20px;
   background: var(--background-color);
 }
 
-.my-team-main h1 {
+.malemesterne-main h1 {
   margin: 0 0 var(--sp-16);
   font-size: 24px;
   font-weight: 600;
 }
 
-.my-team-gameweek {
+.malemesterne-gameweek {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,35 +34,35 @@
   margin-bottom: var(--sp-16);
 }
 
-.my-team-gameweek h2 {
+.malemesterne-gameweek h2 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
 }
 
-.my-team-gameweek .base-button:disabled {
+.malemesterne-gameweek .base-button:disabled {
   visibility: hidden;
 }
 
-.my-team-pending {
+.malemesterne-pending {
   opacity: 0.6;
   transition: opacity 0.2s;
 }
 
-.my-team-content {
+.malemesterne-content {
   display: flex;
   flex-direction: column;
   gap: var(--sp-16);
 }
 
 @media (max-width: 900px) {
-  .my-team-page {
+  .malemesterne-page {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 600px) {
-  .my-team-main {
+  .malemesterne-main {
     padding: var(--sp-16);
   }
 }

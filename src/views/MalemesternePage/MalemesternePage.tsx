@@ -10,7 +10,7 @@ import { useBootstrap } from '@/hooks/useBootstrap'
 import { useEntry, useEntryPicks, useLiveGameweek } from '@/hooks/useMyTeam'
 import { buildLineup } from '@/utils/lineup.ts'
 
-import './MyTeamPage.css'
+import './MalemesternePage.css'
 
 import Pitch from './components/Pitch.tsx'
 import Scoreboard from './components/Scoreboard.tsx'
@@ -24,23 +24,23 @@ const MANAGERS: Manager[] = [
   { teamId: 4776551, color: 'var(--midfielder-color)' }, // Andy
 ]
 
-type MyTeamTab = 'teams' | 'progress'
+type MalemesterneTab = 'teams' | 'progress'
 
-const MY_TEAM_TABS: { tab: MyTeamTab; label: string }[] = [
+const MALEMESTERNE_TABS: { tab: MalemesterneTab; label: string }[] = [
   { tab: 'teams', label: 'Teams' },
   { tab: 'progress', label: 'Season progress' },
 ]
 
-function MyTeamPage() {
-  const [tab, setTab] = useState<MyTeamTab>('teams')
+function MalemesternePage() {
+  const [tab, setTab] = useState<MalemesterneTab>('teams')
   const [teamId, setTeamId] = useState(MANAGERS[0].teamId)
   // Keep showing the current manager while the next one loads.
   const [isPending, startTransition] = useTransition()
 
   return (
     <>
-      <BaseTabs className="my-team-tabs" aria-label="Malemesterne view">
-        {MY_TEAM_TABS.map(({ tab: value, label }) => (
+      <BaseTabs className="malemesterne-tabs" aria-label="Malemesterne view">
+        {MALEMESTERNE_TABS.map(({ tab: value, label }) => (
           <BaseTab key={value} selected={tab === value} onClick={() => setTab(value)}>
             {label}
           </BaseTab>
@@ -53,7 +53,7 @@ function MyTeamPage() {
             selected={teamId}
             onSelect={(next) => startTransition(() => setTeamId(next))}
           />
-          <div className={isPending ? 'my-team-pending' : undefined}>
+          <div className={isPending ? 'malemesterne-pending' : undefined}>
             {/* Keyed so the gameweek resets to the new manager's current one. */}
             <MyTeam key={teamId} teamId={teamId} />
           </div>
@@ -77,7 +77,7 @@ type ManagerPickerProps = {
  */
 function ManagerPicker({ selected, onSelect }: ManagerPickerProps) {
   return (
-    <BaseSegmentedButtons aria-label="Manager" className="my-team-managers">
+    <BaseSegmentedButtons aria-label="Manager" className="malemesterne-managers">
       {MANAGERS.map(({ teamId }) => (
         <BaseSegmentedButton
           key={teamId}
@@ -109,10 +109,10 @@ function MyTeam({ teamId }: { teamId: number }) {
   const changeGameweek = (next: number) => startTransition(() => setGameweek(next))
 
   return (
-    <div className="my-team-page">
-      <div className="my-team-main">
+    <div className="malemesterne-page">
+      <div className="malemesterne-main">
         <h1>Points - {entry.name}</h1>
-        <div className="my-team-gameweek">
+        <div className="malemesterne-gameweek">
           <BaseButton
             aria-label="Previous gameweek"
             square
@@ -131,7 +131,7 @@ function MyTeam({ teamId }: { teamId: number }) {
             <Icon icon="chevron_right" />
           </BaseButton>
         </div>
-        <div className={isPending ? 'my-team-pending' : undefined}>
+        <div className={isPending ? 'malemesterne-pending' : undefined}>
           <GameweekTeam teamId={teamId} gameweek={gameweek} />
         </div>
       </div>
@@ -156,11 +156,11 @@ function GameweekTeam({ teamId, gameweek }: { teamId: number; gameweek: number }
   const gameweekInfo = bootstrap?.gameweeks.find((event) => event.id === gameweek)
 
   return (
-    <div className="my-team-content">
+    <div className="malemesterne-content">
       <Scoreboard entryPicks={entryPicks} gameweek={gameweekInfo} />
       <Pitch lineup={lineup} />
     </div>
   )
 }
 
-export default MyTeamPage
+export default MalemesternePage
