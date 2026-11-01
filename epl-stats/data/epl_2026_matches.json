@@ -178,6 +178,28 @@
         "deep_allowed": 11,
         "ppda": 10.384615,
         "o_ppda": 8.416667
+      },
+      {
+        "match_id": 31267,
+        "date": "2026-10-31 20:00:00",
+        "opponent_id": 228,
+        "home": true,
+        "points": 1,
+        "expected_points": 1.0117,
+        "goals": 1,
+        "xg": 2.24562,
+        "npxg": 1.48445,
+        "ga": 1,
+        "xga": 2.76757,
+        "npxga": 2.76757,
+        "shots": 17,
+        "shots_on_target": 3,
+        "shots_against": 14,
+        "shots_on_target_against": 4,
+        "deep": 1,
+        "deep_allowed": 13,
+        "ppda": 29.454545,
+        "o_ppda": 12.095238
       }
     ]
   },
@@ -542,6 +564,28 @@
         "deep_allowed": 6,
         "ppda": 8.780488,
         "o_ppda": 9.3
+      },
+      {
+        "match_id": 31264,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 245,
+        "home": true,
+        "points": 3,
+        "expected_points": 1.7801,
+        "goals": 2,
+        "xg": 1.45653,
+        "npxg": 1.45653,
+        "ga": 0,
+        "xga": 0.988032,
+        "npxga": 0.988032,
+        "shots": 11,
+        "shots_on_target": 5,
+        "shots_against": 10,
+        "shots_on_target_against": 1,
+        "deep": 2,
+        "deep_allowed": 5,
+        "ppda": 13.521739,
+        "o_ppda": 8.75
       }
     ]
   },
@@ -724,6 +768,28 @@
         "deep_allowed": 5,
         "ppda": 11.352941,
         "o_ppda": 7.0
+      },
+      {
+        "match_id": 31261,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 294,
+        "home": false,
+        "points": 0,
+        "expected_points": 1.8833,
+        "goals": 1,
+        "xg": 1.59627,
+        "npxg": 0.835098,
+        "ga": 3,
+        "xga": 0.97327,
+        "npxga": 0.97327,
+        "shots": 17,
+        "shots_on_target": 2,
+        "shots_against": 12,
+        "shots_on_target_against": 4,
+        "deep": 10,
+        "deep_allowed": 3,
+        "ppda": 14.153846,
+        "o_ppda": 12.666667
       }
     ]
   },
@@ -906,6 +972,28 @@
         "deep_allowed": 5,
         "ppda": 9.75,
         "o_ppda": 8.0
+      },
+      {
+        "match_id": 31266,
+        "date": "2026-10-31 17:30:00",
+        "opponent_id": 82,
+        "home": false,
+        "points": 0,
+        "expected_points": 0.0161,
+        "goals": 0,
+        "xg": 0.136935,
+        "npxg": 0.136935,
+        "ga": 2,
+        "xga": 3.71942,
+        "npxga": 3.71942,
+        "shots": 2,
+        "shots_on_target": 1,
+        "shots_against": 34,
+        "shots_on_target_against": 9,
+        "deep": 2,
+        "deep_allowed": 17,
+        "ppda": 18.357143,
+        "o_ppda": 3.75
       }
     ]
   },
@@ -1088,6 +1176,28 @@
         "deep_allowed": 6,
         "ppda": 17.346154,
         "o_ppda": 8.190476
+      },
+      {
+        "match_id": 31260,
+        "date": "2026-10-31 12:30:00",
+        "opponent_id": 89,
+        "home": true,
+        "points": 3,
+        "expected_points": 2.2957,
+        "goals": 2,
+        "xg": 2.78719,
+        "npxg": 2.02602,
+        "ga": 0,
+        "xga": 1.38641,
+        "npxga": 1.38641,
+        "shots": 18,
+        "shots_on_target": 9,
+        "shots_against": 12,
+        "shots_on_target_against": 3,
+        "deep": 10,
+        "deep_allowed": 7,
+        "ppda": 8.36,
+        "o_ppda": 14.608696
       }
     ]
   },
@@ -1270,6 +1380,28 @@
         "deep_allowed": 7,
         "ppda": 8.190476,
         "o_ppda": 17.346154
+      },
+      {
+        "match_id": 31266,
+        "date": "2026-10-31 17:30:00",
+        "opponent_id": 78,
+        "home": true,
+        "points": 3,
+        "expected_points": 2.9711,
+        "goals": 2,
+        "xg": 3.71942,
+        "npxg": 3.71942,
+        "ga": 0,
+        "xga": 0.136935,
+        "npxga": 0.136935,
+        "shots": 34,
+        "shots_on_target": 9,
+        "shots_against": 2,
+        "shots_on_target_against": 1,
+        "deep": 17,
+        "deep_allowed": 2,
+        "ppda": 3.75,
+        "o_ppda": 18.357143
       }
     ]
   },
@@ -1998,6 +2130,28 @@
         "deep_allowed": 4,
         "ppda": 8.416667,
         "o_ppda": 10.384615
+      },
+      {
+        "match_id": 31263,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 220,
+        "home": true,
+        "points": 0,
+        "expected_points": 2.1001,
+        "goals": 0,
+        "xg": 2.65713,
+        "npxg": 2.65713,
+        "ga": 1,
+        "xga": 1.56582,
+        "npxga": 1.56582,
+        "shots": 21,
+        "shots_on_target": 6,
+        "shots_against": 7,
+        "shots_on_target_against": 3,
+        "deep": 17,
+        "deep_allowed": 3,
+        "ppda": 10.26087,
+        "o_ppda": 11.678571
       }
     ]
   },
@@ -2180,6 +2334,28 @@
         "deep_allowed": 2,
         "ppda": 9.3,
         "o_ppda": 8.780488
+      },
+      {
+        "match_id": 31260,
+        "date": "2026-10-31 12:30:00",
+        "opponent_id": 80,
+        "home": false,
+        "points": 0,
+        "expected_points": 0.5332,
+        "goals": 0,
+        "xg": 1.38641,
+        "npxg": 1.38641,
+        "ga": 2,
+        "xga": 2.78719,
+        "npxga": 2.02602,
+        "shots": 12,
+        "shots_on_target": 3,
+        "shots_against": 18,
+        "shots_on_target_against": 9,
+        "deep": 7,
+        "deep_allowed": 10,
+        "ppda": 14.608696,
+        "o_ppda": 8.36
       }
     ]
   },
@@ -2362,6 +2538,28 @@
         "deep_allowed": 9,
         "ppda": 10.5,
         "o_ppda": 6.0
+      },
+      {
+        "match_id": 31262,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 285,
+        "home": true,
+        "points": 1,
+        "expected_points": 0.5542,
+        "goals": 2,
+        "xg": 0.606545,
+        "npxg": 0.606545,
+        "ga": 2,
+        "xga": 1.65783,
+        "npxga": 1.65783,
+        "shots": 9,
+        "shots_on_target": 3,
+        "shots_against": 15,
+        "shots_on_target_against": 3,
+        "deep": 3,
+        "deep_allowed": 8,
+        "ppda": 17.333333,
+        "o_ppda": 12.0625
       }
     ]
   },
@@ -2544,6 +2742,28 @@
         "deep_allowed": 9,
         "ppda": 5.541667,
         "o_ppda": 17.052632
+      },
+      {
+        "match_id": 31263,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 88,
+        "home": false,
+        "points": 3,
+        "expected_points": 0.6994,
+        "goals": 1,
+        "xg": 1.56582,
+        "npxg": 1.56582,
+        "ga": 0,
+        "xga": 2.65713,
+        "npxga": 2.65713,
+        "shots": 7,
+        "shots_on_target": 3,
+        "shots_against": 21,
+        "shots_on_target_against": 6,
+        "deep": 3,
+        "deep_allowed": 17,
+        "ppda": 11.678571,
+        "o_ppda": 10.26087
       }
     ]
   },
@@ -2726,6 +2946,28 @@
         "deep_allowed": 1,
         "ppda": 10.117647,
         "o_ppda": 22.666667
+      },
+      {
+        "match_id": 31267,
+        "date": "2026-10-31 20:00:00",
+        "opponent_id": 71,
+        "home": false,
+        "points": 1,
+        "expected_points": 1.7551,
+        "goals": 1,
+        "xg": 2.76757,
+        "npxg": 2.76757,
+        "ga": 1,
+        "xga": 2.24562,
+        "npxga": 1.48445,
+        "shots": 14,
+        "shots_on_target": 4,
+        "shots_against": 17,
+        "shots_on_target_against": 3,
+        "deep": 13,
+        "deep_allowed": 1,
+        "ppda": 12.095238,
+        "o_ppda": 29.454545
       }
     ]
   },
@@ -2908,6 +3150,28 @@
         "deep_allowed": 5,
         "ppda": 6.0,
         "o_ppda": 10.5
+      },
+      {
+        "match_id": 31265,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 249,
+        "home": true,
+        "points": 3,
+        "expected_points": 1.2546,
+        "goals": 2,
+        "xg": 0.831999,
+        "npxg": 0.831999,
+        "ga": 0,
+        "xga": 0.958426,
+        "npxga": 0.958426,
+        "shots": 7,
+        "shots_on_target": 1,
+        "shots_against": 16,
+        "shots_on_target_against": 1,
+        "deep": 1,
+        "deep_allowed": 7,
+        "ppda": 10.545455,
+        "o_ppda": 6.322581
       }
     ]
   },
@@ -3090,6 +3354,28 @@
         "deep_allowed": 5,
         "ppda": 7.0,
         "o_ppda": 11.352941
+      },
+      {
+        "match_id": 31264,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 73,
+        "home": false,
+        "points": 0,
+        "expected_points": 0.9092,
+        "goals": 0,
+        "xg": 0.988032,
+        "npxg": 0.988032,
+        "ga": 2,
+        "xga": 1.45653,
+        "npxga": 1.45653,
+        "shots": 10,
+        "shots_on_target": 1,
+        "shots_against": 11,
+        "shots_on_target_against": 5,
+        "deep": 5,
+        "deep_allowed": 2,
+        "ppda": 8.75,
+        "o_ppda": 13.521739
       }
     ]
   },
@@ -3272,6 +3558,28 @@
         "deep_allowed": 4,
         "ppda": 12.761905,
         "o_ppda": 14.526316
+      },
+      {
+        "match_id": 31265,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 244,
+        "home": false,
+        "points": 0,
+        "expected_points": 1.3959,
+        "goals": 0,
+        "xg": 0.958426,
+        "npxg": 0.958426,
+        "ga": 2,
+        "xga": 0.831999,
+        "npxga": 0.831999,
+        "shots": 16,
+        "shots_on_target": 1,
+        "shots_against": 7,
+        "shots_on_target_against": 1,
+        "deep": 7,
+        "deep_allowed": 1,
+        "ppda": 6.322581,
+        "o_ppda": 10.545455
       }
     ]
   },
@@ -3454,6 +3762,28 @@
         "deep_allowed": 6,
         "ppda": 14.526316,
         "o_ppda": 12.761905
+      },
+      {
+        "match_id": 31262,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 91,
+        "home": false,
+        "points": 1,
+        "expected_points": 2.2144,
+        "goals": 2,
+        "xg": 1.65783,
+        "npxg": 1.65783,
+        "ga": 2,
+        "xga": 0.606545,
+        "npxga": 0.606545,
+        "shots": 15,
+        "shots_on_target": 3,
+        "shots_against": 9,
+        "shots_on_target_against": 3,
+        "deep": 8,
+        "deep_allowed": 3,
+        "ppda": 12.0625,
+        "o_ppda": 17.333333
       }
     ]
   },
@@ -3636,6 +3966,28 @@
         "deep_allowed": 5,
         "ppda": 22.666667,
         "o_ppda": 10.117647
+      },
+      {
+        "match_id": 31261,
+        "date": "2026-10-31 15:00:00",
+        "opponent_id": 77,
+        "home": true,
+        "points": 3,
+        "expected_points": 0.8444,
+        "goals": 3,
+        "xg": 0.97327,
+        "npxg": 0.97327,
+        "ga": 1,
+        "xga": 1.59627,
+        "npxga": 0.835098,
+        "shots": 12,
+        "shots_on_target": 4,
+        "shots_against": 17,
+        "shots_on_target_against": 2,
+        "deep": 3,
+        "deep_allowed": 10,
+        "ppda": 12.666667,
+        "o_ppda": 14.153846
       }
     ]
   }
