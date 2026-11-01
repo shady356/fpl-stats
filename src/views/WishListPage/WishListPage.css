@@ -1,3 +1,10 @@
+.wish-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+}
+
 .wish-list-title {
   font-size: 24px;
   font-weight: 600;

@@ -5,7 +5,6 @@ import FavoriteButton from '@/components/FavoriteButton/FavoriteButton'
 import PlayerLink from '@/components/PlayerLink/PlayerLink'
 import PlayerStatusIcon from '@/components/PlayerStatusIcon/PlayerStatusIcon'
 import BaseButton from '@/components/ui/BaseButton/BaseButton'
-import Icon from '@/components/ui/Icon/Icon'
 import PlayerThumbnail from '@/components/ui/PlayerThumbnail/PlayerThumbnail'
 import PositionTag from '@/components/ui/PositionTag/PositionTag'
 import Table from '@/components/ui/Table/Table'
@@ -29,19 +28,37 @@ type PlayersTableProps = {
   sortKey: PlayerColumnKey
   sortOrder: SortOrder
   onSort: (key: PlayerColumnKey) => void
+  /** Shows a checkbox on each row for picking players to compare. */
+  comparing: boolean
+  /** Leaves compare mode, from the Cancel button. */
+  onStopComparing: () => void
+  /** Called with the picked players each time one is ticked or unticked. */
+  onPickedChange?: (picked: Player[]) => void
 }
 
-function PlayersTable({ players, teamNames, sortKey, sortOrder, onSort }: PlayersTableProps) {
+function PlayersTable({
+  players,
+  teamNames,
+  sortKey,
+  sortOrder,
+  onSort,
+  comparing,
+  onStopComparing,
+  onPickedChange,
+}: PlayersTableProps) {
   // Players picked for comparing, in the order they were picked.
   const [picked, setPicked] = useState<Player[]>([])
   const navigate = useNavigate()
 
+  // Leaving compare mode drops the picks, so they don't come back next time.
+  if (!comparing && picked.length > 0) setPicked([])
+
   function togglePicked(player: Player) {
-    setPicked(
-      picked.some((other) => other.id === player.id)
-        ? picked.filter((other) => other.id !== player.id)
-        : [...picked, player],
-    )
+    const next = picked.some((other) => other.id === player.id)
+      ? picked.filter((other) => other.id !== player.id)
+      : [...picked, player]
+    setPicked(next)
+    onPickedChange?.(next)
   }
 
   const names = new Intl.ListFormat('en').format(picked.map((player) => player.web_name))
@@ -62,7 +79,7 @@ function PlayersTable({ players, teamNames, sortKey, sortOrder, onSort }: Player
           >
             Compare
           </BaseButton>
-          <BaseButton onClick={() => setPicked([])}>Cancel</BaseButton>
+          <BaseButton onClick={onStopComparing}>Cancel</BaseButton>
         </div>
       )}
       <Table className="players-table" scrollable>
@@ -93,12 +110,13 @@ function PlayersTable({ players, teamNames, sortKey, sortOrder, onSort }: Player
                   sectionStart={startsSection(index)}
                   player={player}
                   teamNames={teamNames}
+                  picked={comparing ? picked : undefined}
+                  onCompare={togglePicked}
                 />
               ))}
               <td>
                 <span className="players-table-actions">
                   <FavoriteButton playerId={player.id} playerName={player.web_name} />
-                  <CompareButton player={player} picked={picked} onCompare={togglePicked} />
                 </span>
               </td>
             </tr>
@@ -115,13 +133,24 @@ type PlayerCellProps = {
   teamNames: Map<number, string>
   /** Draws a line before the cell. */
   sectionStart: boolean
+  /** Players picked for comparing; undefined when not comparing. */
+  picked: Player[] | undefined
+  onCompare: (player: Player) => void
 }
 
-function PlayerCell({ column, player, teamNames, sectionStart }: PlayerCellProps) {
+function PlayerCell({
+  column,
+  player,
+  teamNames,
+  sectionStart,
+  picked,
+  onCompare,
+}: PlayerCellProps) {
   if (column.key === 'web_name') {
     return (
       <td>
         <span className="players-table-name">
+          {picked && <CompareCheckbox player={player} picked={picked} onCompare={onCompare} />}
           <PlayerThumbnail code={player.code} />
           <span className="players-table-name-text">
             <span className="players-table-name-line">
@@ -153,7 +182,7 @@ function PlayerCell({ column, player, teamNames, sectionStart }: PlayerCellProps
   )
 }
 
-type CompareButtonProps = {
+type CompareCheckboxProps = {
   player: Player
   picked: Player[]
   onCompare: (player: Player) => void
@@ -163,7 +192,7 @@ type CompareButtonProps = {
  * Picks the player for comparing, or unpicks them. Once one is picked, only players in the same
  * position can follow, up to MAX_COMPARED_PLAYERS.
  */
-function CompareButton({ player, picked, onCompare }: CompareButtonProps) {
+function CompareCheckbox({ player, picked, onCompare }: CompareCheckboxProps) {
   const isPicked = picked.some((other) => other.id === player.id)
   const isOtherPosition = picked.length > 0 && picked[0].element_type !== player.element_type
   const isFull = picked.length >= MAX_COMPARED_PLAYERS
@@ -175,18 +204,14 @@ function CompareButton({ player, picked, onCompare }: CompareButtonProps) {
   else if (picked.length > 0) title = 'Add to comparison'
 
   return (
-    <BaseButton
-      className={`players-compare-button ${isPicked ? 'active' : ''}`}
-      square
-      ghost
+    <input
+      type="checkbox"
+      checked={isPicked}
       disabled={!isPicked && (isOtherPosition || isFull)}
-      aria-pressed={isPicked}
       aria-label={`Compare ${player.web_name}`}
       title={title}
-      onClick={() => onCompare(player)}
-    >
-      <Icon icon="compare_arrows" />
-    </BaseButton>
+      onChange={() => onCompare(player)}
+    />
   )
 }
 

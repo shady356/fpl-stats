@@ -127,26 +127,17 @@
   cursor: not-allowed;
 }
 
-.players-compare-button {
-  padding: var(--sp-4);
-  color: var(--text-secondary-color);
+.players-compare-toggle {
+  padding: var(--sp-8) var(--sp-12);
+  gap: var(--sp-8);
 }
 
-.players-compare-button:hover,
-.players-compare-button.active {
+.players-compare-toggle.active,
+.players-compare-toggle.active:hover {
   color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 15%, var(--background-color));
 }
 
-.players-compare-button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.players-compare-button:disabled:hover {
-  background: transparent;
-  color: var(--text-secondary-color);
-}
-
-.players-compare-button .material-symbols-rounded {
+.players-compare-toggle .material-symbols-rounded {
   font-size: 20px;
 }

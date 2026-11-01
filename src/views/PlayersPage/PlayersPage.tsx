@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'react-router'
 
 import BaseButton from '@/components/ui/BaseButton/BaseButton'
@@ -6,13 +6,14 @@ import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmen
 import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons'
 import type { SortOrder } from '@/components/ui/Table/TableHeaderCell'
 import { usePlayers } from '@/hooks/usePlayers'
-import type { PlayerPosition } from '@/types/player'
+import type { Player, PlayerPosition } from '@/types/player'
 import type { Team } from '@/types/team'
 import { filterPlayers } from '@/utils/playerFilters'
 import { POSITION_SHORT_LABELS } from '@/utils/positions'
 
 import './PlayersPage.css'
 
+import CompareToggle from './components/CompareToggle'
 import PlayersTable from './components/PlayersTable'
 import {
   DEFAULT_SORT_KEY,
@@ -52,6 +53,9 @@ function PlayersList({ teams }: PlayersPageProps) {
   const players = usePlayers()
   // Filters live in the URL so they survive opening a player and coming back.
   const [params, setParams] = useSearchParams()
+  const [comparing, setComparing] = useState(false)
+  // The position filter from before picking a player switched it to theirs; null when it wasn't switched.
+  const [positionBeforePick, setPositionBeforePick] = useState<{ value?: string } | null>(null)
 
   const search = params.get('q') ?? ''
   const position = numberParam<PlayerPosition>(params.get('position'), POSITIONS)
@@ -86,6 +90,27 @@ function PlayersList({ teams }: PlayersPageProps) {
     } else {
       update({ sort: key, order: defaultSortOrder(key) })
     }
+  }
+
+  /** Only players in the same position can be compared, so the first pick filters on theirs. */
+  function changePicked(picked: Player[]) {
+    if (picked.length > 0 && positionBeforePick === null) {
+      setPositionBeforePick({ value: params.get('position') ?? undefined })
+      update({ position: String(picked[0].element_type) })
+    } else if (picked.length === 0) {
+      restorePosition()
+    }
+  }
+
+  function restorePosition() {
+    if (positionBeforePick === null) return
+    update({ position: positionBeforePick.value })
+    setPositionBeforePick(null)
+  }
+
+  function stopComparing() {
+    setComparing(false)
+    restorePosition()
   }
 
   if (players.length === 0) return <p>Could not load players.</p>
@@ -148,6 +173,11 @@ function PlayersList({ teams }: PlayersPageProps) {
         <span className="players-count">
           {filtered.length} {filtered.length === 1 ? 'player' : 'players'}
         </span>
+
+        <CompareToggle
+          comparing={comparing}
+          onToggle={() => (comparing ? stopComparing() : setComparing(true))}
+        />
       </div>
 
       {filtered.length === 0 ? (
@@ -159,6 +189,9 @@ function PlayersList({ teams }: PlayersPageProps) {
           sortKey={sortKey}
           sortOrder={sortOrder}
           onSort={sort}
+          comparing={comparing}
+          onStopComparing={stopComparing}
+          onPickedChange={changePicked}
         />
       )}
 

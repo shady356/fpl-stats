@@ -5,6 +5,7 @@ import type { SortOrder } from '@/components/ui/Table/TableHeaderCell'
 import { useFavoritePlayers } from '@/hooks/useFavoritePlayers'
 import { usePlayers } from '@/hooks/usePlayers'
 import type { Team } from '@/types/team'
+import CompareToggle from '@/views/PlayersPage/components/CompareToggle'
 import PlayersTable from '@/views/PlayersPage/components/PlayersTable'
 import {
   DEFAULT_SORT_KEY,
@@ -21,17 +22,27 @@ type WishListPageProps = {
 }
 
 function WishListPage({ teams }: WishListPageProps) {
+  const [comparing, setComparing] = useState(false)
+
   return (
     <div className="players-page">
-      <h1 className="wish-list-title">Wish list</h1>
+      <div className="wish-list-header">
+        <h1 className="wish-list-title">Wish list</h1>
+        <CompareToggle comparing={comparing} onToggle={() => setComparing(!comparing)} />
+      </div>
       <Suspense fallback={<p>Loading players…</p>}>
-        <WishList teams={teams} />
+        <WishList teams={teams} comparing={comparing} onStopComparing={() => setComparing(false)} />
       </Suspense>
     </div>
   )
 }
 
-function WishList({ teams }: WishListPageProps) {
+type WishListProps = WishListPageProps & {
+  comparing: boolean
+  onStopComparing: () => void
+}
+
+function WishList({ teams, comparing, onStopComparing }: WishListProps) {
   const players = usePlayers()
   const { favoriteIds } = useFavoritePlayers()
   const [sortKey, setSortKey] = useState<PlayerColumnKey>(DEFAULT_SORT_KEY)
@@ -67,6 +78,8 @@ function WishList({ teams }: WishListPageProps) {
       sortKey={sortKey}
       sortOrder={sortOrder}
       onSort={sort}
+      comparing={comparing}
+      onStopComparing={onStopComparing}
     />
   )
 }
