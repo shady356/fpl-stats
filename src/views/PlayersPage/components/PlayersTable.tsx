@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 
 import FavoriteButton from '@/components/FavoriteButton/FavoriteButton'
 import PlayerLink from '@/components/PlayerLink/PlayerLink'
+import PlayerStatusIcon from '@/components/PlayerStatusIcon/PlayerStatusIcon'
 import BaseButton from '@/components/ui/BaseButton/BaseButton'
 import Icon from '@/components/ui/Icon/Icon'
 import PlayerThumbnail from '@/components/ui/PlayerThumbnail/PlayerThumbnail'
@@ -13,7 +14,12 @@ import type { Player } from '@/types/player'
 import { comparisonPath, MAX_COMPARED_PLAYERS } from '@/utils/playerComparison'
 import { POSITION_SHORT_LABELS } from '@/utils/positions'
 
-import { PLAYER_COLUMNS, type PlayerColumn, type PlayerColumnKey } from '../playersTableColumns'
+import {
+  PLAYER_COLUMNS,
+  startsSection,
+  type PlayerColumn,
+  type PlayerColumnKey,
+} from '../playersTableColumns'
 
 type PlayersTableProps = {
   /** Already filtered and sorted. */
@@ -62,10 +68,11 @@ function PlayersTable({ players, teamNames, sortKey, sortOrder, onSort }: Player
       <Table className="players-table" scrollable>
         <thead>
           <tr>
-            {PLAYER_COLUMNS.map((column) => (
+            {PLAYER_COLUMNS.map((column, index) => (
               <TableHeaderCell
                 key={column.key}
                 align={column.align}
+                className={startsSection(index) ? 'players-section-start' : undefined}
                 title={column.tooltip}
                 sortOrder={sortKey === column.key ? sortOrder : null}
                 onSort={() => onSort(column.key)}
@@ -73,21 +80,27 @@ function PlayersTable({ players, teamNames, sortKey, sortOrder, onSort }: Player
                 {column.label}
               </TableHeaderCell>
             ))}
+            <th aria-label="Actions" />
           </tr>
         </thead>
         <tbody>
           {players.map((player) => (
             <tr key={player.id} className={player.status === 'a' ? undefined : 'unavailable'}>
-              {PLAYER_COLUMNS.map((column) => (
+              {PLAYER_COLUMNS.map((column, index) => (
                 <PlayerCell
                   key={column.key}
                   column={column}
+                  sectionStart={startsSection(index)}
                   player={player}
                   teamNames={teamNames}
-                  picked={picked}
-                  onCompare={togglePicked}
                 />
               ))}
+              <td>
+                <span className="players-table-actions">
+                  <FavoriteButton playerId={player.id} playerName={player.web_name} />
+                  <CompareButton player={player} picked={picked} onCompare={togglePicked} />
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -100,21 +113,21 @@ type PlayerCellProps = {
   column: PlayerColumn
   player: Player
   teamNames: Map<number, string>
-  /** Players picked for comparing. */
-  picked: Player[]
-  onCompare: (player: Player) => void
+  /** Draws a line before the cell. */
+  sectionStart: boolean
 }
 
-function PlayerCell({ column, player, teamNames, picked, onCompare }: PlayerCellProps) {
+function PlayerCell({ column, player, teamNames, sectionStart }: PlayerCellProps) {
   if (column.key === 'web_name') {
     return (
       <td>
         <span className="players-table-name">
-          <FavoriteButton playerId={player.id} playerName={player.web_name} />
-          <CompareButton player={player} picked={picked} onCompare={onCompare} />
           <PlayerThumbnail code={player.code} />
           <span className="players-table-name-text">
-            <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
+            <span className="players-table-name-line">
+              <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
+              <PlayerStatusIcon player={player} />
+            </span>
             <span className="players-table-team">{teamNames.get(player.team) ?? '–'}</span>
           </span>
         </span>
@@ -131,7 +144,10 @@ function PlayerCell({ column, player, teamNames, picked, onCompare }: PlayerCell
   }
 
   return (
-    <td style={{ textAlign: column.align, color: column.color?.(player) }}>
+    <td
+      className={sectionStart ? 'players-section-start' : undefined}
+      style={{ textAlign: column.align, color: column.color?.(player) }}
+    >
       {column.format ? column.format(player) : column.value(player)}
     </td>
   )

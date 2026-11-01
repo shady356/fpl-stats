@@ -47,6 +47,10 @@
   white-space: nowrap;
 }
 
+.players-table .players-section-start {
+  border-left: 1px solid var(--border-color);
+}
+
 .players-table-name {
   display: flex;
   align-items: center;
@@ -60,10 +64,23 @@
   flex-direction: column;
 }
 
+.players-table-name-line {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
 .players-table-team {
   font-size: 12px;
   font-weight: normal;
   color: var(--text-secondary-color);
+}
+
+.players-table-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-4);
 }
 
 .players-table .unavailable {

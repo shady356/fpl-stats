@@ -7,6 +7,7 @@ export type SortOrder = 'asc' | 'desc'
 type TableHeaderCellProps = {
   children: ReactNode
   align?: 'left' | 'center' | 'right'
+  className?: string
   title?: string
   /** Current sort order when the table is sorted by this column, otherwise null. */
   sortOrder?: SortOrder | null
@@ -17,12 +18,13 @@ type TableHeaderCellProps = {
 function TableHeaderCell({
   children,
   align,
+  className,
   title,
   sortOrder = null,
   onSort,
 }: TableHeaderCellProps) {
   return (
-    <th style={{ textAlign: align }} title={title}>
+    <th className={className} style={{ textAlign: align }} title={title}>
       {onSort ? (
         TableHeaderButton({ children, sortOrder, onClick: onSort })
       ) : (
