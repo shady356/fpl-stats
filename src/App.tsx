@@ -7,7 +7,6 @@ import { computeTeamData } from '@/utils/computeTeamData.ts'
 import ComparePage from '@/views/ComparePage/ComparePage.tsx'
 import FixturesPage from '@/views/FixturesPage/FixturesPage.tsx'
 import MyTeamPage from '@/views/MyTeamPage/MyTeamPage.tsx'
-import OverviewPage from '@/views/OverviewPage/OverviewPage.tsx'
 import PlayerRoute from '@/views/PlayerPage/PlayerRoute'
 import PlayersPage from '@/views/PlayersPage/PlayersPage.tsx'
 import TeamRoute from '@/views/TeamPage/TeamRoute'
@@ -23,8 +22,7 @@ function App() {
       <Header />
       <main>
         <Routes>
-          <Route path="/" element={<Navigate to="/overview" replace />} />
-          <Route path="/overview" element={<OverviewPage teams={teams} />} />
+          <Route path="/" element={<Navigate to="/teams" replace />} />
           <Route path="/teams" element={<TeamsPage teamMatches={teamMatches} />} />
           <Route path="/players" element={<PlayersPage teams={teams} />} />
           <Route path="/fixtures" element={<FixturesPage teams={teams} />} />
