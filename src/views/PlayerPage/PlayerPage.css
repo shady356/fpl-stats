@@ -24,6 +24,24 @@
   font-size: 28px;
 }
 
+/* Sized and spaced like the heart beside it. */
+.player-header-compare {
+  display: flex;
+  padding: var(--sp-8);
+  border-radius: 12px;
+  color: var(--text-secondary-color);
+}
+
+.player-header-compare:hover {
+  background: var(--background-3-color);
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.player-header-compare .material-symbols-rounded {
+  font-size: 28px;
+}
+
 .player-header-name h1 {
   margin: 0;
   font-size: 24px;

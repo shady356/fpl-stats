@@ -4,12 +4,14 @@ import { Link } from 'react-router'
 import FavoriteButton from '@/components/FavoriteButton/FavoriteButton'
 import BarChart from '@/components/ui/Chart/BarChart'
 import LineChart from '@/components/ui/Chart/LineChart'
+import Icon from '@/components/ui/Icon/Icon'
 import PlayerPhoto from '@/components/ui/PlayerPhoto/PlayerPhoto'
 import PositionTag from '@/components/ui/PositionTag/PositionTag'
 import TeamBadge from '@/components/ui/TeamBadge/TeamBadge'
 import { usePlayerSummary } from '@/hooks/usePlayerSummary'
 import type { Player } from '@/types/player'
 import type { Team } from '@/types/team'
+import { comparisonPath } from '@/utils/playerComparison'
 import { formColor } from '@/utils/playerForm'
 import { playerGameweeks, type PlayerGameweek } from '@/utils/playerHistory'
 import { teamFullName } from '@/utils/teamFullNames'
@@ -54,6 +56,14 @@ function PlayerPage({ player, teams }: PlayerPageProps) {
               playerId={player.id}
               playerName={`${player.first_name} ${player.second_name}`}
             />
+            <Link
+              to={comparisonPath([player.id])}
+              className="player-header-compare"
+              aria-label={`Compare ${player.web_name} with another player`}
+              title="Compare with another player"
+            >
+              <Icon icon="compare_arrows" />
+            </Link>
           </div>
           <div className="player-header-details">
             {team && (

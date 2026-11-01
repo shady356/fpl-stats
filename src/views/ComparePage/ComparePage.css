@@ -1,0 +1,157 @@
+.compare-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-24);
+  min-width: 0;
+  padding: var(--sp-8) var(--sp-24) var(--sp-24);
+  border-radius: 20px;
+  background: var(--background-color);
+}
+
+.compare-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-12);
+}
+
+.compare-toolbar h1 {
+  margin-right: auto;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.compare-picker {
+  max-width: 100%;
+  padding: var(--sp-8) var(--sp-12);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--background-color);
+  color: var(--text-color);
+  font: inherit;
+  font-size: 14px;
+}
+
+.compare-picker:focus {
+  outline: 2px solid;
+  outline-color: var(--primary-color);
+}
+
+.compare-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--text-secondary-color);
+}
+
+/* Stat names on the left, a column per player. */
+.compare-stats {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.compare-stats tbody tr {
+  border-top: 1px solid var(--border-color);
+}
+
+.compare-stats thead td {
+  width: 140px;
+}
+
+.compare-stats thead th {
+  padding: 0 var(--sp-8) var(--sp-16);
+  font-weight: normal;
+  vertical-align: top;
+}
+
+.compare-player {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+/* Tucked into the column's top right corner. */
+.compare-remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: var(--sp-4);
+  color: var(--text-secondary-color);
+}
+
+.compare-remove .material-symbols-rounded {
+  font-size: 18px;
+}
+
+.compare-player .player-photo {
+  margin-bottom: var(--sp-4);
+}
+
+.compare-player-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compare-player-details {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  font-size: 14px;
+  color: var(--text-secondary-color);
+}
+
+.compare-stats tbody th {
+  padding: var(--sp-8) var(--sp-8) var(--sp-8) 0;
+  color: var(--text-secondary-color);
+  font-weight: normal;
+  text-align: left;
+}
+
+.compare-stats td {
+  padding: var(--sp-8);
+  text-align: center;
+  font-size: 18px;
+}
+
+.compare-value {
+  display: inline-block;
+  min-width: 48px;
+  padding: var(--sp-4) var(--sp-12);
+  border-radius: 999px;
+}
+
+/* A pill behind the best value. */
+.compare-stats td.best .compare-value {
+  background: color-mix(in srgb, var(--primary-color) 18%, transparent);
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .compare-page {
+    padding: var(--sp-8) var(--sp-16) var(--sp-16);
+  }
+
+  .compare-stats thead td {
+    width: 88px;
+  }
+
+  .compare-stats td {
+    padding: var(--sp-8) var(--sp-4);
+    font-size: 15px;
+  }
+
+  .compare-value {
+    min-width: 0;
+    padding: var(--sp-4) var(--sp-8);
+  }
+}

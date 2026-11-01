@@ -4,6 +4,7 @@ import epl_2026_matches from '@data/epl_2026_matches.json'
 import Header from '@/components/layout/Header/Header'
 import type { Team, TeamMatches } from '@/types/team.ts'
 import { computeTeamData } from '@/utils/computeTeamData.ts'
+import ComparePage from '@/views/ComparePage/ComparePage.tsx'
 import FixturesPage from '@/views/FixturesPage/FixturesPage.tsx'
 import MyTeamPage from '@/views/MyTeamPage/MyTeamPage.tsx'
 import OverviewPage from '@/views/OverviewPage/OverviewPage.tsx'
@@ -31,6 +32,7 @@ function App() {
           <Route path="/wish-list" element={<WishListPage teams={teams} />} />
           <Route path="/team/:teamId" element={<TeamRoute teams={teams} />} />
           <Route path="/player/:playerId" element={<PlayerRoute teams={teams} />} />
+          <Route path="/compare" element={<ComparePage teams={teams} />} />
           <Route path="*" element={<p>Page not found</p>}></Route>
         </Routes>
       </main>
