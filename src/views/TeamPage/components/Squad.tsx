@@ -1,159 +1,123 @@
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 
-import PlayerLink from '@/components/PlayerLink/PlayerLink'
-import PlayerThumbnail from '@/components/ui/PlayerThumbnail/PlayerThumbnail'
-import Table from '@/components/ui/Table/Table'
-import TableHeaderCell from '@/components/ui/Table/TableHeaderCell'
+import BaseSegmentedButton from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButton'
+import BaseSegmentedButtons from '@/components/ui/BaseSegmentedButtons/BaseSegmentedButtons'
+import type { SortOrder } from '@/components/ui/Table/TableHeaderCell'
 import { usePlayers } from '@/hooks/usePlayers'
 import type { Player, PlayerPosition } from '@/types/player'
 import type { Team } from '@/types/team'
+import { filterPlayers } from '@/utils/playerFilters'
+import { POSITION_SHORT_LABELS } from '@/utils/positions'
+import CompareToggle from '@/views/PlayersPage/components/CompareToggle'
+import PlayersTable from '@/views/PlayersPage/components/PlayersTable'
+import {
+  DEFAULT_SORT_KEY,
+  defaultSortOrder,
+  sortPlayers,
+  type PlayerColumnKey,
+} from '@/views/PlayersPage/playersTableColumns'
 
+import '@/views/PlayersPage/PlayersPage.css'
 import './Squad.css'
 
-const POSITIONS: { position: PlayerPosition; label: string }[] = [
-  { position: 1, label: 'Goalkeepers' },
-  { position: 2, label: 'Defenders' },
-  { position: 3, label: 'Midfielders' },
-  { position: 4, label: 'Forwards' },
-]
-
-type PlayerColumn = {
-  label: string
-  title: string
-  align: 'left' | 'right'
-  /** Value to sort by. */
-  value: (player: Player) => number | string
-  render: (player: Player) => ReactNode
-}
-
-const PLAYER_COLUMNS: PlayerColumn[] = [
-  {
-    label: 'Player',
-    title: 'Player',
-    align: 'left',
-    value: (player) => player.web_name,
-    render: (player) => (
-      <span className="player-list-name">
-        <PlayerThumbnail code={player.code} size="small" />
-        <PlayerLink playerId={player.id}>{player.web_name}</PlayerLink>
-      </span>
-    ),
-  },
-  {
-    label: 'Price',
-    title: 'Price',
-    align: 'right',
-    value: (player) => player.now_cost,
-    render: (player) => `£${(player.now_cost / 10).toFixed(1)}m`,
-  },
-  {
-    label: '+/-',
-    title: 'Price change since the start of the season',
-    align: 'right',
-    value: (player) => player.cost_change_start,
-    render: (player) =>
-      `${player.cost_change_start > 0 ? '+' : ''}${(player.cost_change_start / 10).toFixed(1)}`,
-  },
-  {
-    label: 'Min',
-    title: 'Minutes played',
-    align: 'right',
-    value: (player) => player.minutes,
-    render: (player) => player.minutes,
-  },
-  {
-    label: 'Form',
-    title: 'Average points per game over the last 30 days',
-    align: 'right',
-    value: (player) => Number(player.form),
-    render: (player) => player.form,
-  },
-  {
-    label: 'Sel.',
-    title: 'Percentage of FPL managers who own the player',
-    align: 'right',
-    value: (player) => Number(player.selected_by_percent),
-    render: (player) => `${player.selected_by_percent}%`,
-  },
-  {
-    label: 'Pts',
-    title: 'Total points',
-    align: 'right',
-    value: (player) => player.total_points,
-    render: (player) => player.total_points,
-  },
-]
-
-/** Index of the column the tables are sorted by initially (total points). */
-const DEFAULT_SORT_COLUMN = PLAYER_COLUMNS.length - 1
+const POSITIONS = [1, 2, 3, 4] as const
 
 /**
- * The team's players, one table per position, all sorted by the selected column.
+ * The team's players, in the same table as the Players page.
  */
 export default function Squad({ team }: { team: Team }) {
-  const [sortColumn, setSortColumn] = useState(DEFAULT_SORT_COLUMN)
-  const players = usePlayers().filter((player) => player.team === team.team_id)
+  const players = usePlayers()
+  const [position, setPosition] = useState<PlayerPosition>()
+  const [comparing, setComparing] = useState(false)
+  // The position filter from before picking a player switched it to theirs; null when it wasn't switched.
+  const [positionBeforePick, setPositionBeforePick] = useState<{
+    value?: PlayerPosition
+  } | null>(null)
+  const [sortKey, setSortKey] = useState<PlayerColumnKey>(DEFAULT_SORT_KEY)
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
 
-  const { value } = PLAYER_COLUMNS[sortColumn]
-  const sortedPlayers = players.toSorted((a, b) => {
-    const aVal = value(a)
-    const bVal = value(b)
-    if (typeof aVal === 'number' && typeof bVal === 'number') {
-      return bVal - aVal
+  function sort(key: PlayerColumnKey) {
+    if (key === sortKey) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortKey(key)
+      setSortOrder(defaultSortOrder(key))
     }
-    return String(aVal).localeCompare(String(bVal))
-  })
+  }
+
+  /** Only players in the same position can be compared, so the first pick filters on theirs. */
+  function changePicked(picked: Player[]) {
+    if (picked.length > 0 && positionBeforePick === null) {
+      setPositionBeforePick({ value: position })
+      setPosition(picked[0].element_type)
+    } else if (picked.length === 0) {
+      restorePosition()
+    }
+  }
+
+  function restorePosition() {
+    if (positionBeforePick === null) return
+    setPosition(positionBeforePick.value)
+    setPositionBeforePick(null)
+  }
+
+  function stopComparing() {
+    setComparing(false)
+    restorePosition()
+  }
+
+  const teamNames = new Map([[team.team_id, team.team_name]])
+  const filtered = sortPlayers(
+    filterPlayers(players, { search: '', position, team: team.team_id }),
+    sortKey,
+    sortOrder,
+  )
 
   return (
     <section className="card squad">
       <div className="card-header">
         <h2>Players</h2>
-        <label className="squad-sort">
-          Sort by
-          <select value={sortColumn} onChange={(e) => setSortColumn(Number(e.target.value))}>
-            {PLAYER_COLUMNS.map((column, index) => (
-              <option key={column.label} value={index}>
-                {column.title}
-              </option>
+
+        <div className="squad-filters">
+          <BaseSegmentedButtons aria-label="Position">
+            <BaseSegmentedButton
+              selected={position === undefined}
+              onClick={() => setPosition(undefined)}
+            >
+              All
+            </BaseSegmentedButton>
+            {POSITIONS.map((value) => (
+              <BaseSegmentedButton
+                key={value}
+                selected={position === value}
+                onClick={() => setPosition(value)}
+              >
+                {POSITION_SHORT_LABELS[value]}
+              </BaseSegmentedButton>
             ))}
-          </select>
-        </label>
+          </BaseSegmentedButtons>
+
+          <CompareToggle
+            comparing={comparing}
+            onToggle={() => (comparing ? stopComparing() : setComparing(true))}
+          />
+        </div>
       </div>
 
-      {POSITIONS.map(({ position, label }) => (
-        <PlayerList
-          key={position}
-          label={label}
-          players={sortedPlayers.filter((player) => player.element_type === position)}
+      {players.length === 0 ? (
+        <p>Could not load players.</p>
+      ) : (
+        <PlayersTable
+          players={filtered}
+          teamNames={teamNames}
+          sortKey={sortKey}
+          sortOrder={sortOrder}
+          onSort={sort}
+          comparing={comparing}
+          onStopComparing={stopComparing}
+          onPickedChange={changePicked}
         />
-      ))}
+      )}
     </section>
-  )
-}
-
-function PlayerList({ label, players }: { label: string; players: Player[] }) {
-  return (
-    <Table className="player-list">
-      <thead>
-        <tr>
-          {PLAYER_COLUMNS.map((column, index) => (
-            <TableHeaderCell key={column.label} align={column.align} title={column.title}>
-              {index === 0 ? label : column.label}
-            </TableHeaderCell>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {players.map((player) => (
-          <tr key={player.id} className={player.status === 'a' ? undefined : 'unavailable'}>
-            {PLAYER_COLUMNS.map((column) => (
-              <td key={column.label} style={{ textAlign: column.align }}>
-                {column.render(player)}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </Table>
   )
 }
