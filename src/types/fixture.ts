@@ -21,6 +21,8 @@ export type TeamFixture = {
     team_name: string
     team_name_short: string
     rating_total: number
+    rating_attack: number
+    rating_defense: number
     rating_total_color: string
     rating_attack_color: string
     rating_defense_color: string

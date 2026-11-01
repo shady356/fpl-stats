@@ -4,6 +4,26 @@
   border-radius: 20px;
 }
 
+.fixtures-team {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-12);
+}
+
+.fixtures-team-rating {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary-color);
+}
+
+.fixtures-difficulty {
+  display: inline-block;
+  min-width: 3ch;
+  padding: var(--sp-8) var(--sp-12);
+  border-radius: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
 .table-fixture-opponent {
   padding: var(--sp-8) var(--sp-40);
   border-radius: 8px;
@@ -24,6 +44,8 @@
   margin-right: auto;
 }
 
-.table-fixture-opponent-in-run {
-  outline: 2px solid var(--primary-color);
+/* Mark the end of the selected run: team + difficulty columns, then the run's gameweeks */
+.fixtures-table-run-3 td:nth-child(5),
+.fixtures-table-run-5 td:nth-child(7) {
+  border-right: 1px dashed var(--border-color);
 }

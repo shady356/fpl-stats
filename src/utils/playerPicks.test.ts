@@ -67,6 +67,8 @@ function fixture(event: number, rating_total: number): TeamFixture {
       team_name: 'Opponent',
       team_name_short: 'OPP',
       rating_total,
+      rating_attack: 0,
+      rating_defense: 0,
       rating_total_color: '',
       rating_attack_color: '',
       rating_defense_color: '',
